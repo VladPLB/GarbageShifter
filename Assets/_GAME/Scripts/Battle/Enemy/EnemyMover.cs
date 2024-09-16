@@ -14,9 +14,6 @@ namespace _GAME.Scripts.Battle.Player
         [SerializeField] private float _stoppingDistance = .2f;
         [SerializeField] private Transform _model;
         private Rigidbody _rigidbody;
-        private float _mass;
-        private float _friction;
-        private float _normalForceMagnitude;
 
         private EnemyBounds _enemyBounds;
         private List<Vector3> _path;
@@ -36,9 +33,6 @@ namespace _GAME.Scripts.Battle.Player
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
-            _mass = _rigidbody.mass;
-            _friction = _rigidbody.drag;
-            _normalForceMagnitude = (_mass * Physics.gravity).magnitude;
         }
 
         public void Setup(List<Vector3> path, Transform target, EnemyBounds enemyBounds, float moveSpeed, float attackDistance)
@@ -137,11 +131,8 @@ namespace _GAME.Scripts.Battle.Player
             if (!_isStopped)
             {
                 
-                Vector3 frictionForce = _friction * _normalForceMagnitude * -_rigidbody.velocity.normalized;
                 _forward = (_targetPosition - transform.position).normalized;
-                Vector3 totalForce = _forward * _speed * _mass - frictionForce;
-                _rigidbody.AddForce(totalForce);
-                //_rigidbody.velocity = _forward * (_speed * 30f * Time.fixedDeltaTime);
+                _rigidbody.velocity = _forward * (_speed * 30f * Time.fixedDeltaTime);
                 if (DestinationReached())
                 {
                     _isStopped = true;

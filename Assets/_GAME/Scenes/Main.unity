@@ -3026,21 +3026,6 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 330585545}
-    - target: {fileID: 8253206179643077353, guid: 4875409d030a54eb187b7e1b78af6130,
-        type: 3}
-      propertyPath: m_SortingOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8253206179643077353, guid: 4875409d030a54eb187b7e1b78af6130,
-        type: 3}
-      propertyPath: m_PlaneDistance
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8253206179643077353, guid: 4875409d030a54eb187b7e1b78af6130,
-        type: 3}
-      propertyPath: m_SortingLayerID
-      value: -733468553
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

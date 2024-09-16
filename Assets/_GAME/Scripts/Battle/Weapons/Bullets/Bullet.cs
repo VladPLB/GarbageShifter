@@ -64,7 +64,7 @@ public class Bullet : MonoBehaviour, IPoolableItem<BulletType>
          damageReceived?.OnDamage(_data.DamageDealer.Team, _data.Damage, hitPoint, _data.Attributes);
       }
 
-      var isSpawnDecal = damageReceived != null;
+      var isSpawnDecal = damageReceived == null;
       Vector3 hitNormal = hit.normal;
       _viewer.Hit(hitNormal);
       if (isSpawnDecal)

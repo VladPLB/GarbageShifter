@@ -58,7 +58,7 @@ namespace _GAME
             if (list.ToList().IsNullOrEmpty())
                 return default;
             
-            var rndIndex = Random.Range(0, list.Count() - 1);
+            var rndIndex = Random.Range(0, list.Count());
             return list.ElementAt(rndIndex);
         }
         
