@@ -4,9 +4,9 @@ namespace _GAME.Scripts.Battle.Player
 {
     public class EnemyViewer: MonoBehaviour
     {
-        private static readonly int StopKey = Animator.StringToHash("Stop");
         private static readonly int RunKey = Animator.StringToHash("Run");
         private static readonly int FireKey = Animator.StringToHash("Fire");
+        private static readonly int HitKey = Animator.StringToHash("Hit");
         private static readonly int DeadKey = Animator.StringToHash("Dead");
         private static readonly int DeadTypeKey = Animator.StringToHash("DeadType");
 
@@ -17,14 +17,14 @@ namespace _GAME.Scripts.Battle.Player
             _animator.Rebind();
         }
 
-        public void Stop()
+        public void Run(float speed)
         {
-            _animator.SetTrigger(StopKey);
+            _animator.SetFloat(RunKey, speed);
         }
-
-        public void Run()
+        
+        public void Hit()
         {
-            _animator.SetTrigger(RunKey);
+            _animator.SetTrigger(HitKey);
         }
 
         public void Fire()

@@ -1,6 +1,7 @@
 using System;
 using _GAME.Scripts.Common;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace _GAME.Scripts.Battle.Weapons
 {
@@ -10,7 +11,9 @@ namespace _GAME.Scripts.Battle.Weapons
         [SerializeField] private WeaponType _type;
         [SerializeField] private BulletType _bulletType;
         [SerializeField] private float _reloadTime;
+        [SerializeField] private float _reloadTimeRandomize;
         [SerializeField] private int _damage;
+        [SerializeField] private float _aimOffset;
 
         public int Level { get; protected set; } = 1;
         public float LastFireTime { get; protected set; } = 0;
@@ -18,7 +21,9 @@ namespace _GAME.Scripts.Battle.Weapons
         public WeaponType Type => _type;
         public BulletType BulletType => _bulletType;
         public float ReloadTime => _reloadTime;
+        public float ReloadTimeRandomize => _reloadTimeRandomize;
         public int Damage => _damage;
+        public float AimOffset => _aimOffset;
 
         public void Setup(IDamageDealer damageDealer, int level)
         {
@@ -29,13 +34,18 @@ namespace _GAME.Scripts.Battle.Weapons
         public bool TryFireRegister()
         {
             var timeNow = Time.time;
-            if (timeNow < LastFireTime + ReloadTime)
+            if (timeNow < LastFireTime)
             {
                 return false;
             }
 
-            LastFireTime = timeNow;
+            ResetFireTime(timeNow);
             return true;
+        }
+
+        public void ResetFireTime(float timeNow)
+        {
+            LastFireTime = timeNow + ReloadTime + Random.Range(-ReloadTimeRandomize, ReloadTimeRandomize);
         }
     }
 }

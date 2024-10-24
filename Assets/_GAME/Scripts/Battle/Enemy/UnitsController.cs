@@ -31,6 +31,11 @@ namespace _GAME.Scripts.Battle.Enemy
             private set => _enemyCount = Mathf.Max(0, value);
         }
 
+        public List<EnemyController> ActiveUnits => _activeUnits;
+
+        public event Action<EnemyController> OnSpawned;
+        public event Action<EnemyController> OnRemoved;
+
         public void Setup(Transform player)
         {
             _pool = Core.Get<PoolProvider>().Enemies;
@@ -51,6 +56,7 @@ namespace _GAME.Scripts.Battle.Enemy
             unit.Setup(path, _playerTransform, _enemyBounds);
             unit.OnDead += RemoveUnit;
             _activeUnits.Add(unit);
+            OnSpawned?.Invoke(unit);
         }
 
         public void RemoveUnit(EnemyController enemy)
@@ -61,6 +67,7 @@ namespace _GAME.Scripts.Battle.Enemy
         private async void RemoveUnit(EnemyController enemy, bool isForce)
         {
             _activeUnits.Remove(enemy);
+            OnRemoved?.Invoke(enemy);
             if (!isForce)
             {
                 await UniTask.Delay(TimeSpan.FromSeconds(REMOVE_UNIT_TIME));
@@ -73,9 +80,16 @@ namespace _GAME.Scripts.Battle.Enemy
             _activeUnits.ForEach(u =>
             {
                 u.Deactivate();
+                OnRemoved?.Invoke(u);
                 _pool.Push(u);
             });
             _activeUnits.Clear();
+        }
+
+        public void OnDestroy()
+        {
+            OnRemoved = null;
+            OnSpawned = null;
         }
 
         private void OnDrawGizmos()

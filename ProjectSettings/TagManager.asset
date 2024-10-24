@@ -19,7 +19,7 @@ TagManager:
   - Empty
   - Player
   - Enemy
-  - 
+  - EnemyMover
   - 
   - 
   - 

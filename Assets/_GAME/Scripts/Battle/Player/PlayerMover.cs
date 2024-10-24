@@ -11,11 +11,12 @@ namespace _GAME.Scripts.Battle.Player
         private const float MOVE_SPEED = 5f;
         private const float FLY_SPEED = 10f;
         private const float FLY_SPEED_LERP_TIME = 1f;
-        private const float FLY_DELAY = 2.3f;
+        private const float FLY_DELAY = 1.6f;
         
         private NavMeshAgent _navMeshAgent;
         private Vector3 _targetPosition;
         private Quaternion _targetRotation;
+        private bool _isEnableFly = true;
         private float _delayToFly = 0;
         private bool _isFly = false;
 
@@ -37,13 +38,14 @@ namespace _GAME.Scripts.Battle.Player
             transform.rotation = rotation;
         }
 
-        public void MoveTo(Vector3 targetPosition, Quaternion targetRotation)
+        public void MoveTo(Vector3 targetPosition, Quaternion targetRotation, bool isEnableFly)
         {
             SetSpeed(MOVE_SPEED);
             _targetPosition = targetPosition;
             _navMeshAgent.SetDestination(targetPosition);
             _navMeshAgent.isStopped = false;
             _targetRotation = targetRotation;
+            _isEnableFly = isEnableFly;
             _isFly = false;
             _delayToFly = FLY_DELAY;
         }
@@ -74,7 +76,7 @@ namespace _GAME.Scripts.Battle.Player
                     Stop();
                 }
 
-                if (!_isFly)
+                if (!_isFly && _isEnableFly)
                 {
                     _delayToFly -= Time.deltaTime;
                     if (_delayToFly <= 0)

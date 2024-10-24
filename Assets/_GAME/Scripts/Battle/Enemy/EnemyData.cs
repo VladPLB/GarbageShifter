@@ -19,7 +19,7 @@ namespace _GAME.Scripts.Battle.Enemy
         [SerializeField] private int _armor;
         [SerializeField] private float _moveSpeed;
         [SerializeField] private float _attackDistance;
-        
+
 
         public EnemyType Type => _type;
         public EnemyClassType Class => _class;

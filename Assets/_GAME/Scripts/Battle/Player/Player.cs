@@ -1,17 +1,18 @@
 using System;
+using System.Collections.Generic;
+using _GAME.Scripts.Battle.Enemy;
 using _GAME.Scripts.Battle.Level;
 using _GAME.Scripts.Battle.Weapons;
 using _GAME.Scripts.Common;
+using Unity.Collections;
 using UnityEngine;
 
 namespace _GAME.Scripts.Battle.Player
 {
-    public class Player: MonoBehaviour, IDamageDealer
+    public class Player: DamageReceiver, IDamageDealer
     {
         public uint ID => 0;
-        public Team Team => Team.Player;
-        
-        public event Action OnDestinationTargetPosition;
+        public override Team Team => Team.Player;
 
         [SerializeField] private PlayerViewer _viewer;
         [SerializeField] private PlayerMover _mover;
@@ -19,9 +20,19 @@ namespace _GAME.Scripts.Battle.Player
         [SerializeField] private PlayerAim _aim;
         [SerializeField] private Transform _freeWeaponHolder;
         
+        [SerializeField, ReadOnly]
+        private DamageRepeater[] _damageRepeaters;
+        [SerializeField] private DamageReactionViewer _damageReactionViewer;
+        
         private CameraController _cameraController;
         private GameInput _gameInput;
         private bool _battleReady = false;
+        
+        public event Action OnDestinationTargetPosition;
+        public event Action<bool> OnBattleReady;
+        public event Action OnHit;
+
+        public event Action OnDamaged;
         
         
         public void Setup(CameraController cameraController)
@@ -30,16 +41,26 @@ namespace _GAME.Scripts.Battle.Player
             _gameInput = new GameInput();
             _aim.Setup(_gameInput);
             SetupWeapon();
+            
+            foreach (var damageRepeater in _damageRepeaters)
+            {
+                damageRepeater.ApplyReceiver(this);
+            }
         }
 
         private void SetupWeapon()
         {
             var weaponData = Core.Get<DataBase>().Weapons.GetDefaultData(WeaponType.Riffle);
             weaponData.Setup(this);
-            _weapon.Setup(weaponData, IsFire, _freeWeaponHolder);
+            _weapon.Setup(weaponData, IsFire, OnHitHandler, _freeWeaponHolder);
         }
 
-        private bool IsFire()
+        private void OnHitHandler()
+        {
+            OnHit?.Invoke();
+        }
+
+        public bool IsFire()
         {
             return _gameInput.Game.Fire.IsPressed();
         }
@@ -52,6 +73,7 @@ namespace _GAME.Scripts.Battle.Player
             _gameInput.Enable();
             _battleReady = true;
             _cameraController.SetCamera(GameCameraType.Battle);
+            OnBattleReady?.Invoke(true);
         }
 
         public void BattleStop()
@@ -61,6 +83,7 @@ namespace _GAME.Scripts.Battle.Player
 
             _gameInput.Enable();
             _battleReady = false;
+            OnBattleReady?.Invoke(false);
         }
 
         private void OnReactToDestinationPosition()
@@ -81,7 +104,7 @@ namespace _GAME.Scripts.Battle.Player
             _cameraController.SetCamera(GameCameraType.Run);
             _mover.OnMoveCompleted += OnReactToDestinationPosition;
             _mover.OnFly += _viewer.Fly;
-            _mover.MoveTo(targetPosition.Position, targetPosition.Rotation);
+            _mover.MoveTo(targetPosition.Position, targetPosition.Rotation, previewPosition.Type!= PlayerPositionType.Start);
             PlayAnimationByPositionType(previewPosition.Type);
         }
 
@@ -101,5 +124,32 @@ namespace _GAME.Scripts.Battle.Player
             };
             viewerAction.Invoke();
         }
+        
+        public override void OnDamage(Team damageDealersTeam, int damageAmount, Vector3 hitPoint, List<IEffectAttribute> additiveAttributes = null)
+        {
+            OnDamaged?.Invoke();
+            _damageReactionViewer?.Show(damageAmount, transform.position);
+        }
+
+        private void OnDisable()
+        {
+            OnBattleReady = null;
+            OnHit = null;
+            OnDestinationTargetPosition = null;
+            OnDamaged = null;
+        }
+        
+#if UNITY_EDITOR
+        [ContextMenu("ApplyAllDamageRepeaters")]
+        private void ApplyAllDamageRepeaters()
+        {
+            _damageRepeaters = GetComponentsInChildren<DamageRepeater>();
+            foreach (var damageRepeater in _damageRepeaters)
+            {
+                damageRepeater.ApplyReceiver(this);
+                damageRepeater.FindColliders();
+            }
+        }
+#endif
     }
 }

@@ -22,12 +22,12 @@ namespace _GAME.Scripts.Battle.Player
             _animator.SetTrigger(StopKey);
             _flyTrustEffect.gameObject.SetActive(false);
         }
-
+        
         public void Run()
         {
             _animator.SetTrigger(RunKey);
         }
-        
+
         public void Jump()
         {
             _animator.SetTrigger(JumpKey);

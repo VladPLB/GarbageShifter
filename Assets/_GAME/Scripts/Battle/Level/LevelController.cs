@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using _GAME.Scripts;
 using _GAME.Scripts.Battle.Enemy;
 using _GAME.Scripts.Battle.Level;
 using _GAME.Scripts.Battle.Player;
@@ -9,7 +10,7 @@ using _GAME.Scripts.Common;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public class LevelController : MonoBehaviour
+public class LevelController : MonoBehaviour, IRuntimeSetup
 {
     [Header("Debug")]
     [SerializeField] private bool _useOverrideLevelData = true;
@@ -25,7 +26,15 @@ public class LevelController : MonoBehaviour
     private LevelPathFinder _pathfinder;
     private int _currentStageIndex = 0;
 
-    private void Start()
+    public Player Player => _player;
+    public UnitsController UnitsController => _unitsController;
+
+    private void Awake()
+    {
+        Core.Registry(this, typeof(PoolProvider));
+    }
+    
+    public void RuntimeSetup()
     {
         Setup(FindObjectOfType<Player>());
     }

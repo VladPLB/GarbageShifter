@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3f68f0858e543b9afe6ef0e571f1ce9, type: 3}
+  m_Name: UIEnemyHealthBarsDatabase
+  m_EditorClassIdentifier: 
+  _prefabs:
+  - {fileID: 4427827450136113319, guid: bc8416b0283d6403082d781cb98bff03, type: 3}

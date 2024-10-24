@@ -24,15 +24,18 @@ public class Bullet : MonoBehaviour, IPoolableItem<BulletType>
    private BulletViewer _viewer;
    
    private BulletData _data;
-
    private float _maxLiveTime;
+   
+   private Action _onHit;
+
 
    public BulletType Type => _type;
    public bool IsActive => _data != null;
 
-   public void Setup(BulletData data)
+   public void Setup(BulletData data, Action onHit)
    {
       _data = data;
+      _onHit = onHit;
       _type = _data.Type;
       _viewer.Setup();
       _maxLiveTime = Time.time + MAX_LIVE_TIME;
@@ -61,9 +64,11 @@ public class Bullet : MonoBehaviour, IPoolableItem<BulletType>
       var damageReceived = hit.transform.GetComponent<IDamageReceiver>();
       if (damageReceived != null)
       {
-         damageReceived?.OnDamage(_data.DamageDealer.Team, _data.Damage, hitPoint, _data.Attributes);
+         damageReceived.OnDamage(_data.DamageDealer.Team, _data.Damage, hitPoint, _data.Attributes);
+         _onHit?.Invoke();
+         _onHit = null;
       }
-
+      
       var isSpawnDecal = damageReceived == null;
       Vector3 hitNormal = hit.normal;
       _viewer.Hit(hitNormal);

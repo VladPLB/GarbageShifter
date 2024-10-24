@@ -16,6 +16,7 @@ namespace _GAME.Scripts.Battle.Enemy
         [SerializeField] private EnemyMover _enemyMover;
         [SerializeField] private Weapon _weapon;
         [SerializeField] private DamageReactionViewer _damageReactionViewer;
+        [SerializeField] private Transform _healthBarPoint;
         [SerializeField] private StateIntAttribute _health;
         [SerializeField] private StateIntAttribute _armor;
         [SerializeField, ReadOnly]
@@ -28,6 +29,9 @@ namespace _GAME.Scripts.Battle.Enemy
         public override Team Team => Team.Enemy;
         public EnemyType Type => _data.Type;
         public EnemyData Data => _data;
+        public StateIntAttribute Health => _health;
+
+        public Vector3 HealthBarPoint => _healthBarPoint.position;
 
         public event Action<EnemyController> OnDead;
 
@@ -60,13 +64,24 @@ namespace _GAME.Scripts.Battle.Enemy
         public void Play()
         {
             _enemyMover.Play();
-            _enemyMover.OnMoveCompleted += _enemyViewer.Stop;
-            _enemyViewer.Run();
+            _enemyMover.OnMoveSpeed += _enemyViewer.Run;
         }
 
         public bool IsFire()
         {
-            return _isFire;
+            if (!_enemyMover.AttackedDistance)
+            {
+                _isFire = false;
+                return false;
+            }
+
+            if (!_isFire)
+            {
+                _data.WeaponData.ResetFireTime(Time.time);
+            }
+
+            _isFire = true;
+            return true;
         }
         
         public override void OnDamage(Team damageDealersTeam, int damageAmount, Vector3 hitPoint, List<IEffectAttribute> additiveAttributes = null)
@@ -109,6 +124,10 @@ namespace _GAME.Scripts.Battle.Enemy
             if (_health.Current <= 0)
             {
                 Dead();
+            }
+            else
+            {
+                _enemyViewer.Hit();
             }
         }
 

@@ -10,6 +10,7 @@ namespace _GAME.Scripts.Battle.Level
         [SerializeField] private List<EnemyClassType> _enemies;
         [SerializeField] private Bounds _spawnBox;
         [SerializeField] private List<Bounds> _targetMoveBoxes = new();
+        [Header("Debug")]
         [SerializeField] private string _direction;
         [SerializeField] private Bounds _sBox;
         [SerializeField] private List<Bounds> _tBoxes = new();

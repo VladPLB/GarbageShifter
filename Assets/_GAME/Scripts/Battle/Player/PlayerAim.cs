@@ -31,6 +31,7 @@ public class PlayerAim : MonoBehaviour
         _isActive = isActive;
         _rig.weight = isActive ? 1f : 0f;
 
+        ResetCameraDirection();
         if (isActive)
         {
             Ready();
@@ -38,6 +39,11 @@ public class PlayerAim : MonoBehaviour
     }
 
     private void Ready()
+    {
+        
+    }
+
+    private void ResetCameraDirection()
     {
         _lookPoint.transform.localRotation = Quaternion.Euler(_defaultDirection);
         targetEulerAngles = _lookPoint.localEulerAngles;

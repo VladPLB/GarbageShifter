@@ -12,6 +12,9 @@ namespace _GAME.Scripts
         public Pool<TextEffect,TextEffectType> TextEffects { get; private set; }
         public Pool<GameEffect,GameEffectType> GameEffects { get; private set; }
         
+        public Pool<UIEnemyMarker,EnemySubClassType> UIEnemyMarkers { get; private set; }
+        public Pool<UIEnemyHealthBar,EnemySubClassType> UIEnemyHealthBar { get; private set; }
+        
         public Pool<EnemyController,EnemyType> Enemies { get; private set; }
         private void Awake()
         {
@@ -25,6 +28,8 @@ namespace _GAME.Scripts
             TextEffects = new Pool<TextEffect, TextEffectType>(database.TextsEffects.GetPrefab);
             GameEffects = new Pool<GameEffect,GameEffectType>(database.GameEffects.GetPrefab);
             Enemies = new Pool<EnemyController, EnemyType>(database.Enemies.GetPrefab);
+            UIEnemyMarkers = new Pool<UIEnemyMarker,EnemySubClassType>(database.UIEnemyMarkers.GetPrefab);
+            UIEnemyHealthBar = new Pool<UIEnemyHealthBar,EnemySubClassType>(database.UIEnemyHealthBars.GetPrefab);
         }
     }
 }

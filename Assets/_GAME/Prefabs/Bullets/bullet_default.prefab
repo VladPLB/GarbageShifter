@@ -9968,7 +9968,7 @@ MonoBehaviour:
   _coliderRadius: 0.1
   _coliderMask:
     serializedVersion: 2
-    m_Bits: 4545
+    m_Bits: 6593
   _hitImpactType: 1
   _viewer: {fileID: 3212039690258617722}
 --- !u!1 &6769021684165214824

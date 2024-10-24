@@ -17,10 +17,10 @@ MonoBehaviour:
     Event: 450
     _CustomDataLayerMask:
       serializedVersion: 2
-      m_Bits: 27569
+      m_Bits: 23473
     _DepthMaskLayerMask:
       serializedVersion: 2
-      m_Bits: 98
+      m_Bits: 547
     _UseCustomData: 1
     _UseDepthMask: 1
     _UseCustomTexture: 1
@@ -28,16 +28,16 @@ MonoBehaviour:
     _CustomTextureLayerMask:
       serializedVersion: 2
       m_Bits: 4
-    _Thickness: 0.59
+    _Thickness: 1.24
     _ResolutionAdjust: 0
     _UseDepthFade: 0
     _FadeStart: 4
     _FadeEnd: 10
     _NormalsEdgeDetection: 1
-    _NormalsOffset: 0.183
-    _NormalsHardness: 0.675
-    _NormalsPower: 5
-    _DepthEdgeDetection: 1
+    _NormalsOffset: 0.045
+    _NormalsHardness: 0.201
+    _NormalsPower: 1.52
+    _DepthEdgeDetection: 0
     _AcuteAngleFix: 0
     _ViewDirThreshold: 1
     _ViewDirThresholdScale: 2.7
@@ -53,14 +53,14 @@ MonoBehaviour:
     _Frequency: 40
     _ChangesPerSecond: 0
     _UseGrain: 0
-    _GrainTexture: {fileID: 0}
+    _GrainTexture: {fileID: 2800000, guid: 5a8fee4f74b068243867d75205bd69c1, type: 3}
     _GrainStrength: 1
     _GrainScale: 1
     _UseUvOffset: 0
     _OffsetNoise: {fileID: 0}
     _OffsetNoiseScale: 0.4
     _OffsetChangesPerSecond: 0
-    _OffsetStrength: 0.005
+    _OffsetStrength: 0
 --- !u!114 &-4197337700258730362
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_ShadowTransparentReceive: 0
   m_RenderingMode: 0
   m_DepthPrimingMode: 0
-  m_CopyDepthMode: 0
+  m_CopyDepthMode: 1
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 1
 --- !u!114 &6308472721171736281

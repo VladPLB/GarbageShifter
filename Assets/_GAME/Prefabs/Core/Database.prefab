@@ -51,3 +51,7 @@ MonoBehaviour:
     type: 2}
   _gameEffectsDatabase: {fileID: 11400000, guid: 1c39092beb0b9479dbc0992c8d1dca83,
     type: 2}
+  _uiEnemyMarkersDatabase: {fileID: 11400000, guid: 1fca8eb96de544d5db7e2a0874a0f466,
+    type: 2}
+  _uiEnemyHealthBarsDatabase: {fileID: 11400000, guid: 963f628f31b4d48e6bd8f13994d32e13,
+    type: 2}
