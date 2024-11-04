@@ -81,7 +81,7 @@ namespace _GAME.Scripts.Battle.Enemy
         {
             _activeUnits.ForEach(u =>
             {
-                u.Deactivate();
+                u.Deactivate(true);
                 OnRemoved?.Invoke(u);
                 _pool.Push(u);
             });

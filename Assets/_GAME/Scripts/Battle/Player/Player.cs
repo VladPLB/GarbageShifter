@@ -75,7 +75,7 @@ namespace _GAME.Scripts.Battle.Player
         public void BattleReady()
         {
             _aim.SetActive(true);
-            _weapon.SetActive(true);
+            _weapon.SetActive(true, false);
 
             _gameInput.Enable();
             _battleReady = true;
@@ -86,7 +86,7 @@ namespace _GAME.Scripts.Battle.Player
         public void BattleStop()
         {
             _aim.SetActive(false);
-            _weapon.SetActive(false);
+            _weapon.SetActive(false, false);
 
             _gameInput.Enable();
             _battleReady = false;

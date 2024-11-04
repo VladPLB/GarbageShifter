@@ -4,6 +4,7 @@ using _GAME.Scripts.Battle.Player;
 using _GAME.Scripts.Battle.Weapons;
 using _GAME.Scripts.Common;
 using _GAME.Scripts.Pools;
+using Cysharp.Threading.Tasks;
 using Unity.Collections;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ namespace _GAME.Scripts.Battle.Enemy
     {
         [SerializeField] private EnemyData _data;
         [SerializeField] private EnemyViewer _enemyViewer;
+        [SerializeField] private RagDollController _ragDoll;
         [SerializeField] private EnemyMover _enemyMover;
         [SerializeField] private Weapon _weapon;
         [SerializeField] private DamageReactionViewer _damageReactionViewer;
@@ -51,9 +53,11 @@ namespace _GAME.Scripts.Battle.Enemy
         {
             
             _playerTransform = player;
+            
             _enemyMover.Setup(movePath, _playerTransform, enemyBounds, _data.MoveSpeed, _data.AttackDistance);
+            _ragDoll.Setup();
             _enemyViewer.Setup();
-            _weapon.SetActive(true);
+            _weapon.SetActive(true, false);
             _health.Set(_data.Health);
             _armor.Set(_data.Armor);
             DamageRepeatersSetActive(true);
@@ -116,7 +120,7 @@ namespace _GAME.Scripts.Battle.Enemy
         public void OnHealthChange(int delta)
         {
             _damageReactionViewer?.Show(delta, _lastHitPoint ?? transform.position, _lastDamageTextType);
-            _lastHitPoint = null;
+            
             _lastDamageTextType = DamageTextType.Default;
 
             if (_health.Current <= 0)
@@ -127,6 +131,7 @@ namespace _GAME.Scripts.Battle.Enemy
             {
                 _enemyViewer.Hit();
             }
+            _lastHitPoint = null;
         }
 
         private void DamageRepeatersSetActive(bool isActive)
@@ -137,9 +142,9 @@ namespace _GAME.Scripts.Battle.Enemy
             }
         }
 
-        public void Deactivate()
+        public void Deactivate(bool isForce)
         {
-            _weapon.SetActive(false);
+            _weapon.SetActive(false, isForce);
             _enemyMover.Deactivate();
             DamageRepeatersSetActive(false);
             OnDead = null;
@@ -147,9 +152,24 @@ namespace _GAME.Scripts.Battle.Enemy
 
         public void Dead()
         {
-            _enemyViewer.Dead();
+            if (_ragDoll != null)
+            {
+                if(_lastHitPoint!=null)
+                {
+                    _ragDoll.Show(_lastHitPoint ?? transform.position + transform.forward, 10f).Forget();
+                }
+                else
+                {
+                    _ragDoll.Show().Forget();
+                }
+            }
+            else
+            {
+                _enemyViewer.Dead();
+            }
+           
             OnDead?.Invoke(this);
-            Deactivate();
+            Deactivate(false);
         }
         
         #if UNITY_EDITOR

@@ -24,13 +24,18 @@ namespace _GAME.Scripts.Battle.Weapons
             _fireHandler = fireHandler;
             _onHit = onHit;
             _defaultBulletData = Core.Get<DataBase>().Bullets.GetDefaultData(_data.BulletType);
+            
             if(freeStateParent!=null)
             {
-                _viewer.SetupOverrideParents(transform, freeStateParent);
+                _viewer.Setup(transform, freeStateParent);
+            }
+            else
+            {
+                _viewer.Setup();
             }
         }
         
-        public void SetActive(bool isActive)
+        public void SetActive(bool isActive, bool isForce)
         {
             _isActive = isActive;
 
@@ -40,7 +45,7 @@ namespace _GAME.Scripts.Battle.Weapons
             }
             else
             {
-                _viewer.BattleStop();
+                _viewer.BattleStop(isForce);
             }
         }
 
