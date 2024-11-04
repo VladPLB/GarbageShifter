@@ -58,6 +58,7 @@ namespace _GAME.Scripts.Battle.Enemy
             _activeUnits.Add(unit);
             OnSpawned?.Invoke(unit);
             unit.gameObject.SetActive(true);
+            unit.Play();
         }
 
         public void RemoveUnit(EnemyController enemy)

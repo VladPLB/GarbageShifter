@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using _GAME.Scripts.Battle.Enemy;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.AI;
@@ -13,6 +14,8 @@ namespace _GAME.Scripts.Battle.Player
         [SerializeField] private float _stoppingDistance = .2f;
         [SerializeField] private Transform _model;
         private CharacterController _characterController;
+
+        private bool _isActive = false;
 
         private EnemyBounds _enemyBounds;
         private List<Vector3> _path;
@@ -49,6 +52,7 @@ namespace _GAME.Scripts.Battle.Player
 
         public void Play()
         {
+            _isActive = true;
             _pathMoveCoroutine = StartCoroutine(RunPath());
         }
 
@@ -78,6 +82,8 @@ namespace _GAME.Scripts.Battle.Player
                 {
                     yield return null;
                 }
+                if(!_isActive)
+                    yield break;
             }
             Stop();
         }
@@ -113,6 +119,7 @@ namespace _GAME.Scripts.Battle.Player
 
         public void Deactivate()
         {
+            _isActive = false;
             _isStopped = true;
             OnMoveCompleted = null;
             OnMoveSpeed = null;
@@ -121,6 +128,8 @@ namespace _GAME.Scripts.Battle.Player
 
         private void Update()
         {
+            if(!_isActive)
+                return;
             _forward = Vector3.zero;
             Vector3 move = Vector3.zero;
             Vector3 previewPosition = transform.position;

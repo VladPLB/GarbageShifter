@@ -57,8 +57,6 @@ namespace _GAME.Scripts.Battle.Enemy
             _health.Set(_data.Health);
             _armor.Set(_data.Armor);
             DamageRepeatersSetActive(true);
-            
-            Play();
         }
 
         public void Play()
