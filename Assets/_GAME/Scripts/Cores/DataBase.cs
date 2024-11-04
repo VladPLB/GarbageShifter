@@ -14,7 +14,7 @@ namespace _GAME.Scripts
         [Header("Common")]
         [SerializeField] private TextEffectsDatabase _textEffectsDatabase;
         [SerializeField] private GameEffectsDatabase _gameEffectsDatabase;
-        [SerializeField] private UIEnemyMarkersDatabase _uiEnemyMarkersDatabase;
+        [SerializeField] private UIMarkersDatabase _uiEnemyMarkersDatabase;
         [SerializeField] private UIEnemyHealthBarsDatabase _uiEnemyHealthBarsDatabase;
 
         public EnemyDatabase Enemies => _enemyDatabase;
@@ -23,7 +23,7 @@ namespace _GAME.Scripts
         
         public TextEffectsDatabase TextsEffects => _textEffectsDatabase;
         public GameEffectsDatabase GameEffects => _gameEffectsDatabase;
-        public UIEnemyMarkersDatabase UIEnemyMarkers => _uiEnemyMarkersDatabase;
+        public UIMarkersDatabase UIEnemyMarkers => _uiEnemyMarkersDatabase;
         public UIEnemyHealthBarsDatabase UIEnemyHealthBars => _uiEnemyHealthBarsDatabase;
 
         private void Awake()

@@ -17,6 +17,8 @@ namespace _GAME.Scripts.Battle.Level
         public Transform OutConnector => _stageOutConnector;
         public PlayerPosition PlayerPosition => _playerPosition;
 
+        private Action<Vector3> _onSpawnWarning;
+
         public void Setup()
         {
             Setup(null);
@@ -53,14 +55,21 @@ namespace _GAME.Scripts.Battle.Level
             PlayerPosition?.Setup(playerPositionType);
         }
 
-        public void Play()
+        public void Play(Action<Vector3> onSpawnWarning)
         {
-            _enemySpawner?.Play();
+            _onSpawnWarning = onSpawnWarning;
+            _enemySpawner?.Play(OnSpawnWarningHandler);
         }
         
         public void End()
         {
+            _onSpawnWarning = null;
             _enemySpawner?.Stop();
+        }
+
+        private void OnSpawnWarningHandler(Vector3 position)
+        {
+            _onSpawnWarning?.Invoke(position);
         }
     }
 }

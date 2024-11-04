@@ -11,14 +11,13 @@ namespace _GAME.Scripts.Battle.Player
 {
     public class Player: DamageReceiver, IDamageDealer
     {
-        public uint ID => 0;
-        public override Team Team => Team.Player;
-
+        [SerializeField] private PlayerData _data;
         [SerializeField] private PlayerViewer _viewer;
         [SerializeField] private PlayerMover _mover;
         [SerializeField] private Weapon _weapon;
         [SerializeField] private PlayerAim _aim;
         [SerializeField] private Transform _freeWeaponHolder;
+        [SerializeField] private StateIntAttribute _health;
         
         [SerializeField, ReadOnly]
         private DamageRepeater[] _damageRepeaters;
@@ -28,19 +27,27 @@ namespace _GAME.Scripts.Battle.Player
         private GameInput _gameInput;
         private bool _battleReady = false;
         
+        public override Team Team => Team.Player;
+        public StateIntAttribute Health => _health;
+        
         public event Action OnDestinationTargetPosition;
         public event Action<bool> OnBattleReady;
         public event Action OnHit;
 
         public event Action OnDamaged;
-        
-        
+
+        private void Awake()
+        {
+            _health.OnChangeValue += OnHealthChange;
+        }
+
         public void Setup(CameraController cameraController)
         {
             _cameraController = cameraController;
             _gameInput = new GameInput();
             _aim.Setup(_gameInput);
             SetupWeapon();
+            _health.Set(_data.Health);
             
             foreach (var damageRepeater in _damageRepeaters)
             {
@@ -50,8 +57,8 @@ namespace _GAME.Scripts.Battle.Player
 
         private void SetupWeapon()
         {
-            var weaponData = Core.Get<DataBase>().Weapons.GetDefaultData(WeaponType.Riffle);
-            weaponData.Setup(this);
+            var weaponData = Core.Get<DataBase>().Weapons.GetData(WeaponType.Riffle);
+            weaponData.Setup(this, _data.WeaponLevel);
             _weapon.Setup(weaponData, IsFire, OnHitHandler, _freeWeaponHolder);
         }
 
@@ -128,7 +135,17 @@ namespace _GAME.Scripts.Battle.Player
         public override void OnDamage(Team damageDealersTeam, int damageAmount, Vector3 hitPoint, List<IEffectAttribute> additiveAttributes = null)
         {
             OnDamaged?.Invoke();
-            _damageReactionViewer?.Show(damageAmount, transform.position);
+            _health.Remove(damageAmount);
+        }
+        
+        public void OnHealthChange(int delta)
+        {
+            _damageReactionViewer?.Show(delta, transform.position);
+
+            if (_health.Current <= 0)
+            {
+               // Dead(); TODO
+            }
         }
 
         private void OnDisable()

@@ -396,7 +396,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c582f60618c74fbda933174136207cc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stageType: 2
+  _stageType: 3
+  _enemySpawner: {fileID: 0}
   _stageInConnector: {fileID: 381666941427169316}
   _stageOutConnector: {fileID: 7231648744186173172}
   _playerPosition: {fileID: 0}

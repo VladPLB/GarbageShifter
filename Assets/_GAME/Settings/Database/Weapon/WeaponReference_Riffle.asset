@@ -16,5 +16,8 @@ MonoBehaviour:
     _type: 0
     _bulletType: 0
     _reloadTime: 0.2
+    _reloadTimeRandomize: 0
     _damage: 10
+    _damageOffset: 3
+    _aimOffset: 0
   _prefab: {fileID: 6359684540194013533, guid: a959a60e3b62349acabd4d61ff387e4c, type: 3}

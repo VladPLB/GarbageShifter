@@ -17,7 +17,7 @@ namespace _GAME.Scripts.Battle.Context
             _weaponByType = _weapons.ToDictionary(w => w.Data.Type);
         }
         
-        public WeaponData GetDefaultData(WeaponType type)
+        public WeaponData GetData(WeaponType type)
         {
             var reference = _weaponByType[type];
             var data = reference.Data.Clone();

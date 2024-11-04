@@ -54,8 +54,9 @@ namespace _GAME.Scripts.Battle.Weapons
                 var offset = (Mathf.PerlinNoise1D(Time.time) * 2f - 1f) * _data.AimOffset;
                 bullet.transform.forward = (_barrel.forward + _barrel.right * offset + _barrel.up * offset).normalized;
                 var data = _defaultBulletData.Clone();
-                data.Setup(_data.DamageDealer, _data.Damage, bullet.transform.forward);
+                data.Setup(_data.DamageDealer, _data.DamageRandomize, bullet.transform.forward);
                 bullet.Setup(data, OnHit);
+                bullet.gameObject.SetActive(true);
             }
         }
 

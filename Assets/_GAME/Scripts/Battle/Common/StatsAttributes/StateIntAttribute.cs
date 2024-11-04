@@ -10,6 +10,7 @@ namespace _GAME.Scripts.Battle.Enemy
         public int Max;
 
         public event Action<int> OnChangeValue;
+        public event Action<float> OnChangeValue01;
 
         public float Value => Max>0?(float)Current / Max : 0;
 
@@ -45,6 +46,7 @@ namespace _GAME.Scripts.Battle.Enemy
             if (delta != 0)
             {
                 OnChangeValue?.Invoke(delta);
+                OnChangeValue01?.Invoke(Max<=0?0:(float)Current / Max);
             }
         }
     }

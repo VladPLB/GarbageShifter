@@ -26,6 +26,8 @@ namespace _GAME.Scripts.Battle.Level
         private List<float> _enemySpawnDelays;
         private List<int> _enemySpawnCounts;
 
+        private Action<Vector3> _onSpawnGroupWarning;
+
         public void Setup(UnitsController enemyController, EnemyStagePreset enemyStagePreset)
         {
             _enemyController = enemyController;
@@ -48,8 +50,9 @@ namespace _GAME.Scripts.Battle.Level
             _enemySpawnDelays = _enemySpawnDatas.Select(e => e.SpawnDelayBetwenUnits).ToList();
         }
 
-        public void Play()
+        public void Play(Action<Vector3> spawnGroupWarningHandler)
         {
+            _onSpawnGroupWarning = spawnGroupWarningHandler;
             TryClearSpawnCoroutine();
             _enemyController.PlayStage(_enemySpawnCounts.Sum());
             _spawnCoroutine = StartCoroutine(Spawn());
@@ -57,6 +60,7 @@ namespace _GAME.Scripts.Battle.Level
 
         public void Stop()
         {
+            _onSpawnGroupWarning = null;
             _enemyController.ClearCurrentEnemies();
             TryClearSpawnCoroutine();
         }
@@ -75,11 +79,16 @@ namespace _GAME.Scripts.Battle.Level
             for (int i = 0; i < _groupsCount; i++)
             {
                 yield return new WaitForSeconds(_enemyGroupSpawnDelays[i]);
+                
                 EnemyType enemyType = _enemySpawnDatas[i].Type;
                 EnemyClassType enemyClass = _enemyDatabase.GetClass(enemyType);
                 EnemySpawnPoint spawnPoint = _group.GetSpawnPoint(enemyClass);
+                _onSpawnGroupWarning?.Invoke(spawnPoint.WarningPosition);
+                if (spawnPoint.TryDoorOpened())
+                {
+                    yield return new WaitForSeconds(.5f);
+                }
 
-                
                 SpawnEnemies(enemyType, _enemySpawnCounts[i], _enemySpawnDelays[i], spawnPoint);
             }
         }

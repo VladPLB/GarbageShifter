@@ -29,6 +29,8 @@ public class LevelController : MonoBehaviour, IRuntimeSetup
     public Player Player => _player;
     public UnitsController UnitsController => _unitsController;
 
+    public event Action<Vector3> OnSpawnWarning;
+
     private void Awake()
     {
         Core.Registry(this, typeof(PoolProvider));
@@ -105,21 +107,27 @@ public class LevelController : MonoBehaviour, IRuntimeSetup
         await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.STAGE_PLAY_PLAYER_DELAY));
         _player.BattleReady();
         await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.STAGE_PLAY_ENEMY_DELAY));
-        _realStages[_currentStageIndex].Play();
+        _realStages[_currentStageIndex].Play(OnSpawnWarningHandler);
     }
     
     private async void PlayFirstStage()
     {
         _currentStageIndex = 0;
         _player.SetPosition(_playerPositions[_currentStageIndex]);
-        _realStages[_currentStageIndex].Play();
+        _realStages[_currentStageIndex].Play(OnSpawnWarningHandler);
         await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.STAGE_FIRST_DURATION));
         ToNextStage();
+    }
+    
+    private void OnSpawnWarningHandler(Vector3 position)
+    {
+        OnSpawnWarning?.Invoke(position);
     }
 
     public void EndLevel()
     {
         _player.Victory();
+        OnSpawnWarning = null;
     }
     
     private void Update()

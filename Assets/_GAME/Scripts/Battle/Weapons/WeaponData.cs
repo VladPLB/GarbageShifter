@@ -13,6 +13,7 @@ namespace _GAME.Scripts.Battle.Weapons
         [SerializeField] private float _reloadTime;
         [SerializeField] private float _reloadTimeRandomize;
         [SerializeField] private int _damage;
+        [SerializeField] private float _damageOffset;
         [SerializeField] private float _aimOffset;
 
         public int Level { get; protected set; } = 1;
@@ -23,6 +24,7 @@ namespace _GAME.Scripts.Battle.Weapons
         public float ReloadTime => _reloadTime;
         public float ReloadTimeRandomize => _reloadTimeRandomize;
         public int Damage => _damage;
+        public int DamageRandomize => _damage + (int)Random.Range(-_damageOffset, _damageOffset);
         public float AimOffset => _aimOffset;
 
         public void Setup(IDamageDealer damageDealer, int level)

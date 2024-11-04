@@ -100,4 +100,11 @@ namespace _GAME.Scripts.Common
         Default,
         BOSS
     }
+    
+    public enum MarkerType
+    {
+        ENEMY,
+        BOSS,
+        WARNING
+    }
 }

@@ -629,7 +629,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3602891581851039675
 Transform:
   m_ObjectHideFlags: 0
@@ -671,6 +671,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _stageType: 2
+  _enemySpawner: {fileID: 0}
   _stageInConnector: {fileID: 8745337099810362400}
   _stageOutConnector: {fileID: 6688000104480175182}
   _playerPosition: {fileID: 3598248731018371087}

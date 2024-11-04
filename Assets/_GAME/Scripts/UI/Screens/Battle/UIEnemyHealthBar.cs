@@ -42,6 +42,7 @@ namespace _GAME.Scripts.Common
         {
             var item = Core.Get<PoolProvider>().UIEnemyHealthBar.Pop(type);
             item.transform.SetParent(holder);
+            item.gameObject.SetActive(true);
             return item;
         }
     }

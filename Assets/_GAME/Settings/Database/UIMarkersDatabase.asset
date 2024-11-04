@@ -10,7 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 59decfe36e7f46b299d247ada0114e53, type: 3}
-  m_Name: UIEnemyMarkersDatabase
+  m_Name: UIMarkersDatabase
   m_EditorClassIdentifier: 
   _prefabs:
   - {fileID: 727355789248090541, guid: 56108908fbcc94c41b66af5ba353a474, type: 3}
+  - {fileID: 240626240761849606, guid: c2926c47957ba4fd1bd23d5c66a3fb7b, type: 3}

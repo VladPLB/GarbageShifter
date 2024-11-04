@@ -495,11 +495,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f069fb9defa42698c83a6c543183f25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _data:
+    _weaponLevel: 0
+    _health: 500
+    _armor: 0
   _viewer: {fileID: 7650563872970268767}
   _mover: {fileID: 7065061001807874178}
   _weapon: {fileID: 2045281809635374678}
   _aim: {fileID: 6861049720385393006}
   _freeWeaponHolder: {fileID: 721499000510401764}
+  _health:
+    Current: 500
+    Max: 500
   _damageRepeaters:
   - {fileID: 606687075272315195}
   _damageReactionViewer: {fileID: 7582928690967252051}
@@ -3337,6 +3344,10 @@ PrefabInstance:
     - target: {fileID: 1598324380993774, guid: 7eedf4519460a0842af962a850d94e97, type: 3}
       propertyPath: m_Name
       value: FX_Exhaust_Trail
+      objectReference: {fileID: 0}
+    - target: {fileID: 1598324380993774, guid: 7eedf4519460a0842af962a850d94e97, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 1598324380993774, guid: 7eedf4519460a0842af962a850d94e97, type: 3}
       propertyPath: m_IsActive

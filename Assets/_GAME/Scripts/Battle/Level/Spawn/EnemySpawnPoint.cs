@@ -8,6 +8,8 @@ namespace _GAME.Scripts.Battle.Level
     public class EnemySpawnPoint : MonoBehaviour
     {
         [SerializeField] private List<EnemyClassType> _enemies;
+        [SerializeField] private EnemyDoorHandler _door;
+        [SerializeField] private Transform _warningPoint;
         [SerializeField] private Bounds _spawnBox;
         [SerializeField] private List<Bounds> _targetMoveBoxes = new();
         [Header("Debug")]
@@ -15,6 +17,7 @@ namespace _GAME.Scripts.Battle.Level
         [SerializeField] private Bounds _sBox;
         [SerializeField] private List<Bounds> _tBoxes = new();
 
+        public Vector3 WarningPosition =>_warningPoint==null? _spawnBox.center : _warningPoint.position;
         public bool IsTypeContains(EnemyClassType type) => _enemies.Contains(type);
 
         public List<Vector3> GetPath()
@@ -27,6 +30,14 @@ namespace _GAME.Scripts.Battle.Level
             }
 
             return path;
+        }
+
+        public bool TryDoorOpened()
+        {
+            if (_door == null)
+                return false;
+            
+            return _door.Open();
         }
 
         private void OnDrawGizmosSelected()

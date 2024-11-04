@@ -1,73 +1,61 @@
-using System;
 using System.Collections.Generic;
-using _GAME.Scripts.Battle.Enemy;
-using _GAME.Scripts.Battle.Player;
 using _GAME.Scripts.Common;
-using DG.Tweening;
 using UnityEngine;
 
 namespace _GAME.Scripts.UI.Screens.Battle
 {
-    public class UIUnitsMarkers : MonoBehaviour
+    public class UISpawnWarningMarkers : MonoBehaviour
     {
-        private const float OFFSET = 50f;
+        private const float OFFSET = 0f;
         
         [SerializeField] private RectTransform _holder;
         
-        private UnitsController _unitsController;
+        private LevelController _levelController;
         private Camera _camera;
         private Vector2 _halfScreenSize;
-        private Dictionary<EnemyController, UIMarker> _markersByEnemy;
+        private Dictionary<Vector3, UIMarker> _markersByPosition;
 
-        public void Setup(UnitsController unitsController)
+        public void Setup(LevelController levelController)
         {
-            _unitsController = unitsController;
+            _levelController = levelController;
             _camera = Camera.main;
             _halfScreenSize = new Vector2(Screen.width / 2, Screen.height / 2);
-            _markersByEnemy = new();
+            _markersByPosition = new();
 
-            _unitsController.OnSpawned += SpawnUnit;
-            _unitsController.OnRemoved += RemoveUnit;
+            _levelController.OnSpawnWarning += SpawnWarningHandler;
         }
 
-        private void SpawnUnit(EnemyController enemy)
+        private void SpawnWarningHandler(Vector3 position)
         {
-            if (_markersByEnemy.ContainsKey(enemy))
+            if (_markersByPosition.ContainsKey(position))
                 return;
 
-            var markerType = enemy.Data.SubClass switch
-            {
-                EnemySubClassType.BOSS => MarkerType.BOSS,
-                _ => MarkerType.ENEMY
-            };
-
-            var marker = UIMarker.Create(markerType, _holder);
-            _markersByEnemy.Add(enemy, marker);
+            var marker = UIMarker.Create(MarkerType.WARNING, _holder);
+            marker.OnRemoved += () => RemoveMarker(position);
+            _markersByPosition.Add(position, marker);
         }
 
-        private void RemoveUnit(EnemyController enemy)
+        private void RemoveMarker(Vector3 position)
         {
-            if (!_markersByEnemy.ContainsKey(enemy))
+            if (!_markersByPosition.ContainsKey(position))
                 return;
-
-            var marker = _markersByEnemy[enemy];
-            marker.Remove();
-            _markersByEnemy.Remove(enemy);
+            
+            _markersByPosition.Remove(position);
         }
 
         private void LateUpdate()
         {
-            foreach (var item in _markersByEnemy)
+            foreach (var item in _markersByPosition)
             {
-                var enemy = item.Key;
+                var position = item.Key;
                 var marker = item.Value;
-                UpdateHealthBar(marker, enemy);
+                UpdateHealthBar(marker, position);
             }
         }
 
-        private void UpdateHealthBar(UIMarker marker, EnemyController enemy)
+        private void UpdateHealthBar(UIMarker marker, Vector3 position)
         {
-            Vector3 screenPoint = _camera.WorldToScreenPoint(enemy.transform.position + Vector3.up);
+            Vector3 screenPoint = _camera.WorldToScreenPoint(position);
             bool isScreenContain = screenPoint.x > OFFSET && screenPoint.x < Screen.width - OFFSET &&
                                    screenPoint.y > OFFSET && screenPoint.y < Screen.height -OFFSET;
             if (screenPoint.z > 0 && !isScreenContain)

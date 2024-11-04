@@ -17,6 +17,7 @@ namespace _GAME.Scripts.Common
         public virtual async void Show(Vector3 position)
         {
             transform.position = position;
+            gameObject.SetActive(true);
             await UniTask.Delay(TimeSpan.FromSeconds(_liveTime));
             Remove();
         }

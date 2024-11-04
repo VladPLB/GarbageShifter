@@ -24,7 +24,6 @@ namespace _GAME.Scripts
             if (_pools.ContainsKey(key) && !_pools[key].IsNullOrEmpty())
             {
                 var item = _pools[key].Pop();
-                item.gameObject.SetActive(true);
                 return item;
             }
 
@@ -37,7 +36,6 @@ namespace _GAME.Scripts
             
             var prefab = _getPrefabFunc.Invoke(key);
             var item = Object.Instantiate(prefab, _holders[key]);
-            item.gameObject.SetActive(true);
             return item;
         }
 

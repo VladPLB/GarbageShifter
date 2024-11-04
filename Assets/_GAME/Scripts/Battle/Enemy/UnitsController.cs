@@ -8,7 +8,7 @@ namespace _GAME.Scripts.Battle.Enemy
 {
     public class UnitsController : MonoBehaviour
     {
-        private const float REMOVE_UNIT_TIME = 3f;
+        private const float REMOVE_UNIT_TIME = 5f;
         
         private Pool<EnemyController,EnemyType> _pool;
 
@@ -57,6 +57,7 @@ namespace _GAME.Scripts.Battle.Enemy
             unit.OnDead += RemoveUnit;
             _activeUnits.Add(unit);
             OnSpawned?.Invoke(unit);
+            unit.gameObject.SetActive(true);
         }
 
         public void RemoveUnit(EnemyController enemy)

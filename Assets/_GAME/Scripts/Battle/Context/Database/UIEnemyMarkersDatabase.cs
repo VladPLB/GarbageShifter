@@ -7,17 +7,17 @@ using UnityEngine;
 namespace _GAME.Scripts.Battle.Context
 {
     [CreateAssetMenu(fileName = "UIEnemyMarkersDatabase", menuName = "Scriptable/DB/Effects/UIEnemyMarkers", order = 1)]
-    public class UIEnemyMarkersDatabase : ScriptableObject, IRuntimeSetup
+    public class UIMarkersDatabase : ScriptableObject, IRuntimeSetup
     {
-        [SerializeField] private List<UIEnemyMarker> _prefabs = new();
-        private Dictionary<EnemySubClassType, UIEnemyMarker> _prefabsByType = new();
+        [SerializeField] private List<UIMarker> _prefabs = new();
+        private Dictionary<MarkerType, UIMarker> _prefabsByType = new();
         
         public void RuntimeSetup()
         {
             _prefabsByType = _prefabs.ToDictionary(b => b.Type);
         }
 
-        public UIEnemyMarker GetPrefab(EnemySubClassType type)
+        public UIMarker GetPrefab(MarkerType type)
         {
             return _prefabsByType[type];
         }
