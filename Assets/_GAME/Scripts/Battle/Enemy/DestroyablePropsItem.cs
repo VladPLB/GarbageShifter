@@ -11,8 +11,12 @@ namespace _GAME.Scripts.Battle.Enemy
     {
         [SerializeField] private DamageReactionViewer _damageReactionViewer;
         [SerializeField] private StateIntAttribute _health;
-        [SerializeField] private GameEffectType _deadEffect;
-        [SerializeField] private Transform _deadEffectPoint;
+        [SerializeField] private bool _autoRevive = false;
+        [SerializeField] private List<Collider> _colliders = new();
+        [SerializeField] private List<GameObject> _activeItems = new();
+        [SerializeField] private List<GameObject> _destroyedItems = new();
+        [SerializeField] private List<DeadHandler> _deadHandlers = new();
+
         public override Team Team => Team.None;
 
         private Vector3? _lastHitPoint = null;
@@ -27,6 +31,9 @@ namespace _GAME.Scripts.Battle.Enemy
         {
             _health.Set(Random.Range(20, 40));
             gameObject.SetActive(true);
+            _activeItems.ForEach(a => a.SetActive(true));
+            _destroyedItems.ForEach(a => a.SetActive(false));
+            _colliders.ForEach(a => a.enabled = true);
         }
 
         public override void OnDamage(Team damageDealersTeam, int damageAmount, Vector3 hitPoint, List<IEffectAttribute> additiveAttributes = null)
@@ -51,10 +58,17 @@ namespace _GAME.Scripts.Battle.Enemy
 
         public async void Dead()
         {
-            GameEffect.Create(_deadEffect, _deadEffectPoint.position);
-            gameObject.SetActive(false);
-            await UniTask.Delay(TimeSpan.FromSeconds(2));
-            Revive();
+            _deadHandlers.ForEach(h=>h.OnDead());
+            
+            _activeItems.ForEach(a => a.SetActive(false));
+            _destroyedItems.ForEach(a => a.SetActive(true));
+            _colliders.ForEach(a => a.enabled = false);
+            if(_autoRevive)
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(2));
+                gameObject.SetActive(false);
+                Revive();
+            }
         }
     }
 }

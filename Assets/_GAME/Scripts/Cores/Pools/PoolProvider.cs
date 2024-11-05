@@ -9,6 +9,7 @@ namespace _GAME.Scripts
     public class PoolProvider: MonoBehaviour, IRuntimeSetup
     {
         public Pool<Bullet,BulletType> Bullets { get; private set; }
+        public Pool<Explosion,ExplosionType> Explosions { get; private set; }
         public Pool<TextEffect,TextEffectType> TextEffects { get; private set; }
         public Pool<GameEffect,GameEffectType> GameEffects { get; private set; }
         
@@ -24,7 +25,8 @@ namespace _GAME.Scripts
         public void RuntimeSetup()
         {
             var database = Core.Get<DataBase>();
-            Bullets = new Pool<Bullet, BulletType>(database.Bullets.GetBulletPrefab);
+            Bullets = new Pool<Bullet, BulletType>(database.Bullets.GetPrefab);
+            Explosions = new Pool<Explosion, ExplosionType>(database.Explosion.GetPrefab);
             TextEffects = new Pool<TextEffect, TextEffectType>(database.TextsEffects.GetPrefab);
             GameEffects = new Pool<GameEffect,GameEffectType>(database.GameEffects.GetPrefab);
             Enemies = new Pool<EnemyController, EnemyType>(database.Enemies.GetPrefab);

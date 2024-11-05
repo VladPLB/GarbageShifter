@@ -19,7 +19,7 @@ namespace _GAME.Scripts.Common
     public enum EffectAttributeType
     {
         None,
-        SplashDamage,
+        ExplosionDamage,
         HeadShot,
         WeakShot,
         ShieldShot
@@ -31,6 +31,11 @@ namespace _GAME.Scripts.Common
     }
 
     public enum BulletType
+    {
+        Default
+    }
+    
+    public enum ExplosionType
     {
         Default
     }
@@ -71,13 +76,15 @@ namespace _GAME.Scripts.Common
         Default,
         Armor,
         Headshot,
-        Weak
+        Weak,
+        Explosion
     }
 
     public enum GameEffectType
     {
         BlueEnergyExplode,
         LaserHitDecal,
+        Explosion_Default,
     }
 
     public enum EnemyType

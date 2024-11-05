@@ -25,10 +25,16 @@ namespace _GAME.Scripts.Battle.Enemy
             _ragdoll.User_DisableMecanimAfter(.5f);
         }
         
-        public async UniTask Show(Vector3 hitPoint, float force)
+        public async UniTask ShowWithHit(Vector3 hitPoint, float force)
         {
             await Show();
             Hit(hitPoint, force);
+        }
+        
+        public async UniTask ShowWithExplosion(Vector3 direction, float force)
+        {
+            await Show();
+            Force(direction, force);
         }
 
         private void Hit(Vector3 hitPoint, float force)
@@ -40,6 +46,12 @@ namespace _GAME.Scripts.Battle.Enemy
 
             Vector3 dir = ( nearest.position - hitPoint ).normalized;
             _ragdoll.User_AddRigidbodyImpact( nearest, ( dir + new Vector3( 0f, .4f, 0f ) ) * ( force ), 0.14f, ForceMode.Impulse, 0.06f );
+
+        }
+        
+        private void Force(Vector3 direction, float force)
+        {
+            _ragdoll.User_AddAllImpact( ( direction + new Vector3( 0f, .4f, 0f ) ) * ( force ), 0.14f, ForceMode.Impulse );
 
         }
     }

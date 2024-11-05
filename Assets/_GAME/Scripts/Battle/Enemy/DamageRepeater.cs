@@ -20,7 +20,7 @@ namespace _GAME.Scripts.Battle.Enemy
             if(damageDealersTeam == Team)
                 return;
             
-            if(additiveAttributes!=null && additiveAttributes.Any(a=>a.Key == EffectAttributeType.SplashDamage) && _damageRepeaterType!= DamageRepeaterType.Default)
+            if(additiveAttributes!=null && _damageRepeaterType!= DamageRepeaterType.Default && additiveAttributes.Any(a=>a.Key == EffectAttributeType.ExplosionDamage))
                 return;
             
             var shotAttribute = _damageRepeaterType switch

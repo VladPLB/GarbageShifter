@@ -17,7 +17,7 @@ namespace _GAME.Scripts.Battle.Context
             _bulletByType = _bullets.ToDictionary(b => b.Data.Type);
         }
 
-        public Bullet GetBulletPrefab(BulletType type)
+        public Bullet GetPrefab(BulletType type)
         {
             return _bulletByType[type].Prefab;
         }

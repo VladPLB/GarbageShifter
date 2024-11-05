@@ -10,6 +10,7 @@ namespace _GAME.Scripts
         
         [SerializeField] private WeaponDatabase _weaponDatabase;
         [SerializeField] private BulletDatabase _bulletDatabase;
+        [SerializeField] private ExplosionDatabase _explosionDatabase;
         
         [Header("Common")]
         [SerializeField] private TextEffectsDatabase _textEffectsDatabase;
@@ -20,6 +21,7 @@ namespace _GAME.Scripts
         public EnemyDatabase Enemies => _enemyDatabase;
         public WeaponDatabase Weapons => _weaponDatabase;
         public BulletDatabase Bullets => _bulletDatabase;
+        public ExplosionDatabase Explosion => _explosionDatabase;
         
         public TextEffectsDatabase TextsEffects => _textEffectsDatabase;
         public GameEffectsDatabase GameEffects => _gameEffectsDatabase;
@@ -36,6 +38,7 @@ namespace _GAME.Scripts
             Enemies.RuntimeSetup();
             Weapons.RuntimeSetup();
             Bullets.RuntimeSetup();
+            Explosion.RuntimeSetup();
             TextsEffects.RuntimeSetup();
             GameEffects.RuntimeSetup();
             UIEnemyMarkers.RuntimeSetup();

@@ -24,6 +24,7 @@ namespace _GAME.Scripts.Battle.Enemy
         [SerializeField, ReadOnly]
         private DamageRepeater[] _damageRepeaters;
         private Vector3? _lastHitPoint = null;
+        private Vector3? _explosionForce = null;
         private DamageTextType _lastDamageTextType;
         private Transform _playerTransform;
 
@@ -53,6 +54,8 @@ namespace _GAME.Scripts.Battle.Enemy
         {
             
             _playerTransform = player;
+            _lastHitPoint = null;
+            _explosionForce = null;
             
             _enemyMover.Setup(movePath, _playerTransform, enemyBounds, _data.MoveSpeed, _data.AttackDistance);
             _ragDoll.Setup();
@@ -90,10 +93,18 @@ namespace _GAME.Scripts.Battle.Enemy
         {
             if(damageDealersTeam == Team.Enemy)
                 return;
+            
             _lastHitPoint = hitPoint;
             _lastDamageTextType = DamageTextType.Default;
             
             var dmg = damageAmount;
+            if (additiveAttributes.Find(a => a.Key == EffectAttributeType.ExplosionDamage) != null)
+            {
+                _lastHitPoint = null;
+                _explosionForce = (transform.position - hitPoint).normalized;
+                dmg = Mathf.RoundToInt(dmg * GameConstants.EXPLOSION_DAMAGE_MULTIPLIER);
+                _lastDamageTextType = DamageTextType.Explosion;
+            }
             if (additiveAttributes.Find(a => a.Key == EffectAttributeType.HeadShot) != null)
             {
                 dmg = Mathf.RoundToInt(dmg * GameConstants.HEADSHOT_DAMAGE_MULTIPLIER);
@@ -115,6 +126,8 @@ namespace _GAME.Scripts.Battle.Enemy
             }
             
             _health.Remove(damageAmount);
+            _lastHitPoint = null;
+            _explosionForce = null;
         }
         
         public void OnHealthChange(int delta)
@@ -131,7 +144,6 @@ namespace _GAME.Scripts.Battle.Enemy
             {
                 _enemyViewer.Hit();
             }
-            _lastHitPoint = null;
         }
 
         private void DamageRepeatersSetActive(bool isActive)
@@ -154,9 +166,13 @@ namespace _GAME.Scripts.Battle.Enemy
         {
             if (_ragDoll != null)
             {
-                if(_lastHitPoint!=null)
+                if (_explosionForce != null)
                 {
-                    _ragDoll.Show(_lastHitPoint ?? transform.position + transform.forward, 10f).Forget();
+                    _ragDoll.ShowWithExplosion(_explosionForce.Value, 5).Forget();
+                }
+                else if(_lastHitPoint!=null)
+                {
+                    _ragDoll.ShowWithHit(_lastHitPoint.Value, 10f).Forget();
                 }
                 else
                 {

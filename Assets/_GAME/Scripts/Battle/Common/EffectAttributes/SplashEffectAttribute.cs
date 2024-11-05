@@ -1,7 +1,7 @@
 namespace _GAME.Scripts.Common
 {
-    public class SplashEffectAttribute: IEffectAttribute
+    public class ExplosionEffectAttribute: IEffectAttribute
     {
-        public EffectAttributeType Key => EffectAttributeType.SplashDamage;
+        public EffectAttributeType Key => EffectAttributeType.ExplosionDamage;
     }
 }
