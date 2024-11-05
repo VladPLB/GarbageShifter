@@ -10,6 +10,7 @@ namespace _GAME.Scripts.Battle.Weapons
     {
         [SerializeField] private WeaponType _type;
         [SerializeField] private BulletType _bulletType;
+        [SerializeField] private ExplosionType _explosionType;
         [SerializeField] private float _reloadTime;
         [SerializeField] private float _reloadTimeRandomize;
         [SerializeField] private int _damage;
@@ -21,6 +22,7 @@ namespace _GAME.Scripts.Battle.Weapons
         
         public WeaponType Type => _type;
         public BulletType BulletType => _bulletType;
+        public ExplosionType ExplosionType => _explosionType;
         public float ReloadTime => _reloadTime;
         public float ReloadTimeRandomize => _reloadTimeRandomize;
         public int Damage => _damage;

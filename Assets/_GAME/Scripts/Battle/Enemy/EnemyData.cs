@@ -2,6 +2,7 @@ using System;
 using _GAME.Scripts.Battle.Player;
 using _GAME.Scripts.Battle.Weapons;
 using _GAME.Scripts.Common;
+using _GAME.Scripts.Weapons.Bullets;
 using UnityEngine;
 
 namespace _GAME.Scripts.Battle.Enemy
@@ -14,6 +15,8 @@ namespace _GAME.Scripts.Battle.Enemy
         [SerializeField] private EnemySubClassType _subClass;
 
         [SerializeField] private WeaponData _weaponData;
+        [SerializeField] private bool _isBomber = false;
+        [SerializeField] private ExplosionData _explosionData;
 
         [SerializeField] private int _health;
         [SerializeField] private int _armor;
@@ -26,6 +29,8 @@ namespace _GAME.Scripts.Battle.Enemy
         public EnemySubClassType SubClass => _subClass;
 
         public WeaponData WeaponData => _weaponData;
+        public bool IsBomber => _isBomber;
+        public ExplosionData ExplosionData => _explosionData;
         public int Health => _health;
         public int Armor => _armor;
         public float MoveSpeed => _moveSpeed;

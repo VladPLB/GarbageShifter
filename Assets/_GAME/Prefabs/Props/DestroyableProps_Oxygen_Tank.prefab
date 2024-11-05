@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1149779589145646476}
   - component: {fileID: 2874117313938346583}
   - component: {fileID: 7024224412965847190}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Model (Destroy)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109,7 +109,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 264951394028824080}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: ExplPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -143,7 +143,7 @@ GameObject:
   - component: {fileID: 1672145511981243307}
   - component: {fileID: 769416011144105481}
   - component: {fileID: 4795837182535095064}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -243,7 +243,7 @@ GameObject:
   - component: {fileID: 8807370205220422313}
   - component: {fileID: 5205648791153477378}
   - component: {fileID: 2056471760400828748}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: DestroyableProps_Oxygen_Tank
   m_TagString: Untagged
   m_Icon: {fileID: 0}

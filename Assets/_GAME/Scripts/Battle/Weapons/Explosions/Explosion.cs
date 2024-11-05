@@ -31,7 +31,8 @@ public class Explosion : MonoBehaviour, IPoolableItem<ExplosionType>
 
    public void Setup(ExplosionData data)
    {
-      _data = data;
+      _data = new ExplosionData();
+      _data.Setup(data);
       Explode();
    }
 
@@ -46,7 +47,7 @@ public class Explosion : MonoBehaviour, IPoolableItem<ExplosionType>
          var damageReceiver = colliders[i].GetComponent<IDamageReceiver>();
          if(damageReceiver!=null)
          {
-            damageReceiver.OnDamage(_data.DamageDealer.Team, _data.Damage, transform.position, _data.Attributes);
+            damageReceiver.OnDamage(Team.None, _data.Damage, transform.position, _data.Attributes);
          }
       }
 

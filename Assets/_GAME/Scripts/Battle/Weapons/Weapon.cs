@@ -53,7 +53,7 @@ namespace _GAME.Scripts.Battle.Weapons
         {
             if (_data.TryFireRegister())
             {
-                _muzzleFlash.Play();
+                _muzzleFlash?.Play();
                 var bullet = Bullet.Create(_defaultBulletData.Type);
                 bullet.transform.position = _barrel.position;
                 var offset = (Mathf.PerlinNoise1D(Time.time) * 2f - 1f) * _data.AimOffset;

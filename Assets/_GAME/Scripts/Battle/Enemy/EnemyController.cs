@@ -17,6 +17,7 @@ namespace _GAME.Scripts.Battle.Enemy
         [SerializeField] private RagDollController _ragDoll;
         [SerializeField] private EnemyMover _enemyMover;
         [SerializeField] private Weapon _weapon;
+        [SerializeField] private WeaponBomb _weaponBomb;
         [SerializeField] private DamageReactionViewer _damageReactionViewer;
         [SerializeField] private Transform _healthBarPoint;
         [SerializeField] private StateIntAttribute _health;
@@ -40,8 +41,16 @@ namespace _GAME.Scripts.Battle.Enemy
 
         public void Awake()
         {
-            _data.WeaponData.Setup(this, 1);
-            _weapon.Setup(_data.WeaponData, IsFire);
+            if(!_data.IsBomber)
+            {
+                _data.WeaponData.Setup(this, 1);
+                _weapon.Setup(_data.WeaponData, IsFire);
+            }
+            else
+            {
+                _data.ExplosionData.Setup(this, -1, new ExplosionEffectAttribute());
+                _weaponBomb.Setup(_data.ExplosionData, IsFire);
+            }
             _health.OnChangeValue += OnHealthChange;
             
             foreach (var damageRepeater in _damageRepeaters)
@@ -60,7 +69,14 @@ namespace _GAME.Scripts.Battle.Enemy
             _enemyMover.Setup(movePath, _playerTransform, enemyBounds, _data.MoveSpeed, _data.AttackDistance);
             _ragDoll.Setup();
             _enemyViewer.Setup();
-            _weapon.SetActive(true, false);
+            if(!_data.IsBomber)
+            {
+                _weapon.SetActive(true, false);
+            }
+            else
+            {
+                _weaponBomb.SetActive(true, false);
+            }
             _health.Set(_data.Health);
             _armor.Set(_data.Armor);
             DamageRepeatersSetActive(true);
@@ -79,8 +95,8 @@ namespace _GAME.Scripts.Battle.Enemy
                 _isFire = false;
                 return false;
             }
-
-            if (!_isFire)
+            
+            if (!_isFire && !_data.IsBomber)
             {
                 _data.WeaponData.ResetFireTime(Time.time);
             }
@@ -156,7 +172,14 @@ namespace _GAME.Scripts.Battle.Enemy
 
         public void Deactivate(bool isForce)
         {
-            _weapon.SetActive(false, isForce);
+            if(!_data.IsBomber)
+            {
+                _weapon.SetActive(false, isForce);
+            }
+            else
+            {
+                _weaponBomb.SetActive(false, isForce);
+            }
             _enemyMover.Deactivate();
             DamageRepeatersSetActive(false);
             OnDead = null;
@@ -182,6 +205,11 @@ namespace _GAME.Scripts.Battle.Enemy
             else
             {
                 _enemyViewer.Dead();
+            }
+
+            if (_data.IsBomber)
+            {
+                _weaponBomb.Explode();
             }
            
             OnDead?.Invoke(this);

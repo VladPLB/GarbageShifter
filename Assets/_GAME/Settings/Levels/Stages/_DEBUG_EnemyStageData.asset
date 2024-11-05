@@ -23,3 +23,13 @@ MonoBehaviour:
       SpawnRangeAmount: {x: 5, y: 10}
       SpawnDelayBetwenUnits: 0.3
     SpawnDelayGroup: 5
+  - _datas:
+    - Type: 2
+      SpawnRangeAmount: {x: 3, y: 5}
+      SpawnDelayBetwenUnits: 0.5
+    SpawnDelayGroup: 1
+  - _datas:
+    - Type: 2
+      SpawnRangeAmount: {x: 3, y: 5}
+      SpawnDelayBetwenUnits: 0.5
+    SpawnDelayGroup: 7

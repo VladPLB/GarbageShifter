@@ -90,7 +90,8 @@ namespace _GAME.Scripts.Common
     public enum EnemyType
     {
         None,
-        RIFFLEMAN
+        PIRATE_RIFFLEMAN,
+        PIRATE_BOMBER,
     }
     
     public enum EnemyClassType
