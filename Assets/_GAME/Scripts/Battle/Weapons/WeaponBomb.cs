@@ -55,7 +55,11 @@ namespace _GAME.Scripts.Battle.Weapons
                 return;
             
             if(_fireHandler!=null && _fireHandler.Invoke())
+            {
                 Explode();
+                var player = Core.Get<LevelController>().Player;
+                player.OnDamage(Team.None, _data.Damage, transform.position, _data.Attributes);
+            }
         }
     }
 }

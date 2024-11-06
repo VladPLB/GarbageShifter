@@ -1733,7 +1733,7 @@ MonoBehaviour:
     _explosionData:
       _type: 0
       _damage: 5
-      _radius: 4
+      _radius: 2
     _health: 5
     _armor: 0
     _moveSpeed: 4
