@@ -592,6 +592,8 @@ GameObject:
   - component: {fileID: 4318381944560483469}
   - component: {fileID: 7095269863209565574}
   - component: {fileID: 8676129712651811751}
+  - component: {fileID: 1349306783279707442}
+  - component: {fileID: 3036244287706222141}
   m_Layer: 12
   m_Name: EnemyRiffleman(Pirate)
   m_TagString: Untagged
@@ -634,19 +636,27 @@ MonoBehaviour:
     _weaponData:
       _type: 0
       _bulletType: 0
+      _explosionType: 0
       _reloadTime: 1.5
       _reloadTimeRandomize: 0.2
       _damage: 10
       _damageOffset: 0
       _aimOffset: 0.5
+    _isBomber: 0
+    _explosionData:
+      _type: 0
+      _damage: 0
+      _radius: 0
     _health: 30
     _armor: 0
     _moveSpeed: 3.5
     _attackDistance: 4
   _enemyViewer: {fileID: 73571762068322732}
-  _ragDoll: {fileID: 4181509095355068630}
+  _ragDoll: {fileID: 3036244287706222141}
   _enemyMover: {fileID: 7095269863209565574}
   _weapon: {fileID: 2863559782480904395}
+  _weaponBomb: {fileID: 0}
+  _fireCondition: {fileID: 1349306783279707442}
   _damageReactionViewer: {fileID: 679077772838583064}
   _healthBarPoint: {fileID: 304507315146619307}
   _health:
@@ -671,7 +681,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03a70df38b524054aa87618c54c2ef8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stoppingDistance: 0.3
   _model: {fileID: 9044111007990230768}
 --- !u!143 &8676129712651811751
 CharacterController:
@@ -699,6 +708,31 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.75, z: 0}
+--- !u!114 &1349306783279707442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3964232634824775400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4417adb6c9e46a7b02a263eab1c4425, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3036244287706222141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3964232634824775400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58a4b27af51b4175bf6bbdb503087528, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ragdoll: {fileID: 4181509095355068630}
 --- !u!1 &4005379345246384615
 GameObject:
   m_ObjectHideFlags: 0

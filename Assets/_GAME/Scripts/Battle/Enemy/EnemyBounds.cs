@@ -32,7 +32,7 @@ namespace _GAME.Scripts.Battle.Enemy
             _rightDot = Vector3.Dot(_playerRight, _rightBoundaryDirection);
         }
         
-        public Vector3 CorrectPositionWithBounds(Vector3 unitPosition)
+        public bool TryCorrectPositionWithBounds(Vector3 unitPosition, out Vector3 correctedPosition)
         {
             var unitY = unitPosition.y;
             var dots = GetDots(unitPosition);
@@ -50,7 +50,8 @@ namespace _GAME.Scripts.Battle.Enemy
             }
             
             unitPosition.y = unitY;
-            return unitPosition;
+            correctedPosition = unitPosition;
+            return isLeftBounds || isRightBounds;
         }
         
         private Vector3 GetIntersectionPoint(Vector3 point1, Vector3 point2, Vector3 dir1, Vector3 dir2)

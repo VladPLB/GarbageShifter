@@ -11,31 +11,32 @@ namespace _GAME.Scripts.Battle.Player
 {
     public class EnemyMover: MonoBehaviour
     {
-        [SerializeField] private float _stoppingDistance = .2f;
-        [SerializeField] private Transform _model;
+        
+        [SerializeField] protected Transform _model;
         private CharacterController _characterController;
+        protected float _stoppingDistance = .3f;
+        protected bool _isActive = false;
 
-        private bool _isActive = false;
+        protected EnemyBounds _enemyBounds;
+        protected List<Vector3> _path;
+        protected Coroutine _pathMoveCoroutine;
 
-        private EnemyBounds _enemyBounds;
-        private List<Vector3> _path;
-        private Coroutine _pathMoveCoroutine;
-        private int _currentPathIndex = 0;
+        protected Transform _target;
+        protected Vector3 _targetPosition;
+        protected float _attackDistance;
 
-        private Transform _target;
-        private Vector3 _targetPosition;
-        private float _attackDistance;
+        protected float _speed;
+        protected bool _isStopped = true;
+        protected Vector3 _forward;
+        protected bool _isJumpToPlayer = false;
+        
+        protected Action _jumpToPlayerCallback;
+        public Action OnMoveCompleted;
+        public Action<float> OnMoveSpeed;
+        
+        public bool IsAttackedDistance => Vector3.Distance(transform.position, _target.position) <= _attackDistance;
 
-        private float _speed;
-        private bool _isStopped = true;
-        private Vector3 _forward;
-
-        public bool AttackedDistance => Vector3.Distance(transform.position, _target.position) <= _attackDistance;
-
-        public event Action OnMoveCompleted;
-        public event Action<float> OnMoveSpeed;
-
-        private void Awake()
+        protected virtual void Awake()
         {
             _characterController = GetComponent<CharacterController>();
         }
@@ -56,7 +57,7 @@ namespace _GAME.Scripts.Battle.Player
             _pathMoveCoroutine = StartCoroutine(RunPath());
         }
 
-        private IEnumerator RunPath()
+        protected IEnumerator RunPath()
         {
             int currentIndex = 0;
             while (currentIndex <= _path.Count - 1)
@@ -88,27 +89,27 @@ namespace _GAME.Scripts.Battle.Player
             Stop();
         }
 
-        public void TeleportTo(Vector3 position, Quaternion rotation)
+        public virtual void TeleportTo(Vector3 position, Quaternion rotation)
         {
             transform.position = _targetPosition = position;
             _model.rotation  = rotation;
             _isStopped = true;
         }
 
-        public void MoveTo(Vector3 targetPosition)
+        public virtual void MoveTo(Vector3 targetPosition)
         {
             _targetPosition = targetPosition;
             _isStopped = false;
         }
 
-        public void Stop()
+        public virtual void Stop()
         {
             OnMoveSpeed?.Invoke(0);
             OnMoveCompleted?.Invoke();
             Deactivate();
         }
 
-        private void TryClearPathCoroutine()
+        protected void TryClearPathCoroutine()
         {
             if (_pathMoveCoroutine != null)
             {
@@ -126,7 +127,7 @@ namespace _GAME.Scripts.Battle.Player
             TryClearPathCoroutine();
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             if(!_isActive)
                 return;
@@ -140,6 +141,10 @@ namespace _GAME.Scripts.Battle.Player
                 _characterController.Move(move);
                 if (DestinationReached())
                 {
+                    if (IsAttackedDistance)
+                    {
+                        TryClearPathCoroutine();
+                    }
                     _isStopped = true;
                 }
             }
@@ -149,14 +154,24 @@ namespace _GAME.Scripts.Battle.Player
             }
             _model.rotation = Quaternion.Lerp(_model.rotation, Quaternion.LookRotation(_forward), .1f);
             
-            _characterController.transform.position = _enemyBounds.CorrectPositionWithBounds(transform.position);
+            if(_enemyBounds.TryCorrectPositionWithBounds(transform.position, out var correctedPosition))
+            {
+                _characterController.transform.position = correctedPosition;
+            }
             var moveDelta = (transform.position - previewPosition).magnitude;
             OnMoveSpeed?.Invoke(move == Vector3.zero? 0: Mathf.Clamp01(moveDelta/move.magnitude));
         }
         
-        private bool DestinationReached() => Vector3.Distance(transform.position, _targetPosition) <= _stoppingDistance || AttackedDistance;
+        protected bool DestinationReached() => Vector3.Distance(transform.position, _targetPosition) <= _stoppingDistance || IsAttackedDistance;
 
-        private void OnDrawGizmosSelected()
+        public virtual void JumpToPlayer( Action callback)
+        {
+            _jumpToPlayerCallback = callback;
+            _jumpToPlayerCallback?.Invoke();
+            _jumpToPlayerCallback = null;
+        }
+        
+        protected virtual void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.green;
             Gizmos.DrawLine(transform.position + Vector3.up, _targetPosition);

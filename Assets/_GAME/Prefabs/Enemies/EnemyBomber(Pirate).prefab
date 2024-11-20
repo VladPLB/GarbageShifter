@@ -1681,6 +1681,8 @@ GameObject:
   - component: {fileID: 6500422026179611169}
   - component: {fileID: 3848889769980784030}
   - component: {fileID: 1481908661668446754}
+  - component: {fileID: 740769044112304096}
+  - component: {fileID: 9011920653377742107}
   m_Layer: 12
   m_Name: EnemyBomber(Pirate)
   m_TagString: Untagged
@@ -1739,10 +1741,11 @@ MonoBehaviour:
     _moveSpeed: 4
     _attackDistance: 3
   _enemyViewer: {fileID: 1792470177106483830}
-  _ragDoll: {fileID: 206999560306501959}
+  _ragDoll: {fileID: 9011920653377742107}
   _enemyMover: {fileID: 3848889769980784030}
   _weapon: {fileID: 0}
   _weaponBomb: {fileID: 4760161841177813438}
+  _fireCondition: {fileID: 740769044112304096}
   _damageReactionViewer: {fileID: 1780477385195889005}
   _healthBarPoint: {fileID: 6858880150347637443}
   _health:
@@ -1767,7 +1770,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03a70df38b524054aa87618c54c2ef8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stoppingDistance: 0.3
   _model: {fileID: 4020507171993449137}
 --- !u!143 &1481908661668446754
 CharacterController:
@@ -1795,6 +1797,31 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.75, z: 0}
+--- !u!114 &740769044112304096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7851638971267952930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90b6924d8be84376aa88efa87d0b1b49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &9011920653377742107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7851638971267952930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58a4b27af51b4175bf6bbdb503087528, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ragdoll: {fileID: 206999560306501959}
 --- !u!1 &7915972595880101146
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,7 +13,8 @@ namespace _GAME.Scripts.Common
         Default,
         Head,
         Weak,
-        Shield
+        Shield,
+        Other
     }
 
     public enum EffectAttributeType
@@ -92,6 +93,7 @@ namespace _GAME.Scripts.Common
         None,
         PIRATE_RIFFLEMAN,
         PIRATE_BOMBER,
+        DRONE_BOMBER
     }
     
     public enum EnemyClassType

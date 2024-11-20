@@ -14,10 +14,11 @@ namespace _GAME.Scripts.Battle.Enemy
     {
         [SerializeField] private EnemyData _data;
         [SerializeField] private EnemyViewer _enemyViewer;
-        [SerializeField] private RagDollController _ragDoll;
+        [SerializeField] private BaseRagdollBehaviour _ragDoll;
         [SerializeField] private EnemyMover _enemyMover;
         [SerializeField] private Weapon _weapon;
         [SerializeField] private WeaponBomb _weaponBomb;
+        [SerializeField] private BaseEnemyFireConditionBehaviour _fireCondition;
         [SerializeField] private DamageReactionViewer _damageReactionViewer;
         [SerializeField] private Transform _healthBarPoint;
         [SerializeField] private StateIntAttribute _health;
@@ -33,8 +34,8 @@ namespace _GAME.Scripts.Battle.Enemy
         public override Team Team => Team.Enemy;
         public EnemyType Type => _data.Type;
         public EnemyData Data => _data;
+        public EnemyMover Mover => _enemyMover;
         public StateIntAttribute Health => _health;
-
         public Vector3 HealthBarPoint => _healthBarPoint.position;
 
         public event Action<EnemyController> OnDead;
@@ -67,7 +68,10 @@ namespace _GAME.Scripts.Battle.Enemy
             _explosionForce = null;
             
             _enemyMover.Setup(movePath, _playerTransform, enemyBounds, _data.MoveSpeed, _data.AttackDistance);
-            _ragDoll.Setup();
+            if(_ragDoll!=null)
+            {
+                _ragDoll.Setup();
+            }
             _enemyViewer.Setup();
             if(!_data.IsBomber)
             {
@@ -88,21 +92,9 @@ namespace _GAME.Scripts.Battle.Enemy
             _enemyMover.OnMoveSpeed += _enemyViewer.Run;
         }
 
-        public bool IsFire()
+        private bool IsFire()
         {
-            if (!_enemyMover.AttackedDistance)
-            {
-                _isFire = false;
-                return false;
-            }
-            
-            if (!_isFire && !_data.IsBomber)
-            {
-                _data.WeaponData.ResetFireTime(Time.time);
-            }
-
-            _isFire = true;
-            return true;
+            return _fireCondition.IsFire(this);
         }
         
         public override void OnDamage(Team damageDealersTeam, int damageAmount, Vector3 hitPoint, List<IEffectAttribute> additiveAttributes = null)
@@ -191,11 +183,11 @@ namespace _GAME.Scripts.Battle.Enemy
             {
                 if (_explosionForce != null)
                 {
-                    _ragDoll.ShowWithExplosion(_explosionForce.Value, 5).Forget();
+                    _ragDoll.ShowWithExplosion(_explosionForce.Value, 3).Forget();
                 }
                 else if(_lastHitPoint!=null)
                 {
-                    _ragDoll.ShowWithHit(_lastHitPoint.Value, 10f).Forget();
+                    _ragDoll.ShowWithHit(_lastHitPoint.Value, 8f).Forget();
                 }
                 else
                 {

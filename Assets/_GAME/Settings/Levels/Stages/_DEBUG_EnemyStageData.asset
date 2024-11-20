@@ -14,22 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemies:
   - _datas:
-    - Type: 1
-      SpawnRangeAmount: {x: 5, y: 10}
+    - Type: 3
+      SpawnRangeAmount: {x: 2, y: 3}
       SpawnDelayBetwenUnits: 0.3
     SpawnDelayGroup: 0.5
   - _datas:
-    - Type: 1
-      SpawnRangeAmount: {x: 5, y: 10}
+    - Type: 3
+      SpawnRangeAmount: {x: 2, y: 3}
       SpawnDelayBetwenUnits: 0.3
     SpawnDelayGroup: 5
-  - _datas:
-    - Type: 2
-      SpawnRangeAmount: {x: 3, y: 5}
-      SpawnDelayBetwenUnits: 0.5
-    SpawnDelayGroup: 1
-  - _datas:
-    - Type: 2
-      SpawnRangeAmount: {x: 3, y: 5}
-      SpawnDelayBetwenUnits: 0.5
-    SpawnDelayGroup: 7
