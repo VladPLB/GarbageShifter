@@ -10014,7 +10014,7 @@ GameObject:
   - component: {fileID: 6643660224397700166}
   - component: {fileID: 1302250055241154811}
   - component: {fileID: 6512714394019003322}
-  - component: {fileID: 8345606214770637976}
+  - component: {fileID: 5752181068087353808}
   m_Layer: 12
   m_Name: EnemyBomber(Drone)
   m_TagString: Untagged
@@ -10073,7 +10073,7 @@ MonoBehaviour:
     _moveSpeed: 5
     _attackDistance: 5
   _enemyViewer: {fileID: 4527147319405898005}
-  _ragDoll: {fileID: 8345606214770637976}
+  _ragDoll: {fileID: 5752181068087353808}
   _enemyMover: {fileID: 6643660224397700166}
   _weapon: {fileID: 0}
   _weaponBomb: {fileID: 4760161841177813438}
@@ -10147,7 +10147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _warningItem: {fileID: 8181671661053274824}
---- !u!114 &8345606214770637976
+--- !u!114 &5752181068087353808
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10156,10 +10156,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7851638971267952930}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805ae9e50d7414893752652ba7e95ec, type: 3}
+  m_Script: {fileID: 11500000, guid: c6d3f8d206004244942cd3e708fe7a40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rigidbody: {fileID: 1302250055241154811}
+  _model: {fileID: 634627226766531659}
 --- !u!1 &8181671661053274824
 GameObject:
   m_ObjectHideFlags: 0
@@ -15172,6 +15172,18 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 3735c59946c85024faa3f026850c602a, type: 3}
       propertyPath: m_Layer
       value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 3735c59946c85024faa3f026850c602a, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.59341
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 3735c59946c85024faa3f026850c602a, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.59341
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 3735c59946c85024faa3f026850c602a, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.59341
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 3735c59946c85024faa3f026850c602a, type: 3}
       propertyPath: m_LocalPosition.x
