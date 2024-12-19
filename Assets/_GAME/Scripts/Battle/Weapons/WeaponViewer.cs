@@ -8,6 +8,7 @@ namespace _GAME.Scripts.Battle.Weapons
     public class WeaponViewer: MonoBehaviour
     {
         [SerializeField] private bool _usePhysicsDrop = false;
+        [SerializeField] private Collider _collider;
         [SerializeField] private Vector3 _readyPosition;
         [SerializeField] private Vector3 _readyRotation;
         
@@ -29,17 +30,23 @@ namespace _GAME.Scripts.Battle.Weapons
             
             _readyParent = readyStateParent;
             _freeParent = freeStateParent;
+
+            if (_collider != null)
+            {
+                _collider.enabled = false;
+            }
         }
 
         public async void DoPhysicsDrop(float duration)
         {
-            var _rigidbody = gameObject.AddComponent<Rigidbody>();
-            var _collider = gameObject.AddComponent<BoxCollider>();
-            _rigidbody.AddForce(Vector3.up + Random.insideUnitSphere * 10f, ForceMode.Impulse);
+            var rigidbody = gameObject.AddComponent<Rigidbody>();
+            _collider ??= gameObject.AddComponent<BoxCollider>();
+            rigidbody.AddForce(Vector3.up + Random.insideUnitSphere * 10f, ForceMode.Impulse);
             transform.parent = null;
+            _collider.enabled = true;
             await UniTask.Delay(TimeSpan.FromSeconds(duration));
-            Destroy(_rigidbody);
-            Destroy(_collider);
+            Destroy(rigidbody);
+            _collider.enabled = false;
             transform.parent = _defaultParent;
             transform.localPosition = _defaultPosition;
             transform.localRotation = _defaultRotation;

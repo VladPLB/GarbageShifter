@@ -83,9 +83,11 @@ namespace _GAME.Scripts.Common
 
     public enum GameEffectType
     {
+        None = -1,
         BlueEnergyExplode,
         LaserHitDecal,
         Explosion_Default,
+        Spawn_Default
     }
 
     public enum EnemyType
@@ -93,7 +95,10 @@ namespace _GAME.Scripts.Common
         None,
         PIRATE_RIFFLEMAN,
         PIRATE_BOMBER,
-        DRONE_BOMBER
+        DRONE_BOMBER,
+        DRONE_RIFFLE,
+        DRONE_LASER,
+        PIRATE_BIG_RIFFLEMAN,
     }
     
     public enum EnemyClassType
@@ -102,7 +107,8 @@ namespace _GAME.Scripts.Common
         SOLDIER,
         DRONE,
         WEHICLE,
-        SHIP
+        SHIP,
+        BIG_SOLDIER
     }
     
     public enum EnemySubClassType

@@ -13,6 +13,8 @@ namespace _GAME.Scripts.Battle.Weapons
         [SerializeField] private ExplosionType _explosionType;
         [SerializeField] private float _reloadTime;
         [SerializeField] private float _reloadTimeRandomize;
+        [SerializeField] private float _bulletAmount = 1;
+        [SerializeField] private float _bulletSpawnDelay = 0;
         [SerializeField] private int _damage;
         [SerializeField] private float _damageOffset;
         [SerializeField] private float _aimOffset;
@@ -25,6 +27,8 @@ namespace _GAME.Scripts.Battle.Weapons
         public ExplosionType ExplosionType => _explosionType;
         public float ReloadTime => _reloadTime;
         public float ReloadTimeRandomize => _reloadTimeRandomize;
+        public float BulletAmount => _bulletAmount;
+        public float BulletSpawnDelay => _bulletSpawnDelay;
         public int Damage => _damage;
         public int DamageRandomize => _damage + (int)Random.Range(-_damageOffset, _damageOffset);
         public float AimOffset => _aimOffset;

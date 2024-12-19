@@ -53,6 +53,7 @@ namespace _GAME.Scripts.Battle.Enemy
         public void Spawn(EnemyType type, List<Vector3> path)
         {
             var unit = _pool.Pop(type);
+            unit.transform.position = path[0];
             unit.Setup(path, _playerTransform, _enemyBounds);
             unit.OnDead += RemoveUnit;
             _activeUnits.Add(unit);

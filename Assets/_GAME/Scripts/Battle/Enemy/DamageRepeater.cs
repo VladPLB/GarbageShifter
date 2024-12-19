@@ -48,7 +48,7 @@ namespace _GAME.Scripts.Battle.Enemy
                 isActive = false;
 
             enabled = isActive;
-            _colliders.ForEach(c=>c.enabled = enabled);
+            _colliders.ForEach(c=>c.enabled = isActive);
         }
         
         public void ApplyReceiver(IDamageReceiver damageReceiver)

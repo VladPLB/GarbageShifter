@@ -1,5 +1,70 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &66015324927316387
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1682543970287802751}
+  - component: {fileID: 5116192180429490084}
+  m_Layer: 0
+  m_Name: spawnPoint (4)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1682543970287802751
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 66015324927316387}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -12.41, y: 5.63, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3907380240263180388}
+  m_Father: {fileID: 2684085163781665200}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5116192180429490084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 66015324927316387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 882c42e9622964e34986a1c1bcc5eca7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemies: 02000000
+  _door: {fileID: 1896029015694577475}
+  _warningPoint: {fileID: 3907380240263180388}
+  _spawnBox:
+    m_Center: {x: 0, y: -0.69, z: 0}
+    m_Extent: {x: 0.5, y: 0, z: 0.5}
+  _targetMoveBoxes:
+  - m_Center: {x: 2.57, y: -5.61, z: 0}
+    m_Extent: {x: 0.5, y: 0, z: 2}
+  - m_Center: {x: 8.5, y: -5.61, z: 0}
+    m_Extent: {x: 0.5, y: 0, z: 2}
+  _direction: (0.00, 0.00, 1.00)
+  _sBox:
+    m_Center: {x: 0, y: -0.69, z: 0}
+    m_Extent: {x: 0.5, y: 0, z: 0.5}
+  _tBoxes:
+  - m_Center: {x: 2.57, y: -5.61, z: 0}
+    m_Extent: {x: 0.5, y: 0, z: 2}
+  - m_Center: {x: 8.5, y: -5.61, z: 0}
+    m_Extent: {x: 0.5, y: 0, z: 2}
 --- !u!1 &302139293083842175
 GameObject:
   m_ObjectHideFlags: 0
@@ -181,6 +246,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6206711376386561777}
   - component: {fileID: 8046254289725182896}
+  - component: {fileID: 1896029015694577475}
   m_Layer: 0
   m_Name: RoofHatch
   m_TagString: Untagged
@@ -227,6 +293,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1896029015694577475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 304825150894224829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68580795d4ccf487fb1179542e6e8209, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 8046254289725182896}
 --- !u!1 &474244910085797367
 GameObject:
   m_ObjectHideFlags: 0
@@ -647,6 +726,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemies: 010000000200000003000000
+  _door: {fileID: 0}
+  _warningPoint: {fileID: 0}
   _spawnBox:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0, z: 1}
@@ -831,6 +912,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemies: 010000000200000003000000
+  _door: {fileID: 0}
+  _warningPoint: {fileID: 0}
   _spawnBox:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0, z: 1}
@@ -848,6 +931,37 @@ MonoBehaviour:
     m_Extent: {x: 0.5, y: 0, z: 2}
   - m_Center: {x: 3.44, y: 0, z: 6.71}
     m_Extent: {x: 0.5, y: 0, z: 2}
+--- !u!1 &2913195274961730009
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1189053045913170529}
+  m_Layer: 0
+  m_Name: WarningPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1189053045913170529
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2913195274961730009}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.26, z: 0.05}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7941995248397925165}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3002567310288556352
 GameObject:
   m_ObjectHideFlags: 0
@@ -919,6 +1033,37 @@ Transform:
   - {fileID: 321098144070616870}
   - {fileID: 3279168927092411487}
   m_Father: {fileID: 3801656911874067260}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3919563050756150081
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3907380240263180388}
+  m_Layer: 0
+  m_Name: WarningPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3907380240263180388
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3919563050756150081}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.94, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1682543970287802751}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4845568162172717772
 GameObject:
@@ -1038,6 +1183,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemies: 010000000200000003000000
+  _door: {fileID: 0}
+  _warningPoint: {fileID: 0}
   _spawnBox:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0, z: 1}
@@ -1344,6 +1491,8 @@ Transform:
   - {fileID: 6152821086867669408}
   - {fileID: 5383050283689432176}
   - {fileID: 931548602655183700}
+  - {fileID: 1682543970287802751}
+  - {fileID: 7941995248397925165}
   m_Father: {fileID: 3801656911874067260}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2810399711028915252
@@ -1364,6 +1513,8 @@ MonoBehaviour:
     - {fileID: 3667471005596036316}
     - {fileID: 8223950042344330030}
     - {fileID: 7290080703772071084}
+    - {fileID: 5116192180429490084}
+    - {fileID: 3524840674327128378}
 --- !u!1 &8540220183378031203
 GameObject:
   m_ObjectHideFlags: 0
@@ -1492,6 +1643,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemies: 010000000200000003000000
+  _door: {fileID: 0}
+  _warningPoint: {fileID: 0}
   _spawnBox:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0, z: 1}
@@ -1508,6 +1661,67 @@ MonoBehaviour:
   - m_Center: {x: 0, y: 0, z: -6.71}
     m_Extent: {x: 0.5, y: 0, z: 2}
   - m_Center: {x: 13.4, y: 0, z: -6.71}
+    m_Extent: {x: 0.5, y: 0, z: 2}
+--- !u!1 &9159030358545364017
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7941995248397925165}
+  - component: {fileID: 3524840674327128378}
+  m_Layer: 0
+  m_Name: spawnPoint (5)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7941995248397925165
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9159030358545364017}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -18.21, y: 0.02, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1189053045913170529}
+  m_Father: {fileID: 2684085163781665200}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3524840674327128378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9159030358545364017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 882c42e9622964e34986a1c1bcc5eca7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemies: 05000000
+  _door: {fileID: 0}
+  _warningPoint: {fileID: 1189053045913170529}
+  _spawnBox:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 1.01, y: 0, z: 3}
+  _targetMoveBoxes:
+  - m_Center: {x: 14.51, y: 0, z: 0}
+    m_Extent: {x: 0.5, y: 0, z: 2}
+  _direction: (0.00, 0.00, 1.00)
+  _sBox:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 1.01, y: 0, z: 3}
+  _tBoxes:
+  - m_Center: {x: 14.51, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0, z: 2}
 --- !u!1001 &1104662557138363808
 PrefabInstance:

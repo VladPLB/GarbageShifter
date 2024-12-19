@@ -123,5 +123,10 @@ namespace _GAME
             return Random.Range(vector.x, vector.y + 1);
         }
         
+        public static float GetRandom(this Vector2 vector)
+        {
+            return Random.Range(vector.x, vector.y);
+        }
+        
     }
 }

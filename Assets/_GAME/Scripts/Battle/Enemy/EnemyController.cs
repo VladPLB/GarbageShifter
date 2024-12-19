@@ -23,8 +23,9 @@ namespace _GAME.Scripts.Battle.Enemy
         [SerializeField] private Transform _healthBarPoint;
         [SerializeField] private StateIntAttribute _health;
         [SerializeField] private StateIntAttribute _armor;
-        [SerializeField, ReadOnly]
-        private DamageRepeater[] _damageRepeaters;
+        [SerializeField, ReadOnly] private DamageRepeater[] _damageRepeaters;
+        [SerializeField] private GameEffectType _deadEffectType = GameEffectType.None;
+        [SerializeField] private GameEffectType _spawnEffectType = GameEffectType.None;
         private Vector3? _lastHitPoint = null;
         private Vector3? _explosionForce = null;
         private DamageTextType _lastDamageTextType;
@@ -40,18 +41,19 @@ namespace _GAME.Scripts.Battle.Enemy
 
         public event Action<EnemyController> OnDead;
 
-        public void Awake()
+        public void Init()
         {
             if(!_data.IsBomber)
             {
                 _data.WeaponData.Setup(this, 1);
-                _weapon.Setup(_data.WeaponData, IsFire);
+                _weapon.Setup(_data.WeaponData, IsFire, fireCallback:_enemyViewer.Fire);
             }
             else
             {
                 _data.ExplosionData.Setup(this, -1, new ExplosionEffectAttribute());
                 _weaponBomb.Setup(_data.ExplosionData, IsFire);
             }
+            _health.OnChangeValue -= OnHealthChange;
             _health.OnChangeValue += OnHealthChange;
             
             foreach (var damageRepeater in _damageRepeaters)
@@ -62,7 +64,7 @@ namespace _GAME.Scripts.Battle.Enemy
 
         public void Setup(List<Vector3> movePath, Transform player, EnemyBounds enemyBounds)
         {
-            
+            Init();
             _playerTransform = player;
             _lastHitPoint = null;
             _explosionForce = null;
@@ -84,6 +86,10 @@ namespace _GAME.Scripts.Battle.Enemy
             _health.Set(_data.Health);
             _armor.Set(_data.Armor);
             DamageRepeatersSetActive(true);
+            if (_spawnEffectType != GameEffectType.None)
+            {
+                GameEffect.Create(_spawnEffectType, transform.position);
+            }
         }
 
         public void Play()
@@ -203,7 +209,11 @@ namespace _GAME.Scripts.Battle.Enemy
             {
                 _weaponBomb.Explode();
             }
-           
+
+            if (_deadEffectType != GameEffectType.None)
+            {
+                GameEffect.Create(_deadEffectType, transform.position);
+            }
             OnDead?.Invoke(this);
             Deactivate(false);
         }

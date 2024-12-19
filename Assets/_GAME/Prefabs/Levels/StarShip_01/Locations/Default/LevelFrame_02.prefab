@@ -270,6 +270,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemies: 010000000200000003000000
+  _door: {fileID: 0}
+  _warningPoint: {fileID: 0}
   _spawnBox:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0, z: 1}
@@ -465,6 +467,37 @@ Transform:
   - {fileID: 8168854390382879387}
   m_Father: {fileID: 2306167979957528518}
   m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
+--- !u!1 &2747545645046886614
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6892415388709333875}
+  m_Layer: 0
+  m_Name: WarningPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6892415388709333875
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2747545645046886614}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.26, z: 0.05}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4767301508210369755}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2873880081706044990
 GameObject:
   m_ObjectHideFlags: 0
@@ -527,6 +560,67 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6690563614662441079}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3966343685855490389
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4767301508210369755}
+  - component: {fileID: 5418603620362269282}
+  m_Layer: 0
+  m_Name: spawnPoint (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4767301508210369755
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3966343685855490389}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -17.837, y: 0.13400269, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6892415388709333875}
+  m_Father: {fileID: 293531086794553258}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5418603620362269282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3966343685855490389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 882c42e9622964e34986a1c1bcc5eca7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemies: 05000000
+  _door: {fileID: 0}
+  _warningPoint: {fileID: 6892415388709333875}
+  _spawnBox:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 1.01, y: 0, z: 3}
+  _targetMoveBoxes:
+  - m_Center: {x: 14.51, y: 0, z: 0}
+    m_Extent: {x: 0.5, y: 0, z: 2}
+  _direction: (0.00, 0.00, 1.00)
+  _sBox:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 1.01, y: 0, z: 3}
+  _tBoxes:
+  - m_Center: {x: 14.51, y: 0, z: 0}
+    m_Extent: {x: 0.5, y: 0, z: 2}
 --- !u!1 &4057204919038474084
 GameObject:
   m_ObjectHideFlags: 0
@@ -986,6 +1080,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7901455269528706485}
   - component: {fileID: 208063699451331808}
+  - component: {fileID: 3288511827469734450}
   m_Layer: 0
   m_Name: RoofHatch
   m_TagString: Untagged
@@ -1032,6 +1127,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3288511827469734450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5741847525014511119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68580795d4ccf487fb1179542e6e8209, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 208063699451331808}
 --- !u!1 &5868098301210362781
 GameObject:
   m_ObjectHideFlags: 0
@@ -1064,6 +1172,8 @@ Transform:
   m_Children:
   - {fileID: 563685548510615528}
   - {fileID: 3882515670837848886}
+  - {fileID: 7000183522992412159}
+  - {fileID: 4767301508210369755}
   m_Father: {fileID: 6690563614662441079}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8272352801005540260
@@ -1082,6 +1192,8 @@ MonoBehaviour:
   - _spawnPoints:
     - {fileID: 3145029491439136820}
     - {fileID: 7649120846452502114}
+    - {fileID: 2470640849286118655}
+    - {fileID: 5418603620362269282}
 --- !u!1 &6269281390897725460
 GameObject:
   m_ObjectHideFlags: 0
@@ -1245,6 +1357,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemies: 010000000200000003000000
+  _door: {fileID: 0}
+  _warningPoint: {fileID: 0}
   _spawnBox:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.5, y: 0, z: 1}
@@ -1261,6 +1375,102 @@ MonoBehaviour:
   - m_Center: {x: 0, y: 0, z: 6.71}
     m_Extent: {x: 0.5, y: 0, z: 2}
   - m_Center: {x: 3.82, y: 0, z: 6.71}
+    m_Extent: {x: 0.5, y: 0, z: 2}
+--- !u!1 &6990589072171139275
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6344440777352939519}
+  m_Layer: 0
+  m_Name: WarningPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6344440777352939519
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6990589072171139275}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.94, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7000183522992412159}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7391485027793729573
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7000183522992412159}
+  - component: {fileID: 2470640849286118655}
+  m_Layer: 0
+  m_Name: spawnPoint (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7000183522992412159
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7391485027793729573}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -17.3, y: 5.631012, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6344440777352939519}
+  m_Father: {fileID: 293531086794553258}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2470640849286118655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7391485027793729573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 882c42e9622964e34986a1c1bcc5eca7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemies: 02000000
+  _door: {fileID: 3288511827469734450}
+  _warningPoint: {fileID: 6344440777352939519}
+  _spawnBox:
+    m_Center: {x: 0, y: -0.69, z: 0}
+    m_Extent: {x: 0.5, y: 0, z: 0.5}
+  _targetMoveBoxes:
+  - m_Center: {x: 2.57, y: -5.61, z: 0}
+    m_Extent: {x: 0.5, y: 0, z: 2}
+  - m_Center: {x: 12.86, y: -5.61, z: 0}
+    m_Extent: {x: 0.5, y: 0, z: 2}
+  _direction: (0.00, 0.00, 1.00)
+  _sBox:
+    m_Center: {x: 0, y: -0.69, z: 0}
+    m_Extent: {x: 0.5, y: 0, z: 0.5}
+  _tBoxes:
+  - m_Center: {x: 2.57, y: -5.61, z: 0}
+    m_Extent: {x: 0.5, y: 0, z: 2}
+  - m_Center: {x: 12.86, y: -5.61, z: 0}
     m_Extent: {x: 0.5, y: 0, z: 2}
 --- !u!1 &7841735746324743751
 GameObject:

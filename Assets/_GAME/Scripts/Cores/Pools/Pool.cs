@@ -36,6 +36,7 @@ namespace _GAME.Scripts
             
             var prefab = _getPrefabFunc.Invoke(key);
             var item = Object.Instantiate(prefab, _holders[key]);
+            item.gameObject.SetActive(false);
             return item;
         }
 

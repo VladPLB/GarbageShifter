@@ -41,7 +41,7 @@ namespace _GAME.Scripts.Battle.Player
             _characterController = GetComponent<CharacterController>();
         }
 
-        public void Setup(List<Vector3> path, Transform target, EnemyBounds enemyBounds, float moveSpeed, float attackDistance)
+        public virtual void Setup(List<Vector3> path, Transform target, EnemyBounds enemyBounds, float moveSpeed, float attackDistance)
         {
             _speed = moveSpeed;
             _attackDistance = attackDistance;
@@ -49,35 +49,27 @@ namespace _GAME.Scripts.Battle.Player
             _target = target;
             _enemyBounds = enemyBounds;
             _forward = _target.transform.position - transform.position;
+            _isJumpToPlayer = false;
+            var targetRotation = _path.Count>1
+                ? Quaternion.LookRotation((_path[1] - _path[0]).normalized)
+                : _model.rotation;
+            TeleportTo(_path[0], targetRotation);
         }
 
         public void Play()
         {
-            _isActive = true;
             _pathMoveCoroutine = StartCoroutine(RunPath());
+            _isActive = true;
         }
 
         protected IEnumerator RunPath()
         {
-            int currentIndex = 0;
+            int currentIndex = 1;
             while (currentIndex <= _path.Count - 1)
             {
                 var nextPoint = _path[currentIndex];
-                if (currentIndex == 0)
-                {
-                    var targetRotation = currentIndex + 1 < _path.Count - 1
-                        ? Quaternion.LookRotation((_path[1] - nextPoint).normalized)
-                        : _model.rotation;
-                    TeleportTo(nextPoint, targetRotation);
-                }
-                else
-                {
-                    MoveTo(nextPoint);
-                }
-
+                MoveTo(nextPoint);
                 currentIndex++;
-
-
                 yield return null;
                 while (!_isStopped)
                 {
@@ -152,7 +144,7 @@ namespace _GAME.Scripts.Battle.Player
             {
                 _forward = (_target.transform.position - transform.position);
             }
-            _model.rotation = Quaternion.Lerp(_model.rotation, Quaternion.LookRotation(_forward), .1f);
+            _model.rotation = Quaternion.Lerp(_model.rotation, Quaternion.LookRotation(_forward.normalized), .1f);
             
             if(_enemyBounds.TryCorrectPositionWithBounds(transform.position, out var correctedPosition))
             {

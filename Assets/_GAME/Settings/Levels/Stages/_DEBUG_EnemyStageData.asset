@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemies:
   - _datas:
-    - Type: 3
+    - Type: 6
       SpawnRangeAmount: {x: 2, y: 3}
       SpawnDelayBetwenUnits: 0.3
     SpawnDelayGroup: 0.5
   - _datas:
-    - Type: 3
+    - Type: 6
       SpawnRangeAmount: {x: 2, y: 3}
       SpawnDelayBetwenUnits: 0.3
     SpawnDelayGroup: 5

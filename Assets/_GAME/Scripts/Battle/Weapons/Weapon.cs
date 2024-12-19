@@ -2,6 +2,7 @@ using System;
 using _GAME.Scripts.Battle.Context;
 using _GAME.Scripts.Common;
 using _GAME.Scripts.Weapons.Bullets;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace _GAME.Scripts.Battle.Weapons
@@ -16,13 +17,15 @@ namespace _GAME.Scripts.Battle.Weapons
         private Func<bool> _fireHandler;
         private bool _isActive = false;
         private BulletData _defaultBulletData;
-        private Action _onHit; 
+        private Action _onHit;
+        private Action _onFire;
 
-        public void Setup(WeaponData data, Func<bool> fireHandler, Action onHit = null, Transform freeStateParent = null)
+        public void Setup(WeaponData data, Func<bool> fireHandler, Action onHit = null, Transform freeStateParent = null, Action fireCallback = null)
         {
             _data = data;
             _fireHandler = fireHandler;
             _onHit = onHit;
+            _onFire = fireCallback;
             _defaultBulletData = Core.Get<DataBase>().Bullets.GetDefaultData(_data.BulletType);
             
             if(freeStateParent!=null)
@@ -53,6 +56,15 @@ namespace _GAME.Scripts.Battle.Weapons
         {
             if (_data.TryFireRegister())
             {
+                Fire();
+            }
+        }
+
+        public async void Fire()
+        {
+            _onFire?.Invoke();
+            for(int i =0;i<_data.BulletAmount;i++)
+            {
                 _muzzleFlash?.Play();
                 var bullet = Bullet.Create(_defaultBulletData.Type);
                 bullet.transform.position = _barrel.position;
@@ -62,6 +74,10 @@ namespace _GAME.Scripts.Battle.Weapons
                 data.Setup(_data.DamageDealer, _data.DamageRandomize, bullet.transform.forward);
                 bullet.Setup(data, OnHit);
                 bullet.gameObject.SetActive(true);
+                if (i < _data.BulletAmount - 1 && _data.BulletSpawnDelay>0f)
+                {
+                    await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Abs(_data.BulletSpawnDelay)));
+                }
             }
         }
 
