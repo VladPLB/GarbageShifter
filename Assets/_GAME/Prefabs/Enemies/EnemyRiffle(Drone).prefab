@@ -171,7 +171,7 @@ MonoBehaviour:
       _type: 0
       _damage: 5
       _radius: 2
-    _health: 50
+    _health: 20
     _armor: 0
     _moveSpeed: 5
     _attackDistance: 5

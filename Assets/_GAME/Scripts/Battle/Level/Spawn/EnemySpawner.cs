@@ -84,9 +84,9 @@ namespace _GAME.Scripts.Battle.Level
                 EnemyClassType enemyClass = _enemyDatabase.GetClass(enemyType);
                 EnemySpawnPoint spawnPoint = _group.GetSpawnPoint(enemyClass);
                 _onSpawnGroupWarning?.Invoke(spawnPoint.WarningPosition);
-                if (spawnPoint.TryDoorOpened())
+                if (spawnPoint.TryDoorOpened(out var delay))
                 {
-                    yield return new WaitForSeconds(.5f);
+                    yield return new WaitForSeconds(delay + .5f);
                 }
 
                 SpawnEnemies(enemyType, _enemySpawnCounts[i], _enemySpawnDelays[i], spawnPoint);

@@ -32,12 +32,13 @@ namespace _GAME.Scripts.Battle.Level
             return path;
         }
 
-        public bool TryDoorOpened()
+        public bool TryDoorOpened(out float delay)
         {
+            delay = 0;
             if (_door == null)
                 return false;
             
-            return _door.Open();
+            return _door.Open(out delay);
         }
 
         private void OnDrawGizmosSelected()

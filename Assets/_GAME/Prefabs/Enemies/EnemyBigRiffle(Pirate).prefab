@@ -2580,7 +2580,7 @@ MonoBehaviour:
       _type: 0
       _damage: 0
       _radius: 0
-    _health: 100
+    _health: 60
     _armor: 0
     _moveSpeed: 2.5
     _attackDistance: 10
