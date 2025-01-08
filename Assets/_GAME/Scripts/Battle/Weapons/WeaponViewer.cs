@@ -43,7 +43,10 @@ namespace _GAME.Scripts.Battle.Weapons
             _collider ??= gameObject.AddComponent<BoxCollider>();
             rigidbody.AddForce(Vector3.up + Random.insideUnitSphere * 10f, ForceMode.Impulse);
             transform.parent = null;
-            _collider.enabled = true;
+            if (_collider != null)
+            {
+                _collider.enabled = true;
+            }
             await UniTask.Delay(TimeSpan.FromSeconds(duration));
             Destroy(rigidbody);
             _collider.enabled = false;

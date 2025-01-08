@@ -99,6 +99,9 @@ namespace _GAME.Scripts.Common
         DRONE_RIFFLE,
         DRONE_LASER,
         PIRATE_BIG_RIFFLEMAN,
+        BOT_RIFFLE,
+        BOT_DESANT,
+        BOT_DRONE
     }
     
     public enum EnemyClassType

@@ -10021,7 +10021,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5152775876862619108
 Transform:
   m_ObjectHideFlags: 0
@@ -10060,6 +10060,8 @@ MonoBehaviour:
       _explosionType: 0
       _reloadTime: 1.5
       _reloadTimeRandomize: 0.2
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
       _damage: 10
       _damageOffset: 0
       _aimOffset: 0.5
@@ -10090,6 +10092,8 @@ MonoBehaviour:
   - {fileID: 2511893204873594925}
   - {fileID: 8924279735726201296}
   - {fileID: 2866545649233466132}
+  _deadEffectType: -1
+  _spawnEffectType: -1
 --- !u!114 &6643660224397700166
 MonoBehaviour:
   m_ObjectHideFlags: 0
