@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _GAME.Scripts.Battle.Player
 {
-    public class EnemyViewer: MonoBehaviour
+    public class UnitViewer: MonoBehaviour
     {
         private static readonly int RunKey = Animator.StringToHash("Run");
         private static readonly int FireKey = Animator.StringToHash("Fire");

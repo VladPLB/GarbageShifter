@@ -17,7 +17,7 @@ namespace _GAME.Scripts.Battle.Enemy
             _controller = controller;
             if (!_isReady)
             {
-                if (_controller.Mover.IsAttackedDistance)
+                if (_controller.Mover.IsStoppingDistance)
                 {
                     _isReady = true;
                     StartCoroutine(Process());

@@ -14,48 +14,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Active: 1
   settings:
-    Event: 450
+    Event: 300
     _CustomDataLayerMask:
       serializedVersion: 2
-      m_Bits: 23473
+      m_Bits: 23475
     _DepthMaskLayerMask:
       serializedVersion: 2
-      m_Bits: 547
-    _UseCustomData: 1
-    _UseDepthMask: 1
-    _UseCustomTexture: 1
+      m_Bits: 31649
+    _UseCustomData: 0
+    _UseDepthMask: 0
+    _UseCustomTexture: 0
     _CustomTexture: {fileID: 2800000, guid: cbdd39a49a5bf994aa489cdb7d0bbf29, type: 3}
     _CustomTextureLayerMask:
       serializedVersion: 2
-      m_Bits: 4
-    _Thickness: 1.24
+      m_Bits: 0
+    _Thickness: 2.47
     _ResolutionAdjust: 0
     _UseDepthFade: 0
-    _FadeStart: 4
-    _FadeEnd: 10
-    _NormalsEdgeDetection: 1
+    _FadeStart: 5.41
+    _FadeEnd: 30
+    _NormalsEdgeDetection: 0
     _NormalsOffset: 0.045
     _NormalsHardness: 0.201
     _NormalsPower: 1.52
-    _DepthEdgeDetection: 0
+    _DepthEdgeDetection: 1
     _AcuteAngleFix: 0
     _ViewDirThreshold: 1
     _ViewDirThresholdScale: 2.7
-    _DepthThreshold: 0.48
-    _DepthHardness: 0.9
+    _DepthThreshold: 1
+    _DepthHardness: 0.03
     _DepthPower: 5
-    _EdgeColor: {r: 0, g: 0, b: 0, a: 1}
+    _EdgeColor: {r: 0, g: 0, b: 0, a: 0.74509805}
     _UseEdgeBlendDepthFade: 0
     _EdgeBlendFadeStart: 10
     _EdgeBlendFadeEnd: 20
     _UseSketchEdges: 0
-    _Amplitude: 0.00279
-    _Frequency: 40
-    _ChangesPerSecond: 0
+    _Amplitude: 0.0012
+    _Frequency: 48.6
+    _ChangesPerSecond: 8.27
     _UseGrain: 0
-    _GrainTexture: {fileID: 2800000, guid: 5a8fee4f74b068243867d75205bd69c1, type: 3}
-    _GrainStrength: 1
-    _GrainScale: 1
+    _GrainTexture: {fileID: 2800000, guid: 8bb3c8e8a4a87564495dc3ee1eab449c, type: 3}
+    _GrainStrength: 0.745
+    _GrainScale: 2.35
     _UseUvOffset: 0
     _OffsetNoise: {fileID: 0}
     _OffsetNoiseScale: 0.4
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_ShadowTransparentReceive: 0
   m_RenderingMode: 0
   m_DepthPrimingMode: 0
-  m_CopyDepthMode: 1
+  m_CopyDepthMode: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 1
 --- !u!114 &6308472721171736281

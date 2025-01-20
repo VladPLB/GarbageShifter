@@ -33,7 +33,7 @@ namespace _GAME.Scripts.Common
             _label.text = text;
             _animateForce = force;
             _moveRandomize = moveRandom;
-            
+            gameObject.SetActive(true);
             Animation();
         }
 
@@ -57,7 +57,7 @@ namespace _GAME.Scripts.Common
             var seq = DOTween.Sequence()
                 .Append(transform.DOScale(scaleTo, _liveTime).SetEase(_ease))
                 .Join(transform.DOMove(moveTo, _liveTime).SetEase(_ease))
-                .Join(_label.DOFade(0, _liveTime).SetEase(Ease.InExpo))
+                .Join(_label.DOFade(0, _liveTime).SetEase(Ease.Linear))
                 .AppendCallback(Remove);
             seq.Play();
         }

@@ -40,7 +40,10 @@ namespace _GAME.Scripts.Battle.Weapons
         public async void DoPhysicsDrop(float duration)
         {
             var rigidbody = gameObject.AddComponent<Rigidbody>();
-            _collider ??= gameObject.AddComponent<BoxCollider>();
+            if(_collider==null)
+            {
+                _collider = gameObject.AddComponent<BoxCollider>();
+            }
             rigidbody.AddForce(Vector3.up + Random.insideUnitSphere * 10f, ForceMode.Impulse);
             transform.parent = null;
             if (_collider != null)
@@ -49,7 +52,10 @@ namespace _GAME.Scripts.Battle.Weapons
             }
             await UniTask.Delay(TimeSpan.FromSeconds(duration));
             Destroy(rigidbody);
-            _collider.enabled = false;
+            if(_collider!=null)
+            {
+                _collider.enabled = false;
+            }
             transform.parent = _defaultParent;
             transform.localPosition = _defaultPosition;
             transform.localRotation = _defaultRotation;

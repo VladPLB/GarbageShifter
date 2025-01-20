@@ -22,10 +22,10 @@ namespace _GAME.Scripts.Battle.Player
             _rigidBody = GetComponent<Rigidbody>();
         }
 
-        public override void Setup(List<Vector3> path, Transform target, EnemyBounds enemyBounds, float moveSpeed, float attackDistance)
+        public override void Setup(List<Vector3> path, Transform target, EnemyBounds enemyBounds, float moveSpeed, float stoppingDistance, float attackDistance)
         {
             _rigidBody ??= GetComponent<Rigidbody>();
-            base.Setup(path, target, enemyBounds, moveSpeed, attackDistance);
+            base.Setup(path, target, enemyBounds, moveSpeed, stoppingDistance, attackDistance);
             _height = _heightRange.GetRandom();
         }
 
@@ -109,7 +109,7 @@ namespace _GAME.Scripts.Battle.Player
                 _rigidBody.velocity = move;
                 if (DestinationReached())
                 {
-                    if (IsAttackedDistance)
+                    if (IsStoppingDistance)
                     {
                         Stop();
                     }

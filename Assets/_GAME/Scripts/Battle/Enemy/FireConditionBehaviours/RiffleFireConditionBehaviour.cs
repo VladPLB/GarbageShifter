@@ -9,7 +9,7 @@ namespace _GAME.Scripts.Battle.Enemy
         
         public override bool IsFire(EnemyController controller)
         {
-            if (!controller.Mover.IsAttackedDistance)
+            if (!controller.Mover.IsStoppingDistance)
             {
                 _isFire = false;
                 return false;

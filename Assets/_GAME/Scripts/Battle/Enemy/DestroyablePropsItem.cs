@@ -16,6 +16,8 @@ namespace _GAME.Scripts.Battle.Enemy
         [SerializeField] private List<GameObject> _activeItems = new();
         [SerializeField] private List<GameObject> _destroyedItems = new();
         [SerializeField] private List<DeadHandler> _deadHandlers = new();
+        [SerializeField] private GameEffectType _deadEffectType = GameEffectType.Explosion_Small;
+        [SerializeField] private Vector3 _deadEffectOffset = Vector3.zero;
 
         public override Team Team => Team.None;
 
@@ -29,7 +31,7 @@ namespace _GAME.Scripts.Battle.Enemy
 
         private void Revive()
         {
-            _health.Set(Random.Range(20, 40));
+            _health.Reset();
             gameObject.SetActive(true);
             _activeItems.ForEach(a => a.SetActive(true));
             _destroyedItems.ForEach(a => a.SetActive(false));
@@ -59,7 +61,10 @@ namespace _GAME.Scripts.Battle.Enemy
         public async void Dead()
         {
             _deadHandlers.ForEach(h=>h.OnDead());
-            
+            if (_deadEffectType != GameEffectType.None)
+            {
+                GameEffect.Create(_deadEffectType, transform.position + _deadEffectOffset);
+            }
             _activeItems.ForEach(a => a.SetActive(false));
             _destroyedItems.ForEach(a => a.SetActive(true));
             _colliders.ForEach(a => a.enabled = false);

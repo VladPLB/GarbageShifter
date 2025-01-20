@@ -127,6 +127,12 @@ namespace _GAME
         {
             return Random.Range(vector.x, vector.y);
         }
+
+        public static Vector3 ZeroHeightRotation(this Vector3 from, Vector3 to)
+        {
+            to.y = from.y;
+            return (to - from).normalized;
+        }
         
     }
 }

@@ -24,6 +24,7 @@ namespace _GAME.Scripts.Battle.Player
         protected Transform _target;
         protected Vector3 _targetPosition;
         protected float _attackDistance;
+        protected float _stopDistance;
 
         protected float _speed;
         protected bool _isStopped = true;
@@ -34,16 +35,18 @@ namespace _GAME.Scripts.Battle.Player
         public Action OnMoveCompleted;
         public Action<float> OnMoveSpeed;
         
-        public bool IsAttackedDistance => Vector3.Distance(transform.position, _target.position) <= _attackDistance;
+        public bool IsStoppingDistance => Vector3.Distance(transform.position, _target.position) <= _stopDistance;
+        public bool IsAttackDistance => Vector3.Distance(transform.position, _target.position) <= _stopDistance;
 
         protected virtual void Awake()
         {
             _characterController = GetComponent<CharacterController>();
         }
 
-        public virtual void Setup(List<Vector3> path, Transform target, EnemyBounds enemyBounds, float moveSpeed, float attackDistance)
+        public virtual void Setup(List<Vector3> path, Transform target, EnemyBounds enemyBounds, float moveSpeed, float stoppingDistance, float attackDistance)
         {
             _speed = moveSpeed;
+            _stopDistance = stoppingDistance;
             _attackDistance = attackDistance;
             _path = path;
             _target = target;
@@ -133,7 +136,7 @@ namespace _GAME.Scripts.Battle.Player
                 _characterController.Move(move);
                 if (DestinationReached())
                 {
-                    if (IsAttackedDistance)
+                    if (IsStoppingDistance)
                     {
                         TryClearPathCoroutine();
                     }
@@ -154,7 +157,7 @@ namespace _GAME.Scripts.Battle.Player
             OnMoveSpeed?.Invoke(move == Vector3.zero? 0: Mathf.Clamp01(moveDelta/move.magnitude));
         }
         
-        protected bool DestinationReached() => Vector3.Distance(transform.position, _targetPosition) <= _stoppingDistance || IsAttackedDistance;
+        protected bool DestinationReached() => Vector3.Distance(transform.position, _targetPosition) <= _stoppingDistance || IsStoppingDistance;
 
         public virtual void JumpToPlayer( Action callback)
         {

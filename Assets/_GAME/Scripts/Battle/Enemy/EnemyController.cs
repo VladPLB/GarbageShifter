@@ -13,8 +13,9 @@ namespace _GAME.Scripts.Battle.Enemy
     public class EnemyController : DamageReceiver, IPoolableItem<EnemyType>, IDamageDealer
     {
         [SerializeField] private EnemyData _data;
-        [SerializeField] private EnemyViewer _enemyViewer;
+        [SerializeField] private UnitViewer _enemyViewer;
         [SerializeField] private BaseRagdollBehaviour _ragDoll;
+        [SerializeField] private Transform _targetPoint;
         [SerializeField] private EnemyMover _enemyMover;
         [SerializeField] private Weapon _weapon;
         [SerializeField] private WeaponBomb _weaponBomb;
@@ -25,7 +26,9 @@ namespace _GAME.Scripts.Battle.Enemy
         [SerializeField] private StateIntAttribute _armor;
         [SerializeField, ReadOnly] private DamageRepeater[] _damageRepeaters;
         [SerializeField] private GameEffectType _deadEffectType = GameEffectType.None;
+        [SerializeField] private Vector3 _deadEffectOffset = Vector3.zero;
         [SerializeField] private GameEffectType _spawnEffectType = GameEffectType.None;
+        [SerializeField] private Vector3 _spawnEffectOffset = Vector3.zero;
         private Vector3? _lastHitPoint = null;
         private Vector3? _explosionForce = null;
         private DamageTextType _lastDamageTextType;
@@ -38,6 +41,8 @@ namespace _GAME.Scripts.Battle.Enemy
         public EnemyMover Mover => _enemyMover;
         public StateIntAttribute Health => _health;
         public Vector3 HealthBarPoint => _healthBarPoint.position;
+
+        public Vector3 TargetPoint => _targetPoint != null ? _targetPoint.position : transform.position;
 
         public event Action<EnemyController> OnDead;
 
@@ -69,7 +74,7 @@ namespace _GAME.Scripts.Battle.Enemy
             _lastHitPoint = null;
             _explosionForce = null;
             
-            _enemyMover.Setup(movePath, _playerTransform, enemyBounds, _data.MoveSpeed, _data.AttackDistance);
+            _enemyMover.Setup(movePath, _playerTransform, enemyBounds, _data.MoveSpeed, _data.StoppingDistance, _data.AttackDistance);
             if(_ragDoll!=null)
             {
                 _ragDoll.Setup();
@@ -88,7 +93,7 @@ namespace _GAME.Scripts.Battle.Enemy
             DamageRepeatersSetActive(true);
             if (_spawnEffectType != GameEffectType.None)
             {
-                GameEffect.Create(_spawnEffectType, transform.position);
+                GameEffect.Create(_spawnEffectType, transform.position+_spawnEffectOffset);
             }
         }
 
@@ -212,7 +217,7 @@ namespace _GAME.Scripts.Battle.Enemy
 
             if (_deadEffectType != GameEffectType.None)
             {
-                GameEffect.Create(_deadEffectType, transform.position);
+                GameEffect.Create(_deadEffectType, transform.position + _deadEffectOffset);
             }
             OnDead?.Invoke(this);
             Deactivate(false);

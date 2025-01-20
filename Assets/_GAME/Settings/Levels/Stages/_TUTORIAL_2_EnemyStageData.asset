@@ -32,9 +32,9 @@ MonoBehaviour:
     - Type: 9
       SpawnRangeAmount: {x: 10, y: 10}
       SpawnDelayBetwenUnits: 0.5
-    SpawnDelayGroup: 10
+    SpawnDelayGroup: 8
   - _datas:
     - Type: 7
-      SpawnRangeAmount: {x: 10, y: 10}
+      SpawnRangeAmount: {x: 20, y: 20}
       SpawnDelayBetwenUnits: 1
-    SpawnDelayGroup: 12
+    SpawnDelayGroup: 9

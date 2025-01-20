@@ -22,6 +22,7 @@ namespace _GAME.Scripts.Battle.Enemy
         [SerializeField] private int _armor;
         [SerializeField] private float _moveSpeed;
         [SerializeField] private float _attackDistance;
+        [SerializeField] private float _stoppingDistance;
 
 
         public EnemyType Type => _type;
@@ -35,5 +36,6 @@ namespace _GAME.Scripts.Battle.Enemy
         public int Armor => _armor;
         public float MoveSpeed => _moveSpeed;
         public float AttackDistance => _attackDistance;
+        public float StoppingDistance => _stoppingDistance;
     }
 }

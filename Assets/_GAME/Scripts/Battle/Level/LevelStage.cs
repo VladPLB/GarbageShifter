@@ -2,6 +2,7 @@ using System;
 using _GAME.Scripts.Battle.Enemy;
 using _GAME.Scripts.Common;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace _GAME.Scripts.Battle.Level
 {
@@ -12,6 +13,8 @@ namespace _GAME.Scripts.Battle.Level
         [SerializeField] private Transform _stageInConnector;
         [SerializeField] private Transform _stageOutConnector;
         [SerializeField] private PlayerPosition _playerPosition;
+        [SerializeField] private UnityEvent _startLevelEvent;
+        
 
         public LevelStageType StageType => _stageType;
         public Transform OutConnector => _stageOutConnector;
@@ -59,6 +62,7 @@ namespace _GAME.Scripts.Battle.Level
         {
             _onSpawnWarning = onSpawnWarning;
             _enemySpawner?.Play(OnSpawnWarningHandler);
+            _startLevelEvent?.Invoke();
         }
         
         public void End()

@@ -33,7 +33,10 @@ namespace _GAME.Scripts.Common
 
     public enum BulletType
     {
-        Default
+        Default,
+        Default_blue,
+        Laser_red,
+        Laser_blue,
     }
     
     public enum ExplosionType
@@ -87,7 +90,8 @@ namespace _GAME.Scripts.Common
         BlueEnergyExplode,
         LaserHitDecal,
         Explosion_Default,
-        Spawn_Default
+        Spawn_Default,
+        Explosion_Small
     }
 
     public enum EnemyType
@@ -103,7 +107,7 @@ namespace _GAME.Scripts.Common
         BOT_DESANT,
         BOT_DRONE
     }
-    
+
     public enum EnemyClassType
     {
         None,
@@ -119,6 +123,19 @@ namespace _GAME.Scripts.Common
         Default,
         BOSS
     }
+    
+    public enum AllyType
+    {
+        TUTORIAL
+    }
+    
+    public enum AllyClassType
+    {
+        None,
+        SOLDIER,
+        DRONE,
+    }
+    
     
     public enum MarkerType
     {

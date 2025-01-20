@@ -20,6 +20,6 @@ MonoBehaviour:
     SpawnDelayGroup: 0.5
   - _datas:
     - Type: 8
-      SpawnRangeAmount: {x: 3, y: 3}
+      SpawnRangeAmount: {x: 5, y: 5}
       SpawnDelayBetwenUnits: 0.3
     SpawnDelayGroup: 5
