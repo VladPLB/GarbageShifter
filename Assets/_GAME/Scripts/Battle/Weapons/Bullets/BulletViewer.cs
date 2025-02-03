@@ -11,6 +11,7 @@ namespace _GAME.Scripts.Weapons.Bullets
         [SerializeField] private List<GameObject> _deactivatedItemsAfterHit = new();
         [SerializeField] private List<TrailRenderer> _trails = new();
         
+        
         public void Setup()
         {
             _deactivatedItemsAfterHit.ForEach(a=> a.SetActive(true));

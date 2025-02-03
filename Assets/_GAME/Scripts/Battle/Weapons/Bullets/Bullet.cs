@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using _GAME;
 using _GAME.Scripts;
 using _GAME.Scripts.Battle.Context;
+using _GAME.Scripts.Battle.Enemy;
 using _GAME.Scripts.Common;
 using _GAME.Scripts.Pools;
 using _GAME.Scripts.Weapons.Bullets;
@@ -19,6 +22,7 @@ public class Bullet : MonoBehaviour, IPoolableItem<BulletType>
    [SerializeField] private float _coliderRadius = .1f;
    [SerializeField] private LayerMask _coliderMask;
    [SerializeField] private GameEffectType _hitImpactType = GameEffectType.LaserHitDecal;
+   [SerializeField] private List<DeadHandler> _deadHandlers;
    
    [SerializeField]
    private BulletViewer _viewer;
@@ -67,6 +71,14 @@ public class Bullet : MonoBehaviour, IPoolableItem<BulletType>
          damageReceived.OnDamage(_data.DamageDealer.Team, _data.Damage, hitPoint, _data.Attributes);
          _onHit?.Invoke();
          _onHit = null;
+      }
+      
+      if (!_deadHandlers.IsNullOrEmpty())
+      {
+         foreach (var deadHandler in _deadHandlers)
+         {
+            deadHandler.OnDead();
+         }
       }
       
       var isSpawnDecal = damageReceived == null;

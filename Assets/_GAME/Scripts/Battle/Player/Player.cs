@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using _GAME.Scripts.Battle.Enemy;
 using _GAME.Scripts.Battle.Level;
+using _GAME.Scripts.Battle.Player.SecondaryWeapon;
 using _GAME.Scripts.Battle.Weapons;
 using _GAME.Scripts.Common;
 using Unity.Collections;
@@ -15,6 +16,7 @@ namespace _GAME.Scripts.Battle.Player
         [SerializeField] private PlayerViewer _viewer;
         [SerializeField] private PlayerMover _mover;
         [SerializeField] private Weapon _weapon;
+        [SerializeField] private SecondaryWeaponController _secondaryWeaponController;
         [SerializeField] private PlayerAim _aim;
         [SerializeField] private Transform _freeWeaponHolder;
         [SerializeField] private StateIntAttribute _health;
@@ -26,6 +28,7 @@ namespace _GAME.Scripts.Battle.Player
         private CameraController _cameraController;
         private GameInput _gameInput;
         private bool _battleReady = false;
+        private bool _previousFireState = false;
         
         public override Team Team => Team.Player;
         public StateIntAttribute Health => _health;
@@ -47,6 +50,7 @@ namespace _GAME.Scripts.Battle.Player
             _gameInput = new GameInput();
             _aim.Setup(_gameInput);
             SetupWeapon();
+            _secondaryWeaponController.Setup(this, _aim);
             _health.Set(_data.Health);
             
             foreach (var damageRepeater in _damageRepeaters)
@@ -65,11 +69,22 @@ namespace _GAME.Scripts.Battle.Player
         private void OnHitHandler()
         {
             OnHit?.Invoke();
+            _secondaryWeaponController.OnHit();
         }
 
         public bool IsFire()
         {
-            return _gameInput.Game.Fire.IsPressed();
+            var state = _gameInput.Game.Fire.IsPressed();
+            if (_previousFireState != state)
+            {
+                if (!state)
+                {
+                    _secondaryWeaponController.OnFire();
+                }
+            }
+
+            _previousFireState = state;
+            return state;
         }
 
         public void BattleReady()

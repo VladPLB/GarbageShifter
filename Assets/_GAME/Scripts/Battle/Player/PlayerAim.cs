@@ -21,6 +21,8 @@ public class PlayerAim : MonoBehaviour
     private Vector3 rotate;
     private Vector3 targetEulerAngles;
 
+    public Vector3 AimPoint => _precilePoint.position;
+
     public void Setup(GameInput input)
     {
         _gameInput = input;

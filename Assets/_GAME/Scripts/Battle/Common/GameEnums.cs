@@ -37,6 +37,7 @@ namespace _GAME.Scripts.Common
         Default_blue,
         Laser_red,
         Laser_blue,
+        Rocket_red
     }
     
     public enum ExplosionType
