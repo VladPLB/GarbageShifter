@@ -16,11 +16,11 @@ MonoBehaviour:
     _type: 0
     _bulletType: 0
     _explosionType: 0
-    _reloadTime: 0.12
+    _reloadTime: 0.15
     _reloadTimeRandomize: 0
     _bulletAmount: 1
     _bulletSpawnDelay: 0
-    _damage: 8
+    _damage: 9
     _damageOffset: 4
-    _aimOffset: 0
+    _aimOffset: 0.02
   _prefab: {fileID: 6359684540194013533, guid: a959a60e3b62349acabd4d61ff387e4c, type: 3}

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2dfac486e1184f1bb8a62e6c0756d5aa, type: 3}
-  m_Name: _TUTORIAL_2_EnemyStageData
+  m_Name: _TUTORIAL_3_EnemyStageData
   m_EditorClassIdentifier: 
   _enemies:
   - _datas:
@@ -22,4 +22,19 @@ MonoBehaviour:
     - Type: 8
       SpawnRangeAmount: {x: 5, y: 5}
       SpawnDelayBetwenUnits: 0.3
+    SpawnDelayGroup: 4
+  - _datas:
+    - Type: 9
+      SpawnRangeAmount: {x: 10, y: 10}
+      SpawnDelayBetwenUnits: 0.5
     SpawnDelayGroup: 6
+  - _datas:
+    - Type: 9
+      SpawnRangeAmount: {x: 10, y: 10}
+      SpawnDelayBetwenUnits: 0.5
+    SpawnDelayGroup: 8
+  - _datas:
+    - Type: 7
+      SpawnRangeAmount: {x: 20, y: 20}
+      SpawnDelayBetwenUnits: 1
+    SpawnDelayGroup: 9

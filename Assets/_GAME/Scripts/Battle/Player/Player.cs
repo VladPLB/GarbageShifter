@@ -63,13 +63,18 @@ namespace _GAME.Scripts.Battle.Player
         {
             var weaponData = Core.Get<DataBase>().Weapons.GetData(WeaponType.Riffle);
             weaponData.Setup(this, _data.WeaponLevel);
-            _weapon.Setup(weaponData, IsFire, OnHitHandler, _freeWeaponHolder);
+            _weapon.Setup(weaponData, IsFire, OnHitHandler, _freeWeaponHolder, OnFire);
         }
 
         private void OnHitHandler()
         {
             OnHit?.Invoke();
             _secondaryWeaponController.OnHit();
+        }
+        
+        private void OnFire()
+        {
+            _viewer.Fire();
         }
 
         public bool IsFire()

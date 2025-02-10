@@ -13,8 +13,9 @@ namespace _GAME.Scripts.Battle.Level
         [SerializeField] private Transform _stageInConnector;
         [SerializeField] private Transform _stageOutConnector;
         [SerializeField] private PlayerPosition _playerPosition;
+        [SerializeField] private UnityEvent _prestartLevelEvent;
         [SerializeField] private UnityEvent _startLevelEvent;
-        
+        [SerializeField] private UnityEvent _endLevelEvent;
 
         public LevelStageType StageType => _stageType;
         public Transform OutConnector => _stageOutConnector;
@@ -58,6 +59,11 @@ namespace _GAME.Scripts.Battle.Level
             PlayerPosition?.Setup(playerPositionType);
         }
 
+        public void PreStart()
+        {
+            _prestartLevelEvent?.Invoke();
+        }
+
         public void Play(Action<Vector3> onSpawnWarning)
         {
             _onSpawnWarning = onSpawnWarning;
@@ -69,6 +75,7 @@ namespace _GAME.Scripts.Battle.Level
         {
             _onSpawnWarning = null;
             _enemySpawner?.Stop();
+            _endLevelEvent?.Invoke();
         }
 
         private void OnSpawnWarningHandler(Vector3 position)

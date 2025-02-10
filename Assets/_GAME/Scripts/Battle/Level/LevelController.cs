@@ -92,6 +92,7 @@ public class LevelController : MonoBehaviour, IRuntimeSetup
         }
         
         var nextPosition = _playerPositions[_currentStageIndex];
+        _realStages[_currentStageIndex].PreStart();
         _player.MoveToPosition(previewPosition, nextPosition);
         _player.OnDestinationTargetPosition += PlayCurrentStage;
     }

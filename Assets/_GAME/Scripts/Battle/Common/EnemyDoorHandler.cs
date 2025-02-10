@@ -20,9 +20,15 @@ public class EnemyDoorHandler : MonoBehaviour
         {
             return false;
         }
-        _animator.SetTrigger(OpenKey);
-        _isOpened = true;
+
+        Open();
         delay = _delay;
         return true;
+    }
+
+    public void Open()
+    {
+        _animator.SetTrigger(OpenKey);
+        _isOpened = true;
     }
 }
