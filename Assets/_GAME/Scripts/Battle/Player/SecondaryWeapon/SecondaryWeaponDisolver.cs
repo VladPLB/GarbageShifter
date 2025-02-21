@@ -12,7 +12,7 @@ namespace _GAME.Scripts.Battle.Player.SecondaryWeapon
         [SerializeField] private List<Renderer> _renderers;
         [SerializeField] private float _duration = 1f;
 
-        private List<Material> _materials = new();
+        private List<Material> _materials = null;
         private float _progress = 0;
         private float _from = 0;
         private float _to = 0;
@@ -20,15 +20,12 @@ namespace _GAME.Scripts.Battle.Player.SecondaryWeapon
         private float _animateTime = 0f;
 
         private Action _onEndAnimate;
-        
-
-        private void Awake()
-        {
-            _materials = _renderers.Select(s => s.material).ToList();
-        }
 
         public void Setup()
-        { 
+        {
+            _materials ??= _renderers.Select(s => s.material).ToList();
+            _from = 0;
+            _to = 1;
             UpdateProgress(0);
         }
         

@@ -37,7 +37,7 @@ namespace _GAME.Scripts.Battle.Enemy
             if (_isShowTextDamage)
             {
                 hitPoint += new Vector3(Random.Range(-.2f, .2f), Random.Range(-.2f, .2f), Random.Range(-.2f, .2f)) * _reactionForce;
-                TextEffect.Create(TextEffectType.Damage, hitPoint,  Mathf.Abs(damage).ToString(), _reactionForce);
+                TextEffect.Create(TextEffectType.Damage,(int)type, hitPoint,  Mathf.Abs(damage).ToString(), _reactionForce);
                 _reactionForce = Mathf.Min(_reactionForce + REACTION_FORCE_ADDED, MAX_REACTION_FORCE);
             }
             

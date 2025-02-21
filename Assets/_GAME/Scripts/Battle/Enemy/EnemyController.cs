@@ -27,6 +27,7 @@ namespace _GAME.Scripts.Battle.Enemy
         [SerializeField, ReadOnly] private DamageRepeater[] _damageRepeaters;
         [SerializeField] private GameEffectType _deadEffectType = GameEffectType.None;
         [SerializeField] private Vector3 _deadEffectOffset = Vector3.zero;
+        [SerializeField] private Vector3 _damagePointOffset = Vector3.zero;
         [SerializeField] private GameEffectType _spawnEffectType = GameEffectType.None;
         [SerializeField] private Vector3 _spawnEffectOffset = Vector3.zero;
         private Vector3? _lastHitPoint = null;
@@ -151,7 +152,7 @@ namespace _GAME.Scripts.Battle.Enemy
         
         public void OnHealthChange(int delta)
         {
-            _damageReactionViewer?.Show(delta, _lastHitPoint ?? transform.position, _lastDamageTextType);
+            _damageReactionViewer?.Show(delta, _lastHitPoint ?? transform.position + _damagePointOffset, _lastDamageTextType);
             
             _lastDamageTextType = DamageTextType.Default;
 

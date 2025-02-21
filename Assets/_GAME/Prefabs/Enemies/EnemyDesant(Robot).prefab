@@ -262,6 +262,7 @@ MonoBehaviour:
   - {fileID: 349693191102443885}
   _deadEffectType: 4
   _deadEffectOffset: {x: 0, y: 1, z: 0}
+  _damagePointOffset: {x: 0, y: 1, z: 0}
   _spawnEffectType: 3
   _spawnEffectOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &517325629071219694

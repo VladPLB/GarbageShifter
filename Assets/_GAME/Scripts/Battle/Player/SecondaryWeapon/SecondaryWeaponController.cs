@@ -79,10 +79,9 @@ namespace _GAME.Scripts.Battle.Player.SecondaryWeapon
             {
                 _previousWeaponHolderOffset = Vector3.Lerp(_previousWeaponHolderOffset, _weaponBase.TransformPoint(_activeWeaponOffset), .05f);
                 var position = weaponHolderTransform.position;
-                position =  Vector3.Lerp(position,_previousWeaponHolderOffset, .03f);
+                position =  Vector3.Lerp(_previousWeaponHolderOffset, position, .1f);
                 weaponHolderTransform.position = position;
-                weaponHolderTransform.rotation= Quaternion.Lerp(weaponHolderTransform.rotation,
-                    Quaternion.LookRotation((_aim.AimPoint - position).normalized), .1f);
+                weaponHolderTransform.rotation = Quaternion.LookRotation((_aim.AimPoint - position).normalized);
             }
             else
             {

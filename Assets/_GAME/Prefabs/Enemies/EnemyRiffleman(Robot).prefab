@@ -1991,6 +1991,7 @@ MonoBehaviour:
   - {fileID: 5125086048742894006}
   _deadEffectType: 4
   _deadEffectOffset: {x: 0, y: 1, z: 0}
+  _damagePointOffset: {x: 0, y: 1, z: 0}
   _spawnEffectType: -1
   _spawnEffectOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &2419557903675809743
