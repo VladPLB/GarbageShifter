@@ -16,6 +16,7 @@ public class BattleScreen : MonoBehaviour
     [SerializeField] private UIUnitsHealthBars _unitsHealthBars;
     [SerializeField] private UIUnitsMarkers _unitsMarkers;
     [SerializeField] private UISpawnWarningMarkers _warningMarkers;
+    [SerializeField] private GlitchEffectViewer _glitchEffectViewer;
 
     private LevelController _levelController;
     private Player _player;
@@ -42,5 +43,6 @@ public class BattleScreen : MonoBehaviour
         _unitsHealthBars.Setup(_unitsController);
         _unitsMarkers.Setup(_unitsController);
         _warningMarkers.Setup(_levelController);
+        _glitchEffectViewer.Setup();
     }
 }

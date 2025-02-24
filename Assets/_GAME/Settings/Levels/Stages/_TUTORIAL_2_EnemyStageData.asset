@@ -15,11 +15,6 @@ MonoBehaviour:
   _enemies:
   - _datas:
     - Type: 8
-      SpawnRangeAmount: {x: 5, y: 5}
-      SpawnDelayBetwenUnits: 0.3
+      SpawnRangeAmount: {x: 8, y: 8}
+      SpawnDelayBetwenUnits: 0.1
     SpawnDelayGroup: 0.5
-  - _datas:
-    - Type: 8
-      SpawnRangeAmount: {x: 5, y: 5}
-      SpawnDelayBetwenUnits: 0.3
-    SpawnDelayGroup: 6
