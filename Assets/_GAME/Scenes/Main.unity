@@ -20,11 +20,11 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
-  m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
-  m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
+  m_AmbientSkyColor: {r: 0, g: 0.9245101, b: 0.943, a: 1}
+  m_AmbientEquatorColor: {r: 0.207988, g: 0.47439513, b: 0.65199995, a: 1}
+  m_AmbientGroundColor: {r: 0, g: 0.0058132396, b: 0.205, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 0
+  m_AmbientMode: 1
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 2100000, guid: cb0c4d20058461a4db7dc95a11a894ee, type: 2}
   m_HaloStrength: 0.5
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.012879253, g: 0.017030079, b: 0.041392066, a: 1}
+  m_IndirectSpecularColor: {r: 0.012937138, g: 0.016961964, b: 0.04139411, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -131723,7 +131723,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 26238
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
@@ -178386,7 +178386,7 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 0.6745098, g: 0.99099284, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.67768985, b: 0.61, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -178824,6 +178824,31 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1753655630227126633, guid: 4875409d030a54eb187b7e1b78af6130,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1753655630227126633, guid: 4875409d030a54eb187b7e1b78af6130,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1753655630227126633, guid: 4875409d030a54eb187b7e1b78af6130,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1753655630227126633, guid: 4875409d030a54eb187b7e1b78af6130,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1753655630227126633, guid: 4875409d030a54eb187b7e1b78af6130,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1952916019805227819, guid: 4875409d030a54eb187b7e1b78af6130,
         type: 3}
       propertyPath: m_SizeDelta.x
@@ -179032,6 +179057,11 @@ PrefabInstance:
     - target: {fileID: 7658230870028975962, guid: 4875409d030a54eb187b7e1b78af6130,
         type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7803059118969772354, guid: 4875409d030a54eb187b7e1b78af6130,
+        type: 3}
+      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8253206179643077353, guid: 4875409d030a54eb187b7e1b78af6130,
@@ -180230,7 +180260,12 @@ PrefabInstance:
     - target: {fileID: 4054279478594194292, guid: 9b653b46382d54731a174f7e854d14b8,
         type: 3}
       propertyPath: m_RotationOffset.x
-      value: 0.8593403
+      value: 0.85978603
+      objectReference: {fileID: 0}
+    - target: {fileID: 4054279478594194292, guid: 9b653b46382d54731a174f7e854d14b8,
+        type: 3}
+      propertyPath: m_RotationOffset.y
+      value: 0.0000610336
       objectReference: {fileID: 0}
     - target: {fileID: 4589213000882196835, guid: 9b653b46382d54731a174f7e854d14b8,
         type: 3}
@@ -181045,17 +181080,17 @@ PrefabInstance:
     - target: {fileID: 7128646823223261506, guid: 9b653b46382d54731a174f7e854d14b8,
         type: 3}
       propertyPath: m_RotationOffset.x
-      value: 13.148521
+      value: 13.148266
       objectReference: {fileID: 0}
     - target: {fileID: 7128646823223261506, guid: 9b653b46382d54731a174f7e854d14b8,
         type: 3}
       propertyPath: m_RotationOffset.y
-      value: 29.521994
+      value: 29.521614
       objectReference: {fileID: 0}
     - target: {fileID: 7128646823223261506, guid: 9b653b46382d54731a174f7e854d14b8,
         type: 3}
       propertyPath: m_RotationOffset.z
-      value: -12.749275
+      value: -12.749409
       objectReference: {fileID: 0}
     - target: {fileID: 7129766676268065883, guid: 9b653b46382d54731a174f7e854d14b8,
         type: 3}
