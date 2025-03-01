@@ -9,7 +9,6 @@ namespace _GAME.Scripts.Battle.Player
         private static readonly int JumpKey = Animator.StringToHash("Jump");
         private static readonly int FlyKey = Animator.StringToHash("Fly");
         private static readonly int FireKey = Animator.StringToHash("Fire");
-        private static readonly int SecondaryFireKey = Animator.StringToHash("SecondaryFire");
         private static readonly int DeadKey = Animator.StringToHash("Dead");
         private static readonly int ReviveKey = Animator.StringToHash("Revive");
         private static readonly int VictoryKey = Animator.StringToHash("Victory");
@@ -39,9 +38,9 @@ namespace _GAME.Scripts.Battle.Player
             _flyTrustEffect.gameObject.SetActive(true);
         }
 
-        public void Fire(bool isDefault = true)
+        public void Fire()
         {
-            _animator.SetTrigger(  isDefault?FireKey:SecondaryFireKey);
+            _animator.SetTrigger(  FireKey);
         }
         
         public void Dead()

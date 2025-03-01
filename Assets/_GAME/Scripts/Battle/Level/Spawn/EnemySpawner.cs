@@ -5,6 +5,7 @@ using System.Linq;
 using _GAME.Scripts.Battle.Context;
 using _GAME.Scripts.Battle.Enemy;
 using _GAME.Scripts.Common;
+using _GAME.Scripts.Events;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -83,7 +84,15 @@ namespace _GAME.Scripts.Battle.Level
                 EnemyType enemyType = _enemySpawnDatas[i].Type;
                 EnemyClassType enemyClass = _enemyDatabase.GetClass(enemyType);
                 EnemySpawnPoint spawnPoint = _group.GetSpawnPoint(enemyClass);
-                _onSpawnGroupWarning?.Invoke(spawnPoint.WarningPosition);
+                if(spawnPoint.IsWarning)
+                {
+                    _onSpawnGroupWarning?.Invoke(spawnPoint.WarningPosition);
+                }
+
+                if (!string.IsNullOrEmpty(spawnPoint.AttentionMessage))
+                {
+                    EventBus.Push(new AttentionEvent(spawnPoint.AttentionMessage), EventBus.EventRegion.GAMEPLAY);
+                }
                 if (spawnPoint.TryDoorOpened(out var delay))
                 {
                     yield return new WaitForSeconds(delay + .5f);

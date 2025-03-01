@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using _GAME.Scripts.Events;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -20,12 +21,19 @@ public class PlayerAim : MonoBehaviour
     private GameInput _gameInput;
     private Vector3 rotate;
     private Vector3 targetEulerAngles;
+    private bool _isAimLock = false;
 
     public Vector3 AimPoint => _precilePoint.position;
 
     public void Setup(GameInput input)
     {
         _gameInput = input;
+        EventBus.Subscribe<AimLockEvent>(OnAimLock, EventBus.EventRegion.GAMEPLAY);
+    }
+
+    private void OnAimLock(AimLockEvent lockEvent)
+    {
+        _isAimLock = lockEvent.IsLock;
     }
 
     public void SetActive(bool isActive)
@@ -34,15 +42,6 @@ public class PlayerAim : MonoBehaviour
         _rig.weight = isActive ? 1f : 0f;
 
         ResetCameraDirection();
-        if (isActive)
-        {
-            Ready();
-        }
-    }
-
-    private void Ready()
-    {
-        
     }
 
     private void ResetCameraDirection()
@@ -53,7 +52,7 @@ public class PlayerAim : MonoBehaviour
 
     void Update()
     {
-        if(!_isActive)
+        if(!_isActive || _isAimLock)
             return;
         
         var delta = _gameInput.Game.PointerDelta.ReadValue<Vector2>();
@@ -76,5 +75,10 @@ public class PlayerAim : MonoBehaviour
         {
             _precilePoint.transform.position = ray.origin + ray.direction * 10f;
         }
+    }
+
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe<AimLockEvent>(OnAimLock, EventBus.EventRegion.GAMEPLAY);
     }
 }

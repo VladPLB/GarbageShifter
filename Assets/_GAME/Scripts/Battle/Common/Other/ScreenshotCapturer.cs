@@ -12,7 +12,7 @@ public class ScreenshotCapturer : MonoBehaviour
 
     private void OnDestroy()
     {
-        Core.Clear(this);
+        Core.Unregistry(this);
     }
 
     public void TakeScreenshot(System.Action<Texture2D> callback)

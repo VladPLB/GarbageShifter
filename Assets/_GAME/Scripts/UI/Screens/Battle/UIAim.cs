@@ -11,6 +11,7 @@ namespace _GAME.Scripts.UI.Screens.Battle
         [SerializeField] protected RectTransform _base;
         [SerializeField] protected RectTransform _dot;
         [SerializeField] protected RectTransform _hit;
+        [SerializeField] protected GameObject _secondaryWeaponReadyMark;
 
         private Player _player;
         private bool _isFire = false;
@@ -59,6 +60,10 @@ namespace _GAME.Scripts.UI.Screens.Battle
                 if (_isFire != _player.IsFire())
                 {
                     SetBaseState();
+                }
+                if(_secondaryWeaponReadyMark != null)
+                {
+                    _secondaryWeaponReadyMark.SetActive(_player.IsReadySecondaryWeapon);
                 }
             }
         }

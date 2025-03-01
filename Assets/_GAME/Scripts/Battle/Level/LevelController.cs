@@ -7,6 +7,7 @@ using _GAME.Scripts.Battle.Enemy;
 using _GAME.Scripts.Battle.Level;
 using _GAME.Scripts.Battle.Player;
 using _GAME.Scripts.Common;
+using _GAME.Scripts.Events;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -78,12 +79,12 @@ public class LevelController : MonoBehaviour, IRuntimeSetup
         PlayCurrentStage();
     }
 
-    public void ToNextStage()
+    public async void ToNextStage()
     {
         var previewPosition = _playerPositions[_currentStageIndex];
         _realStages[_currentStageIndex].End();
         _player.BattleStop();
-        
+        await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.STAGE_COMPLETE_PLAYER_DELAY));
         _currentStageIndex++;
         if (_currentStageIndex >= _stagesCount)
         {
@@ -104,19 +105,27 @@ public class LevelController : MonoBehaviour, IRuntimeSetup
             PlayFirstStage();
             return;
         }
-        
+        EventBus.Push(new KeyEvent("StageStart"), EventBus.EventRegion.GAMEPLAY);
         await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.STAGE_PLAY_PLAYER_DELAY));
         _player.BattleReady();
+        var stage = _realStages[_currentStageIndex];
+        stage.CheckPlay();
+        await UniTask.WaitWhile(() => !stage.IsPlay);
         await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.STAGE_PLAY_ENEMY_DELAY));
-        _realStages[_currentStageIndex].Play(OnSpawnWarningHandler);
+        stage.Play(OnSpawnWarningHandler);
+        await UniTask.WaitWhile(() => !stage.IsCompleted);
+        await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.STAGE_COMPLETE_DELAY));
+        ToNextStage();
     }
     
     private async void PlayFirstStage()
     {
         _currentStageIndex = 0;
         _player.SetPosition(_playerPositions[_currentStageIndex]);
-        _realStages[_currentStageIndex].Play(OnSpawnWarningHandler);
-        await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.STAGE_FIRST_DURATION));
+        _player.BattleStop();
+        var stage = _realStages[_currentStageIndex];
+        stage.Play(null);
+        await UniTask.WaitWhile(() => !stage.IsCompleted);
         ToNextStage();
     }
     
@@ -129,16 +138,5 @@ public class LevelController : MonoBehaviour, IRuntimeSetup
     {
         _player.Victory();
         OnSpawnWarning = null;
-    }
-    
-    private void Update()
-    {
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                ToNextStage();
-            }
-        }
     }
 }

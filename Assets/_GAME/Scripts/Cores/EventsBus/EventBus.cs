@@ -54,9 +54,9 @@ namespace _GAME.Scripts.Events
                 {
                     if (_events[key].TryGetValue(typeof(T), out var delegates))
                     {
-                        foreach (var del in delegates)
+                        for (int i = delegates.Count - 1; i >= 0; i--)
                         {
-                            (del as Action<T>)?.Invoke(eventData);
+                            (delegates[i] as Action<T>)?.Invoke(eventData);
                         }
                     }
                 }
@@ -65,9 +65,9 @@ namespace _GAME.Scripts.Events
             {
                 if (_events[region].TryGetValue(typeof(T), out var delegates))
                 {
-                    foreach (var del in delegates)
+                    for (int i = delegates.Count - 1; i >= 0; i--)
                     {
-                        (del as Action<T>)?.Invoke(eventData);
+                        (delegates[i] as Action<T>)?.Invoke(eventData);
                     }
                 }
             }

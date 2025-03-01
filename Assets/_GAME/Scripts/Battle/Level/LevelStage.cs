@@ -1,6 +1,7 @@
 using System;
 using _GAME.Scripts.Battle.Enemy;
 using _GAME.Scripts.Common;
+using _GAME.Scripts.Events;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -13,15 +14,23 @@ namespace _GAME.Scripts.Battle.Level
         [SerializeField] private Transform _stageInConnector;
         [SerializeField] private Transform _stageOutConnector;
         [SerializeField] private PlayerPosition _playerPosition;
+        [SerializeField] private levelStageConditionBase _playCondition;
+        [SerializeField] private levelStageConditionBase _completeCondition;
         [SerializeField] private UnityEvent _prestartLevelEvent;
         [SerializeField] private UnityEvent _startLevelEvent;
         [SerializeField] private UnityEvent _endLevelEvent;
 
+        private UnitsController _unitsController = null;
         public LevelStageType StageType => _stageType;
         public Transform OutConnector => _stageOutConnector;
         public PlayerPosition PlayerPosition => _playerPosition;
+        public UnitsController UnitsController => _unitsController;
+        public bool IsPlay => _playCondition == null || _playCondition.IsNext;
+        public bool IsCompleted => _completeCondition==null || _completeCondition.IsNext;
 
         private Action<Vector3> _onSpawnWarning;
+
+        
 
         public void Setup()
         {
@@ -36,6 +45,7 @@ namespace _GAME.Scripts.Battle.Level
         public void Setup(LevelStage previewStage, UnitsController unitsController, EnemyStagePreset enemyStagePreset)
         {
             Setup(previewStage);
+            _unitsController = unitsController;
             _enemySpawner?.Setup(unitsController, enemyStagePreset);
         }
         
@@ -64,11 +74,18 @@ namespace _GAME.Scripts.Battle.Level
             _prestartLevelEvent?.Invoke();
         }
 
+        public void CheckPlay()
+        {
+            _playCondition?.Setup(this);
+        }
+
         public void Play(Action<Vector3> onSpawnWarning)
         {
             _onSpawnWarning = onSpawnWarning;
             _enemySpawner?.Play(OnSpawnWarningHandler);
+            _completeCondition.Setup(this);
             _startLevelEvent?.Invoke();
+            EventBus.Push(new KeyEvent("StagePlay"), EventBus.EventRegion.GAMEPLAY);
         }
         
         public void End()
@@ -76,6 +93,7 @@ namespace _GAME.Scripts.Battle.Level
             _onSpawnWarning = null;
             _enemySpawner?.Stop();
             _endLevelEvent?.Invoke();
+            EventBus.Push(new KeyEvent("StageComplete"), EventBus.EventRegion.GAMEPLAY);
         }
 
         private void OnSpawnWarningHandler(Vector3 position)

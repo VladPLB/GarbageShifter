@@ -65,7 +65,7 @@ namespace _GAME.Scripts.Battle.Player
                 await UniTask.Delay(TimeSpan.FromSeconds(.05f));
                 _directionLight.intensity = _defaultIntencity;
                 await UniTask.Delay(TimeSpan.FromSeconds(.05f));
-                _directionLight.intensity = 0;
+                _directionLight.intensity = _defaultIntencity * .2f;
                 await UniTask.Delay(TimeSpan.FromSeconds(duration));
                 _directionLight.intensity = _defaultIntencity;
                 await UniTask.Delay(TimeSpan.FromSeconds(.05f));

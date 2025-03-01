@@ -5,6 +5,7 @@ using _GAME.Scripts.Battle.Level;
 using _GAME.Scripts.Battle.Player.SecondaryWeapon;
 using _GAME.Scripts.Battle.Weapons;
 using _GAME.Scripts.Common;
+using _GAME.Scripts.Events;
 using Unity.Collections;
 using UnityEngine;
 
@@ -29,13 +30,20 @@ namespace _GAME.Scripts.Battle.Player
         private GameInput _gameInput;
         private bool _battleReady = false;
         private bool _previousFireState = false;
+
+        private bool _isAimLock = false;
         
         public override Team Team => Team.Player;
         public StateIntAttribute Health => _health;
+
+        public bool IsReadySecondaryWeapon => _secondaryWeaponController != null && _secondaryWeaponController.IsReady;
         
         public event Action OnDestinationTargetPosition;
         public event Action<bool> OnBattleReady;
         public event Action OnHit;
+        public event Action OnShot;
+        
+        public event Action OnSeccondaryShot;
 
         public event Action OnDamaged;
 
@@ -57,6 +65,8 @@ namespace _GAME.Scripts.Battle.Player
             {
                 damageRepeater.ApplyReceiver(this);
             }
+            
+            EventBus.Subscribe<AimLockEvent>(OnAimLock, EventBus.EventRegion.GAMEPLAY);
         }
 
         private void SetupWeapon()
@@ -64,22 +74,29 @@ namespace _GAME.Scripts.Battle.Player
             var weaponData = Core.Get<DataBase>().Weapons.GetData(WeaponType.Riffle);
             weaponData.Setup(this, _data.WeaponLevel);
             _weapon.Setup(weaponData, IsFire, OnHitHandler, _freeWeaponHolder, OnFire);
+            OnHit += _secondaryWeaponController.OnHit;
+            OnShot += _viewer.Fire;
         }
 
         private void OnHitHandler()
         {
             OnHit?.Invoke();
-            _secondaryWeaponController.OnHit();
+            
         }
         
         private void OnFire()
         {
-            _viewer.Fire();
+            OnShot?.Invoke();
+        }
+
+        private void OnAimLock(AimLockEvent lockEvent)
+        {
+            _isAimLock = lockEvent.IsLock;
         }
 
         public bool IsFire()
         {
-            var state = _gameInput.Game.Fire.IsPressed();
+            var state = _gameInput.Game.Fire.IsPressed() && !_isAimLock;
             if (_previousFireState != state)
             {
                 if (!state)
@@ -108,7 +125,7 @@ namespace _GAME.Scripts.Battle.Player
             _aim.SetActive(false);
             _weapon.SetActive(false, false);
 
-            _gameInput.Enable();
+            _gameInput.Disable();
             _battleReady = false;
             OnBattleReady?.Invoke(false);
         }
@@ -172,8 +189,11 @@ namespace _GAME.Scripts.Battle.Player
         {
             OnBattleReady = null;
             OnHit = null;
+            OnShot = null;
+            OnSeccondaryShot = null;
             OnDestinationTargetPosition = null;
             OnDamaged = null;
+            EventBus.Unsubscribe<AimLockEvent>(OnAimLock, EventBus.EventRegion.GAMEPLAY);
         }
         
 #if UNITY_EDITOR

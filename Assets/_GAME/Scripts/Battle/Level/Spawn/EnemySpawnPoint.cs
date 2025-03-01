@@ -10,6 +10,7 @@ namespace _GAME.Scripts.Battle.Level
         [SerializeField] private List<EnemyClassType> _enemies;
         [SerializeField] private EnemyDoorHandler _door;
         [SerializeField] private Transform _warningPoint;
+        [SerializeField] private string _attentionMessage = String.Empty;
         [SerializeField] private Bounds _spawnBox;
         [SerializeField] private List<Bounds> _targetMoveBoxes = new();
         [Header("Debug")]
@@ -17,7 +18,9 @@ namespace _GAME.Scripts.Battle.Level
         [SerializeField] private Bounds _sBox;
         [SerializeField] private List<Bounds> _tBoxes = new();
 
+        public bool IsWarning => _warningPoint != null;
         public Vector3 WarningPosition =>_warningPoint==null? _spawnBox.center : _warningPoint.position;
+        public string AttentionMessage => _attentionMessage;
         public bool IsTypeContains(EnemyClassType type) => _enemies.Contains(type);
 
         public List<Vector3> GetPath()

@@ -1,4 +1,5 @@
 using System;
+using _GAME.Scripts.Events;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -20,18 +21,27 @@ namespace _GAME.Scripts.Battle.Player.SecondaryWeapon
 
         private PlayerAim _aim;
         private bool _isReady = false;
-        private bool _isFire = false;
         private Vector3 _previousWeaponHolderOffset;
+        private float _maxValue = 1f;
+
+        public bool IsReady => _weapon.IsReady && !_weapon.IsFire;
 
         public void Setup(Player player,PlayerAim aim)
         {
             _aim = aim;
             _fill.Progress = 0f;
+            _maxValue = 1f;
             _isReady = false;
             _weaponHolder.transform.position = _inactiveWeaponOffset;
             _weapon.Setup(player);
             SetWeaponTransform();
             _fillAnimator.Rebind();
+            EventBus.Subscribe<SeccondaryMaxValueEvent>(OnMaxValueChange, EventBus.EventRegion.GAMEPLAY);
+        }
+
+        private void OnMaxValueChange(SeccondaryMaxValueEvent maxValueEvent)
+        {
+            _maxValue = Mathf.Clamp01(maxValueEvent.MaxValue);
         }
 
         private void SetWeaponTransform()
@@ -47,7 +57,7 @@ namespace _GAME.Scripts.Battle.Player.SecondaryWeapon
         {
             if(_fill.Progress<1f)
             {
-                _fill.Progress += .1f;
+                _fill.Progress = Mathf.Clamp(_fill.Progress + .03f, 0, _maxValue);
                 if (_fill.Progress < 1f)
                 {
                     _fillAnimator.SetTrigger("Added");
@@ -107,6 +117,11 @@ namespace _GAME.Scripts.Battle.Player.SecondaryWeapon
             _fillAnimator.SetBool("IsFull", false);
             await UniTask.Delay(TimeSpan.FromSeconds(.2f));
             _isReady = false;
+        }
+
+        private void OnDisable()
+        {
+            EventBus.Unsubscribe<SeccondaryMaxValueEvent>(OnMaxValueChange, EventBus.EventRegion.GAMEPLAY);
         }
     }
 }

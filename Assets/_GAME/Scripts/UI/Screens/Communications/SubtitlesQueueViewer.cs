@@ -30,6 +30,12 @@ namespace _GAME.Scripts.UI.Screens.Communications
 
         public event Action OnEnd;
 
+        public void Setup()
+        {
+            _text.text = "";
+            _text.color = new Color(_text.color.r, _text.color.g, _text.color.b, 1);
+        }
+
         public void ShowMessage(string message)
         {
             _messagesQueue.Add(message);
@@ -53,7 +59,9 @@ namespace _GAME.Scripts.UI.Screens.Communications
             }
             else
             {
+                _messagesQueue.Clear();
                 OnEnd?.Invoke();
+                OnEnd = null;
             }
         }
 

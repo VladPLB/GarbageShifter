@@ -43,7 +43,7 @@ namespace _GAME.Scripts
 
         private static List<Func<object>> _registryQueue = new();
 
-        public static void Clear<T>(T module) where T : class
+        public static void Unregistry<T>(T module) where T : class
         {
             if (Instance._modules.ContainsKey(typeof(T)))
             {
@@ -92,7 +92,7 @@ namespace _GAME.Scripts
                     Instance._modules[typeof(T)] = module;
                 }
 
-                if (module is MonoBehaviour behaviour)
+                if (module is MonoBehaviour behaviour and not IReparentIgnored)
                 {
                     behaviour.transform.SetParent(Instance.transform);
                 }

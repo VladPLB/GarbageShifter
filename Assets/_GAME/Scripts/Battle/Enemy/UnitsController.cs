@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _GAME.Scripts.Common;
+using _GAME.Scripts.Events;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -71,6 +72,11 @@ namespace _GAME.Scripts.Battle.Enemy
         {
             _activeUnits.Remove(enemy);
             OnRemoved?.Invoke(enemy);
+            EnemyCount--;
+            if(EnemyCount==0)
+            {
+                EventBus.Push(new KeyEvent("ClearEnemies"), EventBus.EventRegion.GAMEPLAY);
+            }
             if (!isForce)
             {
                 await UniTask.Delay(TimeSpan.FromSeconds(REMOVE_UNIT_TIME));
