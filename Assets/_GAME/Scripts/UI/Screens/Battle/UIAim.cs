@@ -2,6 +2,7 @@ using System;
 using _GAME.Scripts.Battle.Player;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace _GAME.Scripts.UI.Screens.Battle
 {
@@ -48,7 +49,7 @@ namespace _GAME.Scripts.UI.Screens.Battle
         private void PlayerOnOnBattleReady(bool ready)
         {
             if (ready)
-                _holderCanvasGroup.DOFade(.3f, .5f);
+                _holderCanvasGroup.DOFade(.4f, .5f);
             else
                 _holderCanvasGroup.DOFade(0f, .5f);
         }
@@ -61,10 +62,8 @@ namespace _GAME.Scripts.UI.Screens.Battle
                 {
                     SetBaseState();
                 }
-                if(_secondaryWeaponReadyMark != null)
-                {
-                    _secondaryWeaponReadyMark.SetActive(_player.IsReadySecondaryWeapon);
-                }
+                
+                _secondaryWeaponReadyMark?.SetActive(_player.IsReadySecondaryWeapon);
             }
         }
 

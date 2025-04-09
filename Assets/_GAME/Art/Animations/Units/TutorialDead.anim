@@ -5666,7 +5666,7 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 23.366667
+  - time: 23.166666
     functionName: Send
     data: 
     objectReferenceParameter: {fileID: 0}

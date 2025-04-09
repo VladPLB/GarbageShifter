@@ -60,6 +60,21 @@ namespace _GAME.Scripts.Common
         Default,
         
     }
+    
+    public enum LobbyCameraType
+    {
+        Map = -1,
+        Transition = 0,
+        Bar_Barmen = 10,
+        Bar_BlackMarket = 11,
+        Angar_Squad = 20,
+        Angar_Ship = 21,
+        Angar_Master = 22,
+        Lab_Researcher = 30,
+        Lab_Medic = 31,
+        Shop_Market = 40,
+        Shop_Teleport = 41
+    }
 
     public enum GameCameraType
     {

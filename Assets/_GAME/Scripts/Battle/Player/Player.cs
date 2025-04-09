@@ -37,6 +37,7 @@ namespace _GAME.Scripts.Battle.Player
         public StateIntAttribute Health => _health;
 
         public bool IsReadySecondaryWeapon => _secondaryWeaponController != null && _secondaryWeaponController.IsReady;
+        public float SecondaryWeaponProgress => _secondaryWeaponController != null? _secondaryWeaponController.Progress: 0f;
         
         public event Action OnDestinationTargetPosition;
         public event Action<bool> OnBattleReady;

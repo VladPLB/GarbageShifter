@@ -25,6 +25,7 @@ namespace _GAME.Scripts.Battle.Player.SecondaryWeapon
         private float _maxValue = 1f;
 
         public bool IsReady => _weapon.IsReady && !_weapon.IsFire;
+        public float Progress => _fill.Progress;
 
         public void Setup(Player player,PlayerAim aim)
         {

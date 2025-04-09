@@ -12,7 +12,7 @@ namespace _GAME.Scripts.UI.Screens
         private async void Start()
         {
             await UniTask.Delay(TimeSpan.FromSeconds(1.5f));
-            _canvasGroup.DOFade(0, .5f).OnComplete(() => gameObject.SetActive(false));
+            _canvasGroup.DOFade(0, .5f);
             EventBus.Subscribe<KeyEvent>(OnEvent, EventBus.EventRegion.GAMEPLAY);
         }
         
@@ -21,7 +21,6 @@ namespace _GAME.Scripts.UI.Screens
             if(keyEvent.Key == "ShowLoading")
             {
                 EventBus.Unsubscribe<KeyEvent>(OnEvent, EventBus.EventRegion.GAMEPLAY);
-                gameObject.SetActive(true);
                 _canvasGroup.DOFade(1, .5f);
             }
         }
