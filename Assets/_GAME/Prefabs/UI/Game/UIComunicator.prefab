@@ -207,6 +207,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1e5bc12483c495eb53b6083fbab8a52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _region: 2
   _animator: {fileID: 9012417942783103324}
   _portrait: {fileID: 5295796560073312521}
   _subtitles: {fileID: 5374957935492999645}

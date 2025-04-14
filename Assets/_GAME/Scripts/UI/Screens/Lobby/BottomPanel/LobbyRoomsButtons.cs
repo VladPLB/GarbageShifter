@@ -12,17 +12,17 @@ namespace _GAME.Scripts.UI.Screens.Lobby
         private const LobbyCameraType DefaultRoomType = LobbyCameraType.Bar_Barmen;
         
         [SerializeField] 
-        private LobbyRoomsController _roomsController;
-        [SerializeField] 
         private List<BottomPanelRoomButton> _roomButtons;
 
         [SerializeField] private RoomPlacesButtons _placesButtonsHolder;
 
+        private LobbyRoomsController _roomsController;
         private bool _isAnimate = false;
         private List<LobbyCameraType> _types;
 
         private void OnEnable()
         {
+            _roomsController = Core.Get<LobbyRoomsController>();
             Initialize(DefaultRoomType);
         }
 

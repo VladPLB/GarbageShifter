@@ -36,6 +36,7 @@ namespace _GAME.Scripts.Lobby
         
         private void Awake()
         {
+            Core.Registry(this);
             _running = false;
             CurrentRoomType = LobbyCameraType.Transition;
             _lobbyRoomsByType.Clear();

@@ -139,4 +139,9 @@ public class LevelController : MonoBehaviour, IRuntimeSetup
         _player.Victory();
         OnSpawnWarning = null;
     }
+
+    private void OnDestroy()
+    {
+        Core.Unregistry(this);
+    }
 }

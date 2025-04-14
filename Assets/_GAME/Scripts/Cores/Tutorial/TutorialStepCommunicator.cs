@@ -15,13 +15,13 @@ namespace _GAME.Scripts.Tutorial
         public override void Play()
         {
             _isComplete = false;
-            EventBus.Subscribe<CommunicatorCompleteEvent>(OnComplete, EventBus.EventRegion.GAMEPLAY);
+            EventBus.Subscribe<DialogCompleteEvent>(OnComplete, EventBus.EventRegion.GAMEPLAY);
             EventBus.Push( new CommunicatorMessageEvent(_messages), EventBus.EventRegion.GAMEPLAY);
         }
 
-        private void OnComplete(CommunicatorCompleteEvent completeEvent)
+        private void OnComplete(DialogCompleteEvent completeEvent)
         {
-            EventBus.Unsubscribe<CommunicatorCompleteEvent>(OnComplete, EventBus.EventRegion.GAMEPLAY);
+            EventBus.Unsubscribe<DialogCompleteEvent>(OnComplete, EventBus.EventRegion.GAMEPLAY);
             _isComplete = true;
         }
     }

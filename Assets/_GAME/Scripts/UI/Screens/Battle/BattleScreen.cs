@@ -19,7 +19,7 @@ public class BattleScreen : MonoBehaviour
     [SerializeField] private UIUnitsMarkers _unitsMarkers;
     [SerializeField] private UISpawnWarningMarkers _warningMarkers;
     [SerializeField] private GlitchEffectViewer _glitchEffectViewer;
-    [SerializeField] private UIGameCommunicator _communicator;
+    [SerializeField] private UIDialog _communicator;
     [SerializeField] private UIGameAttention _gameAttention;
     
 
