@@ -33,7 +33,7 @@ namespace _GAME.Scripts
             }
 
             _instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
             InitModules();
         }
         private void InitModules()

@@ -33,10 +33,9 @@ namespace _GAME.Scripts.Lobby
                 _currentRoomType = value;
             }
         }
-        
-        private void Awake()
+
+        public void Initialize()
         {
-            Core.Registry(this);
             _running = false;
             CurrentRoomType = LobbyCameraType.Transition;
             _lobbyRoomsByType.Clear();
@@ -50,7 +49,7 @@ namespace _GAME.Scripts.Lobby
                     }
                 }
             }
-
+            
             _initialize = true;
         }
 
@@ -142,18 +141,5 @@ namespace _GAME.Scripts.Lobby
             
             _running = false;
         }
-
-#if UNITY_EDITOR
-        [SerializeField] private LobbyCameraType _debugTarget;
-
-        [ContextMenu("RunToNextRoom")]
-        public void DebugRun()
-        {
-            if(Application.isPlaying)
-            {
-                ToRoom(_debugTarget);
-            }
-        }
-#endif
     }
 }

@@ -3,7 +3,7 @@ using System.Collections;
 using _GAME.Scripts;
 using UnityEngine;
 
-public class ScreenshotCapturer : MonoBehaviour
+public class ScreenshotCapturer : MonoBehaviour, IReparentIgnored
 {
     private void Awake()
     {

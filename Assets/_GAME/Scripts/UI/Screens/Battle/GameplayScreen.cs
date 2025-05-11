@@ -5,11 +5,12 @@ using _GAME.Scripts;
 using _GAME.Scripts.Battle.Enemy;
 using _GAME.Scripts.Battle.Player;
 using _GAME.Scripts.Common;
+using _GAME.Scripts.UI;
 using _GAME.Scripts.UI.Screens.Battle;
 using _GAME.Scripts.UI.Screens.Communications;
 using UnityEngine;
 
-public class BattleScreen : MonoBehaviour
+public class GameplayScreen : UIWindow
 {
     [SerializeField] private UIAim _aim;
     [SerializeField] private UIAimTutorial _aimTutorial;
@@ -27,12 +28,13 @@ public class BattleScreen : MonoBehaviour
     private Player _player;
     private UnitsController _unitsController;
 
-    private void Start()
+    public override void OnOpen()
     {
         InitReferences();
         InitBehaviours();
+        base.OnOpen();
     }
-    
+
     private void InitReferences()
     {
         _levelController = Core.Get<LevelController>();

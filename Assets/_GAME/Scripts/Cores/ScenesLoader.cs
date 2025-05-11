@@ -48,10 +48,9 @@ namespace _GAME.Scripts
         public async UniTask LoadGameplayAsync(string gameplayModeSubScene = "")
         {
             await SwitchMainSceneAsync(gameplayScene);
-            await LoadSubSceneAsync(gameplayModeSubScene);
         }
 
-        private async UniTask SwitchMainSceneAsync(string newMainScene)
+        private async UniTask SwitchMainSceneAsync(string newMainScene, string gameplayModeSubScene = "")
         {
             EventBus.Push(new SceneLoadEvent(), EventBus.EventRegion.GLOBAL);
             if (!string.IsNullOrEmpty(_activeMainScene))
@@ -67,12 +66,13 @@ namespace _GAME.Scripts
             }
 
             _activeSubScenes.Clear();
+            await LoadSubSceneAsync(gameplayModeSubScene);
             EventBus.Push(new SceneLoadCompleteEvent(), EventBus.EventRegion.GLOBAL);
         }
 
         private async UniTask LoadSubSceneAsync(string subSceneName)
         {
-            if(!string.IsNullOrEmpty(subSceneName))
+            if(string.IsNullOrEmpty(subSceneName))
                 return;
             
             if (!SceneManager.GetSceneByName(subSceneName).isLoaded)
