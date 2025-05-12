@@ -52,6 +52,19 @@ namespace _GAME
             }
             return outList;
         }
+        
+        public static T PopRandom<T>(this List<T> list, System.Random rand)
+        {
+            int index = rand.Next(0, list.Count());
+            var type = list[index];
+            list.RemoveAt(index);
+            return type;
+        }
+        
+        public static T PopRandom<T>(this List<T> list)
+        {
+            return PopRandom(list, new System.Random());
+        }
 
         public static T GetRandomItem<T>(this IEnumerable<T> list)
         {

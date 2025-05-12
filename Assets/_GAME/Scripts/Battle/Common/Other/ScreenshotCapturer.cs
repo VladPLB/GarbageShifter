@@ -10,11 +10,6 @@ public class ScreenshotCapturer : MonoBehaviour, IReparentIgnored
         Core.Registry(this);
     }
 
-    private void OnDestroy()
-    {
-        Core.Unregistry(this);
-    }
-
     public void TakeScreenshot(System.Action<Texture2D> callback)
     {
         StartCoroutine(CaptureScreenshot(callback));

@@ -1,5 +1,6 @@
 using _GAME.Scripts.Common;
 using _GAME.Scripts.Lobby;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace _GAME.Scripts.UI.Screens.Lobby
@@ -8,13 +9,13 @@ namespace _GAME.Scripts.UI.Screens.Lobby
     {
         [SerializeField] private LobbyBottomPanel _bottomPanel;
         
-        private LobbyRoomsController _roomsController;
-
-        public void Initialize(LobbyRoomsController roomsController)
+        
+private LobbyRoomsController _roomsController;
+        public async UniTask Initialize(LobbyRoomsController roomsController)
         {
             _roomsController = roomsController;
             InitReferences();
-            InitBehaviours();
+            await InitBehaviours();
         }
         
         private void InitReferences()
@@ -22,9 +23,9 @@ namespace _GAME.Scripts.UI.Screens.Lobby
             
         }
 
-        private void InitBehaviours()
+        private async UniTask InitBehaviours()
         {
-            _bottomPanel.Initialize(_roomsController);
+            await _bottomPanel.Initialize(_roomsController);
         }
     }
 }

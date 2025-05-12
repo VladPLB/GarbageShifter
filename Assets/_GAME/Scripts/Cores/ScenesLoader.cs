@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using _GAME.Scripts.Events;
 using Cysharp.Threading.Tasks;
@@ -14,6 +15,7 @@ namespace _GAME.Scripts
 
         private bool _isUiSceneLoaded = false;
         private string _activeMainScene;
+        private bool _activeSceneLoaded = false;
         private List<string> _activeSubScenes = new();
 
         private void Awake()
@@ -33,10 +35,14 @@ namespace _GAME.Scripts
 
         public void OnEvent(KeyEvent keyEvent)
         {
-            if (keyEvent.Key == "UILoaded")
+            switch (keyEvent.Key)
             {
-                EventBus.Unsubscribe<KeyEvent>(OnEvent, EventBus.EventRegion.GLOBAL);
-                _isUiSceneLoaded = true;
+                case "SceneLoaded":
+                    _activeSceneLoaded = true;
+                    break;
+                case "UILoaded":
+                    _isUiSceneLoaded = true;
+                    break;
             }
         }
 
@@ -53,12 +59,11 @@ namespace _GAME.Scripts
         private async UniTask SwitchMainSceneAsync(string newMainScene, string gameplayModeSubScene = "")
         {
             EventBus.Push(new SceneLoadEvent(), EventBus.EventRegion.GLOBAL);
+            _activeSceneLoaded = false;
+            await UniTask.Delay(TimeSpan.FromSeconds(.5f));
             if (!string.IsNullOrEmpty(_activeMainScene))
                 await SceneManager.UnloadSceneAsync(_activeMainScene);
-
-            await SceneManager.LoadSceneAsync(newMainScene, LoadSceneMode.Additive);
-            _activeMainScene = newMainScene;
-
+            
             foreach (var sub in _activeSubScenes)
             {
                 if (SceneManager.GetSceneByName(sub).isLoaded)
@@ -66,7 +71,12 @@ namespace _GAME.Scripts
             }
 
             _activeSubScenes.Clear();
+
+            await SceneManager.LoadSceneAsync(newMainScene, LoadSceneMode.Additive);
+            _activeMainScene = newMainScene;
+            
             await LoadSubSceneAsync(gameplayModeSubScene);
+            await UniTask.WaitWhile(() => !_activeSceneLoaded);
             EventBus.Push(new SceneLoadCompleteEvent(), EventBus.EventRegion.GLOBAL);
         }
 
