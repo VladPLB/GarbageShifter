@@ -7,8 +7,6 @@ using UnityEngine.SceneManagement;
 
 namespace _GAME.Scripts.Tools.Editor
 {
-
-
     [InitializeOnLoad]
     public static class SceneStarter
     {

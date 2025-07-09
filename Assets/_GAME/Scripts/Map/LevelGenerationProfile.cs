@@ -11,11 +11,11 @@ namespace _GAME.Scripts.Map
     [System.Serializable]
     public class LevelTypeWeight
     {
-        public MapController.LevelType levelType;
+        public MapManager.LevelType levelType;
         public float weight;
     }
 
-    [CreateAssetMenu(menuName = "Game/Level Map/Generation Profile", fileName = "LevelGenerationProfile")]
+    [CreateAssetMenu(menuName = "Scriptable/Level/Generation Profile", fileName = "LevelGenerationProfile")]
     public class LevelGenerationProfile : ScriptableObject
     {
         
@@ -23,7 +23,7 @@ namespace _GAME.Scripts.Map
         private int _locationsPerZone = 10;
         [SerializeField] private List<string> _zoneNames;
         [SerializeField] private List<SkyboxSettings> _skyboxSettings;
-        [SerializeField] private List<MapController.LocationType> _locationTypes;
+        [SerializeField] private List<MapManager.LocationType> _locationTypes;
         [SerializeField] 
         private int2 _levelsPerLocationRange;
         [SerializeField]
@@ -37,7 +37,7 @@ namespace _GAME.Scripts.Map
         private Random _random;
 
         public int LocationsPerZone => _locationsPerZone;
-        public List<MapController.LocationType> LocationTypes => _locationTypes.ToList();
+        public List<MapManager.LocationType> LocationTypes => _locationTypes.ToList();
         public float ZSpacing => _zSpacing;
         public float XJitter => _xJitter;
         
@@ -50,7 +50,7 @@ namespace _GAME.Scripts.Map
         public string GetRandomName(int zone)
         {
             var rand = new Random(zone * 1234);
-            return _zoneNames[rand.Next(_zoneNames.Count())];
+            return $"{_zoneNames[rand.Next(_zoneNames.Count())]} {rand.Next(1,30).ToRoman()}";
         }
         
         public SkyboxSettings GetRandomSkyBox(int zone)
@@ -59,7 +59,7 @@ namespace _GAME.Scripts.Map
             return _skyboxSettings[rand.Next(_skyboxSettings.Count())];
         }
 
-        public MapController.LevelType GetRandomLevelType(int level)
+        public MapManager.LevelType GetRandomLevelType(int level)
         {
             var rand = new Random(level * 354);
             float totalWeight = 0f;
@@ -76,7 +76,7 @@ namespace _GAME.Scripts.Map
                     return entry.levelType;
             }
 
-            return MapController.LevelType.Default;
+            return MapManager.LevelType.Default;
         }
     }
 }

@@ -2635,15 +2635,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 4966247918815089925}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8c1a330b32b48ca978f4cbedcde0075, type: 3}
+  m_Script: {fileID: 11500000, guid: 77d1dd6234fa40d2928538bfb3570f8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _roomButtons:
   - {fileID: 65769395445484538}
   - {fileID: 3851382954672924138}
+  - {fileID: 4951455642048482300}
   - {fileID: 1586218417593822929}
   - {fileID: 1621951961321587781}
-  - {fileID: 4951455642048482300}
   _placesButtonsHolder: {fileID: 4874894451799838557}
 --- !u!1 &5879388587209003575
 GameObject:

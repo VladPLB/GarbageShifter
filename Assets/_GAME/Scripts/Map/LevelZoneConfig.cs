@@ -30,12 +30,12 @@ namespace _GAME.Scripts.Map
     [System.Serializable]
     public class LevelLocation
     {
-        public MapController.LocationType type;
-        public List<MapController.LevelType> levels;
+        public MapManager.LocationType type;
+        public List<MapManager.LevelType> levels;
         public Vector3 uiPosition;
     }
 
-    [CreateAssetMenu(menuName = "Game/Level Map/Zona", fileName = "LevelZone")]
+    [CreateAssetMenu(menuName = "Scriptable/Map/Zona", fileName = "LevelZone")]
     public class LevelZoneConfig : ScriptableObject
     {
         [SerializeField]

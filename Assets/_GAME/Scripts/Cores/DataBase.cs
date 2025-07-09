@@ -17,6 +17,7 @@ namespace _GAME.Scripts
         [SerializeField] private GameEffectsDatabase _gameEffectsDatabase;
         [SerializeField] private UIMarkersDatabase _uiEnemyMarkersDatabase;
         [SerializeField] private UIEnemyHealthBarsDatabase _uiEnemyHealthBarsDatabase;
+        [SerializeField] private MapLocationItemsDatabase _mapLocationItemsDatabase;
 
         public EnemyDatabase Enemies => _enemyDatabase;
         public WeaponDatabase Weapons => _weaponDatabase;
@@ -27,6 +28,8 @@ namespace _GAME.Scripts
         public GameEffectsDatabase GameEffects => _gameEffectsDatabase;
         public UIMarkersDatabase UIEnemyMarkers => _uiEnemyMarkersDatabase;
         public UIEnemyHealthBarsDatabase UIEnemyHealthBars => _uiEnemyHealthBarsDatabase;
+        
+        public MapLocationItemsDatabase MapLocationItemsDatabase => _mapLocationItemsDatabase;
 
         private void Awake()
         {
@@ -43,6 +46,7 @@ namespace _GAME.Scripts
             GameEffects.RuntimeSetup();
             UIEnemyMarkers.RuntimeSetup();
             UIEnemyHealthBars.RuntimeSetup();
+            MapLocationItemsDatabase.RuntimeSetup();
         }
     }
 }

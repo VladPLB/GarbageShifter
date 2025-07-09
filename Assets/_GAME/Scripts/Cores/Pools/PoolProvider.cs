@@ -2,6 +2,7 @@ using System;
 using _GAME.Scripts.Battle.Context;
 using _GAME.Scripts.Battle.Enemy;
 using _GAME.Scripts.Common;
+using _GAME.Scripts.Map;
 using UnityEngine;
 
 namespace _GAME.Scripts
@@ -15,6 +16,8 @@ namespace _GAME.Scripts
         
         public Pool<UIMarker,MarkerType> UIMarkers { get; private set; }
         public Pool<UIEnemyHealthBar,EnemySubClassType> UIEnemyHealthBar { get; private set; }
+        
+        public Pool<MapLocationItem ,MapManager.LocationType> MapLocationItem { get; private set; }
         
         public Pool<EnemyController,EnemyType> Enemies { get; private set; }
         private void Awake()
@@ -32,6 +35,7 @@ namespace _GAME.Scripts
             Enemies = new Pool<EnemyController, EnemyType>(database.Enemies.GetPrefab);
             UIMarkers = new Pool<UIMarker,MarkerType>(database.UIEnemyMarkers.GetPrefab);
             UIEnemyHealthBar = new Pool<UIEnemyHealthBar,EnemySubClassType>(database.UIEnemyHealthBars.GetPrefab);
+            MapLocationItem = new Pool<MapLocationItem,MapManager.LocationType>(database.MapLocationItemsDatabase.GetPrefab);
         }
     }
 }

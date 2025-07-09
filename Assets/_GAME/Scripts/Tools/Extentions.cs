@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,19 +9,22 @@ namespace _GAME
 {
     public static class Extentions
     {
-
-        public static bool IsNullOrEmpty(this Array array)
-        {
-            return array == null || array.Length == 0;
-        }
+        /*
         public static bool IsNullOrEmpty(this IList list)
         {
             return list == null || list.Count == 0;
         }
+        */
+        public static bool IsNullOrEmpty(this Array array)
+        {
+            return array == null || array.Length == 0;
+        }
+        
         public static bool IsNullOrEmpty(this ICollection collection)
         {
             return collection == null || collection.Count == 0;
         }
+
 
         public static T Clone<T>(this T prototype)
         {
@@ -147,5 +149,25 @@ namespace _GAME
             return (to - from).normalized;
         }
         
+        public static string ToRoman(this int number)
+        {
+            if (number < 1 || number > 30) return number.ToString();
+
+            (int value, string symbol)[] map = new[]
+            {
+                (10, "X"), (9, "IX"), (5, "V"), (4, "IV"), (1, "I")
+            };
+
+            var result = "";
+            foreach (var (value, symbol) in map)
+            {
+                while (number >= value)
+                {
+                    result += symbol;
+                    number -= value;
+                }
+            }
+            return result;
+        }
     }
 }

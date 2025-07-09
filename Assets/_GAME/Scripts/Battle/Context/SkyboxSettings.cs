@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _GAME.Scripts.Battle.Context
 {
-    [CreateAssetMenu(menuName = "Rendering/Skybox Settings", fileName = "SkyboxSettings")]
+    [CreateAssetMenu(menuName = "Scriptable/Level/Skybox Settings", fileName = "SkyboxSettings")]
     public class SkyboxSettings : ScriptableObject
     {
         [SerializeField] private Material skyboxMaterial;

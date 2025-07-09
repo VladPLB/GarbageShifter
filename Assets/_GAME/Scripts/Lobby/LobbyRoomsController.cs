@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _GAME.Scripts.Common;
+using _GAME.Scripts.Map;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -25,6 +26,8 @@ namespace _GAME.Scripts.Lobby
         private bool _running = false;
         private bool _initialize = false;
 
+        private MapController _mapController;
+
         public LobbyCameraType CurrentRoomType
         {
             get => _currentRoomType;
@@ -34,9 +37,10 @@ namespace _GAME.Scripts.Lobby
             }
         }
 
-        public void Initialize()
+        public void Initialize(MapController mapController)
         {
             _running = false;
+            _mapController = mapController;
             CurrentRoomType = LobbyCameraType.Transition;
             _lobbyRoomsByType.Clear();
             foreach (var room in _rooms)
@@ -55,6 +59,7 @@ namespace _GAME.Scripts.Lobby
 
         public async UniTask OpenTablet()
         {
+            _mapController.Show();
             _tabletAnimator.SetTrigger(OpenKey);
             await UniTask.Delay(TimeSpan.FromSeconds(1f));
             _cameraController.SetCamera(LobbyCameraType.Map);
@@ -68,6 +73,7 @@ namespace _GAME.Scripts.Lobby
             _mapCameraAnimator.SetTrigger(CloseKey);
             await UniTask.Delay(TimeSpan.FromSeconds(.6f));
             _tabletAnimator.SetTrigger(CloseKey);
+            _mapController.Hide();
             await UniTask.Delay(TimeSpan.FromSeconds(.6f));
         }
 

@@ -56,3 +56,5 @@ MonoBehaviour:
     type: 2}
   _uiEnemyHealthBarsDatabase: {fileID: 11400000, guid: 963f628f31b4d48e6bd8f13994d32e13,
     type: 2}
+  _mapLocationItemsDatabase: {fileID: 11400000, guid: f64760dcd53384a4faed6898231a36b5,
+    type: 2}
