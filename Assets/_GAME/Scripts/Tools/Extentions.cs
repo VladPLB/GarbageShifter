@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -46,7 +45,7 @@ namespace _GAME
             int count = tmpList.Count;
             for (int i = 0; i < count; i++)
             {
-                var rndIndex = Random.Range(0, tmpList.Count - 1);
+                var rndIndex = Random.Range(0, tmpList.Count);
                 outList.Add(tmpList[rndIndex]);
                 tmpList.RemoveAt(rndIndex);
             }
@@ -73,7 +72,7 @@ namespace _GAME
             
             for (int i = 0; i < count; i++)
             {
-                var rndIndex = Random.Range(0, tmpList.Count - 1);
+                var rndIndex = Random.Range(0, tmpList.Count);
                 outList.Add(tmpList[rndIndex]);
                 tmpList.RemoveAt(rndIndex);
                 if (tmpList.IsNullOrEmpty())
