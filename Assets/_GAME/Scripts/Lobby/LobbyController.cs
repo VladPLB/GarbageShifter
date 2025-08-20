@@ -1,9 +1,10 @@
-using System;
-using _GAME.Scripts.Battle.Context;
+using System.Collections.Generic;
 using _GAME.Scripts.Cores.Save.SavesConfigs;
 using _GAME.Scripts.Events;
 using _GAME.Scripts.Map;
 using _GAME.Scripts.Save;
+using _GAME.Scripts.Tutorial;
+using _GAME.Scripts.UI.Screens.Communications;
 using _GAME.Scripts.UI.Screens.Lobby;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -14,6 +15,7 @@ namespace _GAME.Scripts.Lobby
     {
         [SerializeField] private LobbyRoomsController _roomsController;
         [SerializeField] private MapController _mapController;
+        [SerializeField] private List<TutorialController> _tutorialControllers;
 
         private UIManager _uiManager;
         private MapManager _mapManager;
@@ -28,13 +30,17 @@ namespace _GAME.Scripts.Lobby
             _saveManager = Core.Get<SaveManager>();
 
             _progressData = _saveManager.GetData<ProgressData>();
-            
+            foreach (var tutorialController in _tutorialControllers)
+            {
+                tutorialController.Initialize();
+            }
             _roomsController.Initialize(_mapController);
-
+            
             var (zoneIndex, locationIndex, levelIndex) = _mapManager.GetInfo(_progressData.Level);
             LevelZoneData zoneData = _mapManager.GetZone(zoneIndex);
             zoneData.Setup();
-            
+            EventBus.Push(new KeyEvent("RoomsLoaded"), EventBus.EventRegion.LOBBY);
+            await UniTask.DelayFrame(1);
             await ShowLobbyScreen();
             _mapController.Initialize(zoneData, locationIndex, levelIndex);
             EventBus.Push(new KeyEvent("SceneLoaded"), EventBus.EventRegion.GLOBAL);
@@ -44,11 +50,26 @@ namespace _GAME.Scripts.Lobby
         {
             var lobbyScreen = _uiManager.OpenWindow<LobbyScreen>();
             await lobbyScreen.Initialize(_roomsController);
+            EventBus.Subscribe<OpenDialogScreenEvent>(OnOpenDialogScreen, EventBus.EventRegion.LOBBY);
+        }
+
+        private void OnOpenDialogScreen(OpenDialogScreenEvent e)
+        {
+            if (e.IsOpen)
+            {
+                var screen =_uiManager.OpenWindow<UIDialog>();
+                screen.SetPosition(e.PositionType);
+            }
+            else
+            {
+                _uiManager.CloseWindow<UIDialog>();
+            }
         }
 
         private void OnDisable()
         {
             _uiManager.ClearWindowPool();
+            EventBus.Unsubscribe<OpenDialogScreenEvent>(OnOpenDialogScreen, EventBus.EventRegion.LOBBY);
         }
     }
 }

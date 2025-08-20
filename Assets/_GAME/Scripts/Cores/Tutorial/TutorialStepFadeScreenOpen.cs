@@ -7,14 +7,14 @@ using UnityEngine;
 
 namespace _GAME.Scripts.Tutorial
 {
-    public class TutorialPlayerAimLockEvent : TutorialStepBase
+    public class TutorialStepFadeScreenOpen : TutorialStepBase
     {
-        [SerializeField] private bool _lock;
+        [SerializeField] private int _id;
         public override bool IsComplete => true;
         
         public override void Play()
         {
-            EventBus.Push(new AimLockEvent(_lock), EventBus.EventRegion.GAMEPLAY);
+            EventBus.Push(new OpenTutorFadeScreenEvent(_id), EventBus.EventRegion.GLOBAL);
         }
     }
 }

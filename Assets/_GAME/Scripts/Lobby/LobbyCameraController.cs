@@ -13,22 +13,22 @@ namespace _GAME.Scripts.Lobby
         [SerializeField] private Camera _lobbyCamera;
         [SerializeField] private List<VCameraByType> _cameras;
 
-        public void SetCamera(LobbyCameraType type)
+        public void SetCamera(LobbyPlaceType type)
         {
-            _lobbyCamera.enabled = type != LobbyCameraType.Map;
+            _lobbyCamera.enabled = type != LobbyPlaceType.Map;
             _cameras.ForEach(c=>c.VCamera.enabled = c.Type == type);
         }
 
         [Serializable]
         public struct VCameraByType
         {
-            public LobbyCameraType Type;
+            public LobbyPlaceType Type;
             public CinemachineVirtualCamera VCamera;
         }
 
         private void OnEnable()
         {
-            SetCamera(LobbyCameraType.Transition);
+            SetCamera(LobbyPlaceType.Transition);
         }
     }
 }

@@ -15,22 +15,22 @@ namespace _GAME.Scripts.UI.Screens.Lobby
         [SerializeField] private Color _selectedColor;
         [SerializeField] private Color _deselectedColor;
         
-        protected LobbyCameraType _type;
+        protected LobbyPlaceType _type;
 
-        public void Setup(LobbyCameraType type, Action<LobbyCameraType> onClick)
+        public void Setup(LobbyPlaceType type, Action<LobbyPlaceType> onClick)
         {
             _type = type;
             var text = type switch
             {
-                LobbyCameraType.Bar_Barmen => "Barmen",
-                LobbyCameraType.Bar_BlackMarket => "Black Market",
-                LobbyCameraType.Angar_Squad => "Squad",
-                LobbyCameraType.Angar_Ship => "Ship",
-                LobbyCameraType.Angar_Master => "Upgrade",
-                LobbyCameraType.Lab_Researcher => "Research",
-                LobbyCameraType.Lab_Medic => "Medic",
-                LobbyCameraType.Shop_Market => "Shop",
-                LobbyCameraType.Shop_Teleport => "Teleport",
+                LobbyPlaceType.Bar_Barmen => "Barmen",
+                LobbyPlaceType.Bar_BlackMarket => "Black Market",
+                LobbyPlaceType.Angar_Squad => "Squad",
+                LobbyPlaceType.Angar_Ship => "Ship",
+                LobbyPlaceType.Angar_Master => "Upgrade",
+                LobbyPlaceType.Lab_Researcher => "Research",
+                LobbyPlaceType.Lab_Medic => "Medic",
+                LobbyPlaceType.Shop_Market => "Shop",
+                LobbyPlaceType.Shop_Teleport => "Teleport",
                _ => string.Empty
             };
             _button.onClick.RemoveAllListeners();
@@ -43,7 +43,7 @@ namespace _GAME.Scripts.UI.Screens.Lobby
             }
         }
 
-        public void Select(LobbyCameraType type)
+        public void Select(LobbyPlaceType type)
         {
             bool selected = type == _type;
             if (_label != null)

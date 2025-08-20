@@ -1,39 +1,43 @@
-using System;
 using System.Collections.Generic;
 using _GAME.Scripts.Common;
 using _GAME.Scripts.Events;
 using _GAME.Scripts.Lobby;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 
 namespace _GAME.Scripts.UI.Screens.Lobby
 {
-    public class LobbyBottomPanel : MonoBehaviour
+    public class LobbyBottomPanel : LobbyPanel
     {
-        private const LobbyCameraType DefaultRoomType = LobbyCameraType.Bar_Barmen;
-        
-        [SerializeField] 
-        private List<BottomPanelRoomButton> _roomButtons;
+        [SerializeField] private List<BottomPanelRoomButton> _roomButtons;
 
         [SerializeField] private RoomPlacesButtons _placesButtonsHolder;
 
         private LobbyRoomsController _roomsController;
         private bool _isAnimate = false;
-        private List<LobbyCameraType> _types;
+        private List<LobbyPlaceType> _types;
 
         public async UniTask Initialize(LobbyRoomsController roomsController)
         {
             _roomsController = roomsController;
+            _holderTransform.anchoredPosition = _hidePosition;
             _placesButtonsHolder.Setup();
             foreach (var roomButton in _roomButtons)
             {
                 roomButton.Setup(OnRoomClick);
             }
-            
+            EventBus.Subscribe<ToLobbyPlaceEvent>(ToLobbyPlaceEventHandler, EventBus.EventRegion.LOBBY);
+            Show().Forget();
             await ToStartRoom();
         }
-        
-        private async UniTask Select(LobbyCameraType type)
+
+        private void ToLobbyPlaceEventHandler(ToLobbyPlaceEvent e)
+        {
+            ToRoom(e.Type, true).Forget();
+        }
+
+        private async UniTask Select(LobbyPlaceType type)
         { 
             if(_isAnimate)
                 return;
@@ -53,7 +57,7 @@ namespace _GAME.Scripts.UI.Screens.Lobby
             _isAnimate = false;
         }
 
-        private List<LobbyCameraType> GetTypes(LobbyCameraType type)
+        private List<LobbyPlaceType> GetTypes(LobbyPlaceType type)
         {
             foreach (var roomButton in _roomButtons)
             {
@@ -68,22 +72,32 @@ namespace _GAME.Scripts.UI.Screens.Lobby
 
         private async UniTask ToStartRoom()
         {
-            await ToRoom(DefaultRoomType);
+            Debug.Log($"ToStartRoom {_roomsController.StartRoom}");
+            await ToRoom(_roomsController.StartRoom);
         }
         
-        private async UniTask ToRoom(LobbyCameraType type)
+        private async UniTask ToRoom(LobbyPlaceType type, bool awaitAnimate = false)
         {
-            if(_isAnimate)
-                return;
+            if (_isAnimate)
+            {
+                if (!awaitAnimate)
+                {
+                    return;
+                }
+                else
+                {
+                    await UniTask.WaitWhile(() => _isAnimate == true);
+                }
+            }
             await Select(type);
         }
 
-        private void OnRoomClick(List<LobbyCameraType> types)
+        private void OnRoomClick(List<LobbyPlaceType> types)
         {
             ToRoom(types[0]).Forget();
         }
 
-        private void OnPlaceClick(LobbyCameraType type)
+        private void OnPlaceClick(LobbyPlaceType type)
         {
             ToRoom(type).Forget();
         }

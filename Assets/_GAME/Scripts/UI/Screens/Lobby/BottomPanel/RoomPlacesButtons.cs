@@ -7,24 +7,21 @@ using UnityEngine;
 
 namespace _GAME.Scripts.UI.Screens.Lobby
 {
-    public class RoomPlacesButtons : MonoBehaviour
+    public class RoomPlacesButtons : LobbyPanel
     {
-        [SerializeField] private RectTransform _holderTransform;
-        [SerializeField] private Vector2 _hidePosition;
-        [SerializeField] private Vector2 _showPosition;
         [SerializeField] 
         private List<BottomPanelPlaceButton> _buttons;
 
-        private List<LobbyCameraType> _types;
+        private List<LobbyPlaceType> _types;
         private bool _isAnimate = false;
-        private Action<LobbyCameraType> _onClick;
+        private Action<LobbyPlaceType> _onClick;
         
         public void Setup()
         {
             _holderTransform.anchoredPosition = _hidePosition;
         }
         
-        public async void Show(List<LobbyCameraType> types, LobbyCameraType targetType, Action<LobbyCameraType> onClick)
+        public async void Show(List<LobbyPlaceType> types, LobbyPlaceType targetType, Action<LobbyPlaceType> onClick)
         {
             if(_isAnimate)
                 return;
@@ -33,29 +30,23 @@ namespace _GAME.Scripts.UI.Screens.Lobby
             float showDelay = .2f;
             if (_types == null || _types[0] != types[0])
             {
-               /* if (_types != null)
-                {
-                    await Hide(true);
-                    showDelay = 2.6f;
-                }
-                */
                 _types = types;
                 for (int i = 0; i < _buttons.Count; i++)
                 {
-                    _buttons[i].Setup(i < _types.Count?_types[i]: LobbyCameraType.Transition, OnClick);
+                    _buttons[i].Setup(i < _types.Count?_types[i]: LobbyPlaceType.Transition, OnClick);
                 }
                 if(types.Count>1)
                 {
                     _onClick = onClick;
                     Select(types.Contains(targetType) ? targetType : types[0]);
                     await UniTask.Delay(TimeSpan.FromSeconds(showDelay));
-                    await _holderTransform.DOAnchorPos(_showPosition, .2f).AsyncWaitForCompletion();
+                    await Show();
                 }
             }
             _isAnimate = false;
         }
 
-        public async UniTask Hide(bool force = false)
+        public async UniTask Hide(bool force)
         {
             if(!force)
             {
@@ -63,22 +54,23 @@ namespace _GAME.Scripts.UI.Screens.Lobby
                     return;
                 _isAnimate = true;
             }
-            await _holderTransform.DOAnchorPos(_hidePosition, .2f).AsyncWaitForCompletion();
+
+            await Hide();
             if(!force)
             {
                 _isAnimate = false;
             }
         }
         
-        public async void TryHide(LobbyCameraType targetType)
+        public async void TryHide(LobbyPlaceType targetType)
         {
             if (_types != null && !_types.Contains(targetType))
             {
-                await Hide();
+                await Hide(false);
             }
         }
 
-        public void Select(LobbyCameraType type)
+        public void Select(LobbyPlaceType type)
         {
             for (int i = 0; i < _buttons.Count; i++)
             {
@@ -86,7 +78,7 @@ namespace _GAME.Scripts.UI.Screens.Lobby
             }
         }
 
-        private void OnClick(LobbyCameraType type)
+        private void OnClick(LobbyPlaceType type)
         {
             _onClick?.Invoke(type);
         }

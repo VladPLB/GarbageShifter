@@ -52,3 +52,5 @@ MonoBehaviour:
   interactionBlockerPrefab: {fileID: 0}
   windowPrefabs:
   - {fileID: 7983564946789722226, guid: 9769a50bc480f4a0dbf39d9ae0ab53de, type: 3}
+  - {fileID: 5220882650761009497, guid: 7fa3e9e4fdbe74b0e933128917623c39, type: 3}
+  - {fileID: -5056959779334714327, guid: 1c92691971f874f2e88050db725c1e20, type: 3}

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _GAME.Scripts.Common;
+using _GAME.Scripts.Events;
 using _GAME.Scripts.Map;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -18,17 +19,18 @@ namespace _GAME.Scripts.Lobby
         [SerializeField] private Animator _tabletAnimator;
         [SerializeField] private Animator _mapCameraAnimator;
 
-        private Dictionary<LobbyCameraType, LobbyRoom> _lobbyRoomsByType = new();
+        private Dictionary<LobbyPlaceType, LobbyRoom> _lobbyRoomsByType = new();
 
-        private LobbyCameraType _currentRoomType = LobbyCameraType.Transition;
-        private LobbyCameraType _targetRoomType = LobbyCameraType.Transition;
-        private LobbyCameraType _peviousRoomType = LobbyCameraType.Transition;
+        private LobbyPlaceType _currentRoomType = LobbyPlaceType.Transition;
+        private LobbyPlaceType _targetRoomType = LobbyPlaceType.Transition;
+        private LobbyPlaceType _peviousRoomType = LobbyPlaceType.Transition;
         private bool _running = false;
         private bool _initialize = false;
 
         private MapController _mapController;
 
-        public LobbyCameraType CurrentRoomType
+        public LobbyPlaceType StartRoom { get; private set; } = LobbyPlaceType.Bar_Barmen;
+        public LobbyPlaceType CurrentRoomType
         {
             get => _currentRoomType;
             set
@@ -41,7 +43,7 @@ namespace _GAME.Scripts.Lobby
         {
             _running = false;
             _mapController = mapController;
-            CurrentRoomType = LobbyCameraType.Transition;
+            CurrentRoomType = LobbyPlaceType.Transition;
             _lobbyRoomsByType.Clear();
             foreach (var room in _rooms)
             {
@@ -54,7 +56,13 @@ namespace _GAME.Scripts.Lobby
                 }
             }
             
+            EventBus.Subscribe<SetLobbyStartPlaceEvent>(SetLobbyStartPlaceEventHandler, EventBus.EventRegion.LOBBY);
             _initialize = true;
+        }
+
+        private void SetLobbyStartPlaceEventHandler(SetLobbyStartPlaceEvent e)
+        {
+            StartRoom = e.Type;
         }
 
         public async UniTask OpenTablet()
@@ -62,7 +70,7 @@ namespace _GAME.Scripts.Lobby
             _mapController.Show();
             _tabletAnimator.SetTrigger(OpenKey);
             await UniTask.Delay(TimeSpan.FromSeconds(1f));
-            _cameraController.SetCamera(LobbyCameraType.Map);
+            _cameraController.SetCamera(LobbyPlaceType.Map);
             _mapCameraAnimator.SetTrigger(OpenKey);
             await UniTask.Delay(TimeSpan.FromSeconds(.6f));
         }
@@ -77,7 +85,7 @@ namespace _GAME.Scripts.Lobby
             await UniTask.Delay(TimeSpan.FromSeconds(.6f));
         }
 
-        public async UniTask ToRoom(LobbyCameraType type)
+        public async UniTask ToRoom(LobbyPlaceType type)
         {
             if (_running)
                 return;
@@ -89,9 +97,9 @@ namespace _GAME.Scripts.Lobby
 
             _running = true;
             _targetRoomType = type;
-            if (_targetRoomType == LobbyCameraType.Map)
+            if (_targetRoomType == LobbyPlaceType.Map)
             {
-                if (_currentRoomType == LobbyCameraType.Map)
+                if (_currentRoomType == LobbyPlaceType.Map)
                 {
                     await CloseTablet();
                     CurrentRoomType = _targetRoomType = _peviousRoomType;
@@ -101,20 +109,21 @@ namespace _GAME.Scripts.Lobby
                     _peviousRoomType = _currentRoomType;
                     CurrentRoomType = type;
                     await OpenTablet();
+                    EventBus.Push(new OnLobbyPlaceEvent(CurrentRoomType), EventBus.EventRegion.LOBBY);
                 }
             }
             else
             {
-                if (_currentRoomType == LobbyCameraType.Map)
+                if (_currentRoomType == LobbyPlaceType.Map)
                 {
                     await CloseTablet();
                     CurrentRoomType = _peviousRoomType;
                 }
-                if (CurrentRoomType == LobbyCameraType.Transition || !_lobbyRoomsByType[CurrentRoomType].Has(type))
+                if (CurrentRoomType == LobbyPlaceType.Transition || !_lobbyRoomsByType[CurrentRoomType].Has(type))
                 {
 
-                    _cameraController.SetCamera(LobbyCameraType.Transition);
-                    if (CurrentRoomType == LobbyCameraType.Transition)
+                    _cameraController.SetCamera(LobbyPlaceType.Transition);
+                    if (CurrentRoomType == LobbyPlaceType.Transition)
                     {
                         _rotatorAnimator.Rebind();
                     }
@@ -136,6 +145,7 @@ namespace _GAME.Scripts.Lobby
                     await UniTask.Delay(TimeSpan.FromSeconds(.5f));
                     _cameraController.SetCamera(_targetRoomType);
                     await UniTask.Delay(TimeSpan.FromSeconds(.5f));
+                    EventBus.Push(new OnLobbyPlaceEvent(CurrentRoomType), EventBus.EventRegion.LOBBY);
                 }
                 else
                 {

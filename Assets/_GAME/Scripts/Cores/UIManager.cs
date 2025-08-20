@@ -132,10 +132,51 @@ namespace _GAME.Scripts
 
             return OpenWindow<T>(prefab, layerName, blockInteraction);
         }
-        
-        public void CloseWindow(Type windowType)
+
+        public void CloseWindow(UIWindow window)
         {
-            if (_activeWindows.TryGetValue(windowType, out var window))
+            if (window == null)
+                return;
+
+            var go = window.gameObject;
+            var type = window.GetType();
+            
+            if (_activeWindows.TryGetValue(type, out var activeGo) && activeGo == go)
+                _activeWindows.Remove(type);
+            
+            if (_windowStack.Contains(go))
+            {
+                var temp = new Stack<GameObject>();
+                while (_windowStack.Count > 0)
+                {
+                    var top = _windowStack.Pop();
+                    if (top == go)
+                        break;
+                    temp.Push(top);
+                }
+                while (temp.Count > 0)
+                    _windowStack.Push(temp.Pop());
+            }
+            
+            window.OnClose();
+            
+            if (!_windowPool.ContainsKey(type) || _windowPool[type] == null)
+            {
+                _windowPool[type] = go;
+                go.SetActive(false);
+            }
+            else if (_windowPool[type] != go)
+            {
+                Destroy(go);
+            }
+            
+            if (_windowStack.Count == 0)
+                HideInteractionBlocker();
+        }
+        
+        public void CloseWindow<T>() where T : UIWindow
+        {
+            if (_activeWindows.TryGetValue(typeof(T), out var window))
             {
                 if (_windowStack.Contains(window))
                 {
@@ -155,9 +196,9 @@ namespace _GAME.Scripts
                 if (ui != null) ui.OnClose();
                 else window.SetActive(false);
 
-                _activeWindows.Remove(windowType);
-                if (!_windowPool.ContainsKey(windowType))
-                    _windowPool.Add(windowType, window);
+                _activeWindows.Remove(typeof(T));
+                if (!_windowPool.ContainsKey(typeof(T)))
+                    _windowPool.Add(typeof(T), window);
             }
 
             if (_windowStack.Count == 0)

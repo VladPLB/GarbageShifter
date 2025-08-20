@@ -2,13 +2,28 @@ using System;
 using System.Collections.Generic;
 using _GAME.Scripts.Events;
 using Cysharp.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace _GAME.Scripts.UI.Screens.Communications
 {
-    public class UIDialog : MonoBehaviour, IReparentIgnored
+    public class UIDialog : UIWindow, IReparentIgnored
     {
+        public enum PositionType
+        {
+            Middle,
+            Bottom,
+            Top
+        }
+
+        [Serializable]
+        public struct PanelPosition
+        {
+            public PositionType Type;
+            public Vector2 RectPosition;
+        }
+        
         private static readonly int ShowKey = Animator.StringToHash("Show");
         private static readonly int HideKey = Animator.StringToHash("Hide");
         private static readonly TimeSpan ShowedTime = TimeSpan.FromSeconds(1f);
@@ -16,52 +31,88 @@ namespace _GAME.Scripts.UI.Screens.Communications
 
         [SerializeField] private EventBus.EventRegion _region;
         [SerializeField] private Animator _animator;
-        [SerializeField] private Image _portrait;
         [SerializeField] private SubtitlesQueueViewer _subtitles;
+        [SerializeField] private TextMeshProUGUI _nameLabel;
+        [SerializeField] private RectTransform _panelRoot;
+        [SerializeField] private List<PanelPosition> _positions;
 
         private bool _showed = false;
+        private NPCName _name;
         private List<string> _messages = new();
+        private List<NPCAnimationType> _animations = new();
+        private int _currentAnimation = 0;
 
         public event Action OnCompleted;
-        
-        public void Setup()
+
+        public override void OnOpen()
         {
-            EventBus.Subscribe<CommunicatorMessageEvent>(ShowMessage, _region);
+            base.OnOpen();
+            EventBus.Subscribe<DialogMessageEvent>(ShowMessage, _region);
             _subtitles.Setup();
         }
-        
-        public void ShowMessage(string message)
+
+        public void SetPosition(PositionType type)
         {
-            _messages.Add(message);
-            Show();
+            foreach (var position in _positions)
+            {
+                if (position.Type == type)
+                {
+                    _panelRoot.anchoredPosition = position.RectPosition;
+                    return;
+                }
+            }
+            _panelRoot.anchoredPosition = _positions[0].RectPosition;
         }
 
-        public void ShowMessage(List<string> messages)
+        public void ShowMessage(NPCName npcName, List<string> messages, List<NPCAnimationType> animations)
         {
+            _name = npcName;
             _messages.AddRange(messages);
+            _animations.AddRange(animations);
             Show();
         }
         
-        private void ShowMessage(CommunicatorMessageEvent messageEvent)
+        private void ShowMessage(DialogMessageEvent messageEvent)
         {
-            _messages.AddRange(messageEvent.Messages);
-            Show();
+            ShowMessage(messageEvent.Name,messageEvent.Messages, messageEvent.Animations);
         }
         
         private async void Show()
         {
+            _nameLabel.text = _name.ToString();
             if (!_showed)
             {
                 _animator.SetTrigger(ShowKey);
             }
             await UniTask.Delay(ShowedTime);
             _showed = true;
-            _subtitles.OnEnd += CompleteDialog;
+            _currentAnimation = 0;
+            _subtitles.OnNextMessage += NextAnimation;
+            _subtitles.OnEnd += OnEnd;
+            
             _subtitles.ShowMessages(_messages);
             _messages.Clear();
         }
 
-        private async void CompleteDialog()
+        private void OnEnd()
+        {
+            _animations.Clear();
+            OnCompleted?.Invoke();
+            OnCompleted = null;
+            EventBus.Push(new DialogCompleteEvent(), _region);
+        }
+
+        private void NextAnimation()
+        {
+            if(_currentAnimation < _animations.Count && _animations[_currentAnimation] != NPCAnimationType.None)
+            {
+                NpcAnimationEvent animationEvent = new NpcAnimationEvent(_name, _animations[_currentAnimation]);
+                EventBus.Push(animationEvent, _region);
+            }
+            _currentAnimation++;
+        }
+
+        private async UniTask CompleteDialog()
         {
             if (_showed)
             {
@@ -70,14 +121,13 @@ namespace _GAME.Scripts.UI.Screens.Communications
             
             await UniTask.Delay(HideTime);
             _showed = false;
-            OnCompleted?.Invoke();
-            OnCompleted = null;
-            EventBus.Push(new DialogCompleteEvent(), _region);
         }
 
-        private void OnDestroy()
+        public override async void OnClose()
         {
-            EventBus.Unsubscribe<CommunicatorMessageEvent>(ShowMessage, EventBus.EventRegion.GAMEPLAY);
+            await CompleteDialog();
+            EventBus.Unsubscribe<DialogMessageEvent>(ShowMessage, _region);
+            base.OnClose();
         }
     }
 }

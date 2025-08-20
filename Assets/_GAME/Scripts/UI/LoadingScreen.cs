@@ -7,13 +7,16 @@ using UnityEngine.UI;
 
 namespace _GAME.Scripts.UI.Screens
 {
-    public class LoadingScreen : UIWindow
+    public class LoadingScreen : MonoBehaviour
     {
         [SerializeField] private CanvasGroup _canvasGroup;
         private void Awake()
         {
             EventBus.Subscribe<SceneLoadEvent>(OnShow, EventBus.EventRegion.GLOBAL);
             EventBus.Subscribe<SceneLoadCompleteEvent>(OnHide, EventBus.EventRegion.GLOBAL);
+            
+            _canvasGroup.alpha = 1;
+            _canvasGroup.blocksRaycasts = true;
         }
         
         public void OnShow(SceneLoadEvent keyEvent)

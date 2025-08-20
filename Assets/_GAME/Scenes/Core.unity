@@ -243,7 +243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ade65e2280a7c49379913b5bce21b204, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _autoSaveDelay: 1
+  _autoSaveDelay: 30
 --- !u!4 &705984741
 Transform:
   m_ObjectHideFlags: 0

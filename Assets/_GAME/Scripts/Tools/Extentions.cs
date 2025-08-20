@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace _GAME
@@ -168,6 +169,22 @@ namespace _GAME
                 }
             }
             return result;
+        }
+
+        public static void SetListener(this Button button, Action callback)
+        {
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(()=>callback());
+        }
+        
+        public static void SetOneShotListener(this Button button, Action callback)
+        {
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(()=>
+            {
+                button.onClick.RemoveAllListeners();
+                callback();
+            });
         }
     }
 }

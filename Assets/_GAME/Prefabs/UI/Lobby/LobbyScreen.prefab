@@ -1934,6 +1934,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c2a691f23e94706989e29fbe0f928be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _panelName: SubRooms
   _holderTransform: {fileID: 3780608910970479044}
   _hidePosition: {x: 0, y: -48}
   _showPosition: {x: 0, y: 167}
@@ -2623,7 +2624,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 334.9812}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &929768269176625396
@@ -2638,6 +2639,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77d1dd6234fa40d2928538bfb3570f8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _panelName: Bottom
+  _holderTransform: {fileID: 3067606352740514609}
+  _hidePosition: {x: 0, y: -500}
+  _showPosition: {x: 0, y: 0}
   _roomButtons:
   - {fileID: 65769395445484538}
   - {fileID: 3851382954672924138}

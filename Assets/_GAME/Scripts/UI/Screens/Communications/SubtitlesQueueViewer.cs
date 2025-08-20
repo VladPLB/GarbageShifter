@@ -28,6 +28,7 @@ namespace _GAME.Scripts.UI.Screens.Communications
         private List<string> _messagesQueue = new();
         private bool _isFaster = false;
 
+        public event Action OnNextMessage;
         public event Action OnEnd;
 
         public void Setup()
@@ -56,12 +57,14 @@ namespace _GAME.Scripts.UI.Screens.Communications
                 var message = _messagesQueue.First();
                 _messagesQueue.RemoveAt(0);
                 _typingCoroutine = StartCoroutine(TypeSubtitles(message));
+                OnNextMessage?.Invoke();
             }
             else
             {
                 _messagesQueue.Clear();
                 OnEnd?.Invoke();
                 OnEnd = null;
+                OnNextMessage = null;
             }
         }
 

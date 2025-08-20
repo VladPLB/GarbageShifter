@@ -10,11 +10,12 @@ namespace _GAME.Scripts.Tutorial
     public class TutorialStepSendEventKey : TutorialStepBase
     {
         [SerializeField] private string _key;
+        [SerializeField] private EventBus.EventRegion _region = EventBus.EventRegion.GAMEPLAY;
         public override bool IsComplete => true;
         
         public override void Play()
         {
-            EventBus.Push(new KeyEvent(_key), EventBus.EventRegion.GAMEPLAY);
+            EventBus.Push(new KeyEvent(_key), _region);
         }
     }
 }

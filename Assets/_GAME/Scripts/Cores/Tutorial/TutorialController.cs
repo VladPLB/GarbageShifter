@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using _GAME.Scripts.Cores.Save.SavesConfigs;
+using _GAME.Scripts.Save;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -7,15 +10,56 @@ namespace _GAME.Scripts.Tutorial
 {
     public class TutorialController : MonoBehaviour
     {
+        [SerializeField] private int _tutorialStep;
         [SerializeField] private List<TutorialStepBase> _steps = new();
+        [SerializeField] private int _currentStep = 0;
 
-        private async void Start()
+        private TutorialEntryData _tutorialEntryData;
+        private SaveManager _saveManager;
+        public void Initialize()
         {
-            for (int i = 0; i < _steps.Count; i++)
+            _saveManager = Core.Get<SaveManager>();
+            if(_saveManager == null)
+                return;
+            
+            _tutorialEntryData = _saveManager.GetData<TutorialEntryData>();
+            if (_tutorialEntryData.TutorialStep != _tutorialStep)
             {
-                _steps[i].Play();
-                await UniTask.WaitWhile(()=>!_steps[i].IsComplete);
+                if (_tutorialEntryData.TutorialStep < _tutorialStep)
+                    _tutorialEntryData.OnDataChanged += Play;
             }
+            else
+            {
+                Play(false);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if(_tutorialEntryData!=null)
+            {
+                _tutorialEntryData.OnDataChanged -= Play;
+            }
+        }
+
+        private async void Play(bool forced)
+        {
+            if (_tutorialEntryData.TutorialStep != _tutorialStep)
+            {
+                return;
+            }
+            foreach (var t in _steps)
+            {
+                t.Play();
+                _currentStep++;
+                if (t.IsComplete)
+                {
+                    continue;
+                }
+                await UniTask.WaitWhile(()=>!t.IsComplete);
+            }
+            
+            _tutorialEntryData.NextStep();
         }
     }
 }

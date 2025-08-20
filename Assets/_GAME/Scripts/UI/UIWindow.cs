@@ -3,7 +3,7 @@ using UnityEngine;
 namespace _GAME.Scripts.UI
 {
     public abstract class UIWindow : MonoBehaviour
-    {
+     {
         protected UIManager manager;
 
         public void SetManager(UIManager uiManager)
@@ -24,7 +24,7 @@ namespace _GAME.Scripts.UI
         public void Close()
         {
             if (manager != null)
-                manager.CloseWindow(this.GetType());
+                manager.CloseWindow(this);
             else
                 Debug.LogWarning("UIWindow has no reference to UIManager.");
         }

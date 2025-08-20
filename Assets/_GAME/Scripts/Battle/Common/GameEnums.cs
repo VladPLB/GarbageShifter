@@ -61,7 +61,7 @@ namespace _GAME.Scripts.Common
         
     }
     
-    public enum LobbyCameraType
+    public enum LobbyPlaceType
     {
         Map = -1,
         Transition = 0,
@@ -72,6 +72,7 @@ namespace _GAME.Scripts.Common
         Angar_Master = 22,
         Lab_Researcher = 30,
         Lab_Medic = 31,
+        Lab_Medic_Tut_NewLife = 32,
         Shop_Market = 40,
         Shop_Teleport = 41
     }

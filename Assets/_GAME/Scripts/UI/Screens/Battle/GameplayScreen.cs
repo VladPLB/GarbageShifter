@@ -20,7 +20,7 @@ public class GameplayScreen : UIWindow
     [SerializeField] private UIUnitsMarkers _unitsMarkers;
     [SerializeField] private UISpawnWarningMarkers _warningMarkers;
     [SerializeField] private GlitchEffectViewer _glitchEffectViewer;
-    [SerializeField] private UIDialog _communicator;
+    [SerializeField] private UIComunicator _communicator;
     [SerializeField] private UIGameAttention _gameAttention;
     
 

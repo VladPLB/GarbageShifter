@@ -4,6 +4,6 @@ namespace _GAME.Scripts.UI.Screens.Lobby
 {
     public interface IPlaceButton
     {
-        void Select(LobbyCameraType type);
+        void Select(LobbyPlaceType type);
     }
 }

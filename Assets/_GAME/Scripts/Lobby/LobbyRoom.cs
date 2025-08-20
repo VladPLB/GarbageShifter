@@ -9,11 +9,11 @@ namespace _GAME.Scripts.Lobby
     public class LobbyRoom : MonoBehaviour
     {
         [SerializeField] private GameObject _room;
-        [SerializeField] private List<LobbyCameraType> _types;
+        [SerializeField] private List<LobbyPlaceType> _types;
 
-        public List<LobbyCameraType> Types => _types;
+        public List<LobbyPlaceType> Types => _types;
         
-        public bool Has(LobbyCameraType type) => _types.Contains(type);
+        public bool Has(LobbyPlaceType type) => _types.Contains(type);
 
         public void SetRoomActive(bool isActive) => _room?.SetActive(isActive);
     }

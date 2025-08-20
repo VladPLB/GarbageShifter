@@ -22,7 +22,7 @@ namespace _GAME.Scripts.Save
         
         private const string PREF_KEY = "GlobalSave";
         
-        [SerializeField] private float _autoSaveDelay = 1f;
+        [SerializeField] private float _autoSaveDelay = 30f;
         
         private Dictionary<Type, ISaveData> _dataDictionary;
 
@@ -47,7 +47,7 @@ namespace _GAME.Scripts.Save
             var type = data.GetType();
             if (_dataDictionary.ContainsKey(type))
             {
-                Debug.LogWarning($"[SaveManager] Duplicate data type '{type.Name}' ignored.");
+                //Debug.LogWarning($"[SaveManager] Duplicate data type '{type.Name}' ignored.");
                 return;
             }
             _dataDictionary[type] = data;
