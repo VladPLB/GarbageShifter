@@ -34,6 +34,29 @@ namespace _GAME.Scripts.Map
             
             return GenerateLazyZone(count, _prepareZones.Count, level);
         }
+        
+        public (int zoneIndex, LocationType locationType, LevelType levelType) GetLevelInfo(int level)
+        {
+            int count = 0;
+            for (int z = 0; z < _prepareZones.Count; z++)
+            {
+                var zone = _prepareZones[z].Data;
+                for (int l = 0; l < zone.Locations.Count; l++)
+                {
+                    var location = zone.Locations[l];
+                    for (int i = 0; i < location.levels.Count; i++)
+                    {
+                        if (count == level)
+                            return (z, location.type, location.levels[i]);
+                        count++;
+                    }
+                }
+            }
+            var newZoneInfo = GenerateLazyZone(count, _prepareZones.Count, level);
+            var newZone = GetZone(newZoneInfo.zoneIndex);
+            
+            return (newZoneInfo.zoneIndex, newZone.Locations[newZoneInfo.locationIndex].type, newZone.Locations[newZoneInfo.locationIndex].levels[newZoneInfo.levelIndex]);
+        }
 
         private void Start()
         {
@@ -42,7 +65,22 @@ namespace _GAME.Scripts.Map
 
         public LevelZoneData GetZone(int zoneIndex)
         {
-            return zoneIndex < _prepareZones.Count ? _prepareZones[zoneIndex].Data : GenerateZoneData(zoneIndex);
+            bool isPrepared = zoneIndex < _prepareZones.Count;
+            var zone = isPrepared ? _prepareZones[zoneIndex].Data : GenerateZoneData(zoneIndex);
+            if(isPrepared)
+            {
+                var rand = new System.Random(zoneIndex * 7919);
+                for (int l = 0; l < zone.Locations.Count; l++)
+                {
+                    if (zone.Locations[l].uiPosition == Vector3.zero)
+                    {
+                        zone.Locations[l].uiPosition =
+                            new Vector3((float)(rand.NextDouble() * 2 - 1) * _generationProfile.XJitter, 0,
+                                l * -_generationProfile.ZSpacing);
+                    }
+                }
+            }
+            return zone;
         }
         
         private (int zoneIndex, int locationIndex, int levelIndex) GenerateLazyZone(int count, int zoneIndex ,int level)

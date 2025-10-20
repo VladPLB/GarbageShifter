@@ -27,8 +27,8 @@ Transform:
   m_GameObject: {fileID: 319054389953886411}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -0, z: 0}
-  m_LocalScale: {x: 0.71, y: 0.71, z: 0.71}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1277757289925197888}
@@ -100,7 +100,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &7628446536883053400
 RectTransform:
   m_ObjectHideFlags: 0
@@ -109,15 +109,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2479366218420779365}
   m_LocalRotation: {x: -0, y: 0.94509894, z: -0.32678434, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: -0.264}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0, z: 0.1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1277757289925197888}
   m_LocalEulerAnglesHint: {x: 38.147, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.04, y: 1.014}
+  m_AnchoredPosition: {x: 0, y: 0.5}
   m_SizeDelta: {x: 3.2756, y: 0.6184}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &2531984572708578909
@@ -182,7 +182,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Space ship
+  m_text: Name
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 819507a38fa816a489de88dad2de2ce9, type: 2}
   m_sharedMaterial: {fileID: -6419728470944652023, guid: 819507a38fa816a489de88dad2de2ce9,
@@ -210,7 +210,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 4.25
+  m_fontSize: 4.9
   m_fontSizeBase: 3
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -302,9 +302,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1223bf8d4e74478ba36a8593304169e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _dotRenderer: {fileID: 8416105036710235736}
+  _inactiveMaterial: {fileID: 2100000, guid: 4bf10d94145fd6c4187c18de0af92e43, type: 2}
+  _activeMaterial: {fileID: 2100000, guid: 74b61eac74c684f67af1475868755752, type: 2}
   _nameLabel: {fileID: 5563309818017272272}
-  _levelsLabel: {fileID: 4439213170341071985}
-  _completedLevelsLabel: {fileID: 643133551731308492}
+  _progressLabel: {fileID: 643133551731308492}
+  _progressLabelShadow: {fileID: 4439213170341071985}
+  _activeColorCode: '#FF8A00'
+  _completeColorCode: '#555555'
 --- !u!1 &8784513704229931728
 GameObject:
   m_ObjectHideFlags: 0
@@ -404,7 +409,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '*****'
+  m_text: <color=#555555>*</color><color=#FF8A00>*</color>***
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 819507a38fa816a489de88dad2de2ce9, type: 2}
   m_sharedMaterial: {fileID: -6419728470944652023, guid: 819507a38fa816a489de88dad2de2ce9,
@@ -494,7 +499,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6873156550120231706
 RectTransform:
   m_ObjectHideFlags: 0
@@ -503,16 +508,16 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9084812220205567877}
   m_LocalRotation: {x: -0, y: 0.94509894, z: -0.32678434, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0, z: 0.3}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1609774867350609609}
   m_Father: {fileID: 1277757289925197888}
   m_LocalEulerAnglesHint: {x: 38.147, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.059, y: 0.587}
+  m_AnchoredPosition: {x: 0, y: 0.5}
   m_SizeDelta: {x: 1.7681, y: 0.6184}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &2018799420311540802

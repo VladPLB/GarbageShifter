@@ -9,9 +9,6 @@ public class UIInputLocker : MonoBehaviour
 
     private EventSystem _eventSystem;
 
-    private bool _prevEnabled = true;
-    private int _lockCounter = 0;
-
     private void Awake()
     {
         EventBus.Subscribe<KeyEvent>(OnKeyEvent, EventBus.EventRegion.GLOBAL);
@@ -21,7 +18,7 @@ public class UIInputLocker : MonoBehaviour
     private void OnDestroy()
     {
         EventBus.Unsubscribe<KeyEvent>(OnKeyEvent, EventBus.EventRegion.GLOBAL);
-        if (_lockCounter > 0) RestoreEventSystem();
+        Unlock();
     }
 
     private void OnKeyEvent(KeyEvent e)
@@ -43,29 +40,14 @@ public class UIInputLocker : MonoBehaviour
         CheckEventSystem();
         if (_eventSystem == null) return;
 
-        _lockCounter++;
-        if (_lockCounter == 1)
-        {
-            _prevEnabled = _eventSystem.enabled;
-            _eventSystem.enabled = false;
-        }
+        _eventSystem.enabled = false;
     }
 
     public void Unlock()
     {
-        if (_lockCounter <= 0) return;
-        _lockCounter--;
-
-        if (_lockCounter == 0)
-        {
-            RestoreEventSystem();
-        }
-    }
-
-    private void RestoreEventSystem()
-    {
         if (_eventSystem == null) return;
-        _eventSystem.enabled = _prevEnabled;
+
+        _eventSystem.enabled = true;
     }
 
     private void CheckEventSystem()

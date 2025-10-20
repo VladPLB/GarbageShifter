@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using _GAME.Scripts.Battle.Context;
@@ -25,6 +26,16 @@ namespace _GAME.Scripts.Map
         {
             _skyboxSettings.Setup();
         }
+
+        public MapManager.LocationType GetLocationType(int locationIndex)
+        {
+            return Locations[locationIndex].type;
+        }
+        
+        public MapManager.LevelType GetLevelType(int locationIndex, int levelIndex)
+        {
+            return Locations[locationIndex].levels[levelIndex];
+        }
     }
     
     [System.Serializable]
@@ -42,5 +53,10 @@ namespace _GAME.Scripts.Map
         private LevelZoneData _data;
 
         public LevelZoneData Data => _data;
+
+        private void OnValidate()
+        {
+            
+        }
     }
 }

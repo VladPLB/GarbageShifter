@@ -23,12 +23,11 @@ namespace _GAME.Scripts.Tutorial
                 return;
             
             _tutorialEntryData = _saveManager.GetData<TutorialEntryData>();
-            if (_tutorialEntryData.TutorialStep != _tutorialStep)
+            if (_tutorialEntryData.TutorialStep < _tutorialStep)
             {
-                if (_tutorialEntryData.TutorialStep < _tutorialStep)
-                    _tutorialEntryData.OnDataChanged += Play;
+                _tutorialEntryData.OnDataChanged += Play;
             }
-            else
+            else if (_tutorialEntryData.TutorialStep == _tutorialStep)
             {
                 Play(false);
             }
@@ -44,10 +43,6 @@ namespace _GAME.Scripts.Tutorial
 
         private async void Play(bool forced)
         {
-            if (_tutorialEntryData.TutorialStep != _tutorialStep)
-            {
-                return;
-            }
             foreach (var t in _steps)
             {
                 t.Play();

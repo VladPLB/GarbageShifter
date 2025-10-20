@@ -199,6 +199,7 @@ MonoBehaviour:
   _generationProfile: {fileID: 11400000, guid: 6cae988ad485942b88f9532141238bd6, type: 2}
   _prepareZones:
   - {fileID: 11400000, guid: 6dce5579a747441b7ade733dbad17c9d, type: 2}
+  - {fileID: 11400000, guid: 570afb027b79842e3887971cc76cb66f, type: 2}
 --- !u!4 &428886085
 Transform:
   m_ObjectHideFlags: 0
@@ -475,7 +476,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _defaultSaveData
       value: 
-      objectReference: {fileID: 11400000, guid: 20fb3f2006e394bd78efce817e2cf8ec,
+      objectReference: {fileID: 11400000, guid: 920ea3d950b034bb0ab0419c0c308105,
         type: 2}
     - target: {fileID: 3635067661546066970, guid: d2334bbc4d9b4499a975443b1f0fffe8,
         type: 3}

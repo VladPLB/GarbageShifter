@@ -2,6 +2,7 @@ using System;
 using _GAME.Scripts.Battle.Enemy;
 using _GAME.Scripts.Common;
 using _GAME.Scripts.Events;
+using _GAME.Scripts.Map;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,6 +10,7 @@ namespace _GAME.Scripts.Battle.Level
 {
     public class LevelStage: MonoBehaviour
     {
+        [SerializeField] private MapManager.LocationType _locationType;
         [SerializeField] private LevelStageType _stageType;
         [SerializeField] private EnemySpawner _enemySpawner;
         [SerializeField] private Transform _stageInConnector;
@@ -21,16 +23,16 @@ namespace _GAME.Scripts.Battle.Level
         [SerializeField] private UnityEvent _endLevelEvent;
 
         private UnitsController _unitsController = null;
+        
+        public MapManager.LocationType LocationType => _locationType;
         public LevelStageType StageType => _stageType;
         public Transform OutConnector => _stageOutConnector;
         public PlayerPosition PlayerPosition => _playerPosition;
         public UnitsController UnitsController => _unitsController;
         public bool IsPlay => _playCondition == null || _playCondition.IsNext;
-        public bool IsCompleted => _completeCondition==null || _completeCondition.IsNext;
+        public bool IsCompleted => _completeCondition ==null || _completeCondition.IsNext;
 
         private Action<Vector3> _onSpawnWarning;
-
-        
 
         public void Setup()
         {
@@ -83,7 +85,7 @@ namespace _GAME.Scripts.Battle.Level
         {
             _onSpawnWarning = onSpawnWarning;
             _enemySpawner?.Play(OnSpawnWarningHandler);
-            _completeCondition.Setup(this);
+            _completeCondition?.Setup(this);
             _startLevelEvent?.Invoke();
             EventBus.Push(new KeyEvent("StagePlay"), EventBus.EventRegion.GAMEPLAY);
         }

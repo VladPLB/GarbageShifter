@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a09395eb1a44fb4a55a25910faea0d0, type: 3}
+  m_Name: BigShip_LevelData 7
+  m_EditorClassIdentifier: 
+  _start: {fileID: 0}
+  _end: {fileID: 0}
+  _locationType: 4
+  _levelTypes: 0
+  _stages:
+  - {fileID: 11400000, guid: 77e60dca6543a44f2b945faff5055825, type: 2}
+  - {fileID: 11400000, guid: b0ec9c0685f5340a988a9cc0e3ddc8f5, type: 2}
+  - {fileID: 11400000, guid: 15685a0c29bc24e8f94d32a10c052a72, type: 2}
+  _useRotators: 1

@@ -43,6 +43,7 @@ namespace _GAME.Scripts.UI.Screens.Communications
         
         private async void Show()
         {
+            EventBus.Push(new KeyEvent("LockUI"), EventBus.EventRegion.GLOBAL);
             if (!_showed)
             {
                 _animator.SetTrigger(ShowKey);
@@ -62,10 +63,12 @@ namespace _GAME.Scripts.UI.Screens.Communications
             }
             
             await UniTask.Delay(HideTime);
+            EventBus.Push(new KeyEvent("UnlockUI"), EventBus.EventRegion.GLOBAL);
             _showed = false;
             OnCompleted?.Invoke();
             OnCompleted = null;
             EventBus.Push(new DialogCompleteEvent(), _region);
+            
         }
 
         public void OnDestroy()

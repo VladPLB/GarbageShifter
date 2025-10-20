@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using _GAME.Scripts.Cores.Save.SavesConfigs;
 using _GAME.Scripts.Events;
+using _GAME.Scripts.Save;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,6 +14,9 @@ namespace _GAME.Scripts
         private const string uiScene = "UI";
         private const string lobbyScene = "Lobby";
         private const string gameplayScene = "Gameplay";
+        
+        private SaveManager _saveManager;
+        private TutorialEntryData _tutorialEntryData;
 
         private bool _isUiSceneLoaded = false;
         private string _activeMainScene;
@@ -20,17 +25,26 @@ namespace _GAME.Scripts
 
         private void Awake()
         {
-            Core.Registry(this);
+            Core.Registry(this, typeof(SaveManager));
         }
 
         public async void RuntimeSetup()
         {
+            _saveManager = Core.Get<SaveManager>();
+            _tutorialEntryData = _saveManager.GetData<TutorialEntryData>();
             _isUiSceneLoaded = false;
             EventBus.Subscribe<KeyEvent>(OnEvent, EventBus.EventRegion.GLOBAL);
             if (!SceneManager.GetSceneByName(uiScene).isLoaded)
                 await SceneManager.LoadSceneAsync(uiScene, LoadSceneMode.Additive);
             await UniTask.WaitWhile(() => !_isUiSceneLoaded);
-            await LoadLobbyAsync();
+            if(_tutorialEntryData.TutorialStep == 0)
+            {
+                await LoadGameplayAsync();
+            }
+            else
+            {
+                await LoadLobbyAsync();
+            }
         }
 
         public void OnEvent(KeyEvent keyEvent)
@@ -43,6 +57,12 @@ namespace _GAME.Scripts
                 case "UILoaded":
                     _isUiSceneLoaded = true;
                     break;
+                case "ToLobby":
+                    LoadLobbyAsync().Forget();
+                    break;
+                case "ToGameplay":
+                    LoadGameplayAsync().Forget();
+                    break;
             }
         }
 
@@ -53,7 +73,7 @@ namespace _GAME.Scripts
 
         public async UniTask LoadGameplayAsync(string gameplayModeSubScene = "")
         {
-            await SwitchMainSceneAsync(gameplayScene);
+            await SwitchMainSceneAsync(gameplayScene, gameplayModeSubScene);
         }
 
         private async UniTask SwitchMainSceneAsync(string newMainScene, string gameplayModeSubScene = "")

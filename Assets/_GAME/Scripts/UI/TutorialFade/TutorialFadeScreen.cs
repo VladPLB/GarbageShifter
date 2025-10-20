@@ -86,7 +86,7 @@ namespace _GAME.Scripts.UI.Screens.Lobby
                     EventBus.Push(new ToLobbyPlaceEvent(LobbyPlaceType.Map), EventBus.EventRegion.LOBBY);
                     break;
                 case 2:
-                    EventBus.Push(new ToLobbyPlaceEvent(LobbyPlaceType.Bar_Barmen), EventBus.EventRegion.LOBBY);
+                    EventBus.Push(new KeyEvent("ToGameplay"), EventBus.EventRegion.GLOBAL);
                     break;
             }
         }

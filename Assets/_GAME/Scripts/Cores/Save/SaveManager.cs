@@ -37,7 +37,7 @@ namespace _GAME.Scripts.Save
         {
             _dataDictionary = new Dictionary<Type, ISaveData>();
             SetupDefaults();
-            Load();
+            //Load();
             _autoSaveTime = Time.time + _autoSaveDelay;
             _changed = false;
         }

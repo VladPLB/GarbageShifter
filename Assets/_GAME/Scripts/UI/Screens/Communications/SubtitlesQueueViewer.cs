@@ -5,6 +5,7 @@ using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using System.Collections;
+using Cysharp.Threading.Tasks;
 using Random = UnityEngine.Random;
 
 namespace _GAME.Scripts.UI.Screens.Communications
@@ -23,8 +24,7 @@ namespace _GAME.Scripts.UI.Screens.Communications
         private float _messageDuration = 2f;
         [SerializeField]
         private float _fadeOutTime = 0.5f;
-
-        private Coroutine _typingCoroutine;
+        
         private List<string> _messagesQueue = new();
         private bool _isFaster = false;
 
@@ -49,14 +49,22 @@ namespace _GAME.Scripts.UI.Screens.Communications
             NextMessage();
         }
 
+        private void Update()
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                FasterShow();
+            }
+        }
+
         private void NextMessage()
         {
-            if(_messagesQueue.Count>0 && _typingCoroutine == null)
+            if(_messagesQueue.Count>0)
             {
                 _isFaster = false;
                 var message = _messagesQueue.First();
                 _messagesQueue.RemoveAt(0);
-                _typingCoroutine = StartCoroutine(TypeSubtitles(message));
+                TypeSubtitles(message).Forget();
                 OnNextMessage?.Invoke();
             }
             else
@@ -73,7 +81,7 @@ namespace _GAME.Scripts.UI.Screens.Communications
             _isFaster = true;
         }
 
-        private IEnumerator TypeSubtitles(string message)
+        private async UniTask TypeSubtitles(string message)
         {
             _text.text = "";
             _text.color = new Color(_text.color.r, _text.color.g, _text.color.b, 1);
@@ -85,27 +93,33 @@ namespace _GAME.Scripts.UI.Screens.Communications
                 if(!_isFaster)
                 {
                     if (message[i] == ' ')
-                        yield return new WaitForSeconds(Random.Range(_wordPause.x, _wordPause.y));
+                        await UniTask.WhenAny(UniTask.WaitWhile(()=>!_isFaster), UniTask.Delay(TimeSpan.FromSeconds(Random.Range(_wordPause.x, _wordPause.y))));
                     else
-                        yield return new WaitForSeconds(Random.Range(_letterPause.x, _letterPause.y));
+                        await UniTask.WhenAny(UniTask.WaitWhile(()=>!_isFaster),UniTask.Delay(TimeSpan.FromSeconds(Random.Range(_letterPause.x, _letterPause.y))));
                 }
             }
+            _isFaster = false;
 
-            yield return new WaitForSeconds(_messageDuration);
+            await UniTask.WhenAny(UniTask.WaitWhile(()=>!_isFaster),UniTask.Delay(TimeSpan.FromSeconds(_messageDuration)));
 
-            float elapsedTime = 0;
-            Color originalColor = _text.color;
-
-            while (elapsedTime < _fadeOutTime)
+            if(!_isFaster)
             {
-                elapsedTime += Time.deltaTime;
-                _text.color = new Color(originalColor.r, originalColor.g, originalColor.b, Mathf.Lerp(1, 0, elapsedTime / _fadeOutTime));
-                yield return null;
+                float elapsedTime = 0;
+                Color originalColor = _text.color;
+
+                while (elapsedTime < _fadeOutTime)
+                {
+                    elapsedTime += Time.deltaTime;
+                    _text.color = new Color(originalColor.r, originalColor.g, originalColor.b,
+                        Mathf.Lerp(1, 0, elapsedTime / _fadeOutTime));
+                    await UniTask.DelayFrame(1);
+                    if (_isFaster)
+                        break;
+                }
+                await UniTask.Delay(TimeSpan.FromSeconds(_messagePause));
             }
 
             _text.text = "";
-            yield return new WaitForSeconds(_messagePause);
-            _typingCoroutine = null;
             NextMessage();
         }
     }

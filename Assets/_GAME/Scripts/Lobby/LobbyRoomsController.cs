@@ -71,14 +71,14 @@ namespace _GAME.Scripts.Lobby
             _tabletAnimator.SetTrigger(OpenKey);
             await UniTask.Delay(TimeSpan.FromSeconds(1f));
             _cameraController.SetCamera(LobbyPlaceType.Map);
-            _mapCameraAnimator.SetTrigger(OpenKey);
+            _mapCameraAnimator.SetBool(OpenKey, true);
             await UniTask.Delay(TimeSpan.FromSeconds(.6f));
         }
         
         public async UniTask CloseTablet()
         {
             _cameraController.SetCamera(_peviousRoomType);
-            _mapCameraAnimator.SetTrigger(CloseKey);
+            _mapCameraAnimator.SetBool(OpenKey, false);
             await UniTask.Delay(TimeSpan.FromSeconds(.6f));
             _tabletAnimator.SetTrigger(CloseKey);
             _mapController.Hide();
@@ -92,7 +92,7 @@ namespace _GAME.Scripts.Lobby
 
             await UniTask.WaitWhile(() => !_initialize);
 
-            if (type == CurrentRoomType)
+            if (type == CurrentRoomType && _currentRoomType != LobbyPlaceType.Map)
                 return;
 
             _running = true;
@@ -101,8 +101,9 @@ namespace _GAME.Scripts.Lobby
             {
                 if (_currentRoomType == LobbyPlaceType.Map)
                 {
-                    await CloseTablet();
-                    CurrentRoomType = _targetRoomType = _peviousRoomType;
+                    EventBus.Push(new KeyEvent("ToGameplay"), EventBus.EventRegion.GLOBAL);
+                    //await CloseTablet();
+                    //CurrentRoomType = _targetRoomType = _peviousRoomType;
                 }
                 else
                 {

@@ -79,6 +79,7 @@ namespace _GAME.Scripts.UI.Screens.Communications
         
         private async void Show()
         {
+            EventBus.Push(new KeyEvent("LockUI"), EventBus.EventRegion.GLOBAL);
             _nameLabel.text = _name.ToString();
             if (!_showed)
             {
@@ -121,6 +122,7 @@ namespace _GAME.Scripts.UI.Screens.Communications
             
             await UniTask.Delay(HideTime);
             _showed = false;
+            EventBus.Push(new KeyEvent("UnlockUI"), EventBus.EventRegion.GLOBAL);
         }
 
         public override async void OnClose()

@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: DefaultSaveDataConfig
   m_EditorClassIdentifier: 
   _progressData:
-    Level: 5
+    Level: 0
+  _tutorialEntryData:
+    TutorialStep: 0

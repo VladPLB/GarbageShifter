@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dfac486e1184f1bb8a62e6c0756d5aa, type: 3}
+  m_Name: _TUTORIAL_1_EnemyStageData
+  m_EditorClassIdentifier: 
+  _stages:
+  - {fileID: 788245007452469075, guid: cc94c7a3f30f44575a7b6fbcaa517adb, type: 3}
+  _enemies:
+  - _datas:
+    - Type: 8
+      SpawnRangeAmount: {x: 3, y: 3}
+      SpawnDelayBetwenUnits: 0.3
+    SpawnDelayGroup: 0.5
+  - _datas:
+    - Type: 8
+      SpawnRangeAmount: {x: 5, y: 5}
+      SpawnDelayBetwenUnits: 0.3
+    SpawnDelayGroup: 5

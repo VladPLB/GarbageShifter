@@ -7,6 +7,8 @@ namespace _GAME.Scripts.Map
     public class MapPathBuilder: MonoBehaviour
 {
     [SerializeField]
+    private Transform _cameraTransform;
+    [SerializeField]
     private Transform _root;
     [SerializeField]
     private MapLocationPoint _pointPrefab;
@@ -32,11 +34,25 @@ namespace _GAME.Scripts.Map
         {
             rawPoints.Add(loc.uiPosition);
         }
-        
-        BuildLine(_lineRenderer, rawPoints);
-        BuildLine(_lineRendererCompleted, rawPoints, currentLocationIndex+1);
+        bool isFuturePathEnabled = currentLocationIndex < rawPoints.Count-1;
+        bool isPastPathEnabled = currentLocationIndex > 0;
+        _lineRenderer.enabled = isFuturePathEnabled;
+        if(isFuturePathEnabled)
+        {
+            BuildLine(_lineRenderer, rawPoints, currentLocationIndex, rawPoints.Count);
+        }
+        _lineRendererCompleted.enabled = isPastPathEnabled;
+        if(isPastPathEnabled)
+        {
+            BuildLine(_lineRendererCompleted, rawPoints, 0, currentLocationIndex+1);
+        }
 
         SetupLocationPoints(rawPoints, currentLocationIndex, currentLevelIndex);
+        
+        var cameraPos = rawPoints[currentLocationIndex];
+        cameraPos.y = 8f;
+        cameraPos.z += 5f;
+        _cameraTransform.localPosition = cameraPos;
     }
 
     private void SetupLocationPoints(List<Vector3> rawPoints, int currentLocationIndex, int currentLevelIndex)
@@ -47,30 +63,26 @@ namespace _GAME.Scripts.Map
             point.transform.localPosition = rawPoints[i];
             LevelLocation _locationData = _zoneData.Locations[i];
             point.name = $"Point_{_locationData.type}_{i}";
-            bool isComplete = i < currentLocationIndex;
-            bool isActive = i == currentLevelIndex;
             point.Init(_pool, _locationData, i);
+            point.CurrentProgress(currentLocationIndex, currentLevelIndex);
             _points.Add(point);
         }
     }
 
-    private void BuildLine(LineRenderer lineRenderer, List<Vector3> rawPoints, int count = 0)
+    private void BuildLine(LineRenderer lineRenderer, List<Vector3> rawPoints, int start, int end)
     {
         var points = new List<Vector3>();
-        if (count < 1)
+       // for (int i = start; i < Mathf.Min(rawPoints.Count,end); i++)
+       // {
+       //     points.Add(rawPoints[i]);
+       // }
+        for (int i = 0; i < rawPoints.Count; i++)
         {
-            points = rawPoints.ToList();
-        }
-        else
-        {
-            for (int i = 0; i < Mathf.Min(rawPoints.Count,count); i++)
-            {
-                points.Add(rawPoints[i]);
-            }
+            points.Add(rawPoints[i]);
         }
         lineRenderer.widthCurve = AnimationCurve.Constant(0,1,_lineWidth);
         lineRenderer.useWorldSpace = false;
-        var smoothed = GenerateCatmullRomPoints(points, _subdivisions);
+        var smoothed = GenerateCatmullRomPoints(points,start,end, _subdivisions);
         var finalPoints = new List<Vector3>(smoothed);
 
         //InsertTails(smoothed, finalPoints, count<1);
@@ -83,24 +95,7 @@ namespace _GAME.Scripts.Map
         }
     }
 
-    private void InsertTails(List<Vector3> smoothed, List<Vector3> finalPoints, bool isEnd)
-    {
-        if (smoothed.Count >= 2)
-        {
-            var dirStart = (smoothed[1] - smoothed[0]).normalized;
-            var tailStart = smoothed[0] - dirStart * _tailLength;
-            finalPoints.Insert(0, tailStart);
-            if(isEnd)
-            {
-                int last = smoothed.Count - 1;
-                var dirEnd = (smoothed[last] - smoothed[last - 1]).normalized;
-                var tailEnd = smoothed[last] + dirEnd * _tailLength;
-                finalPoints.Add(tailEnd);
-            }
-        }
-    }
-
-    private List<Vector3> GenerateCatmullRomPoints(List<Vector3> points, int subdivisions)
+    private List<Vector3> GenerateCatmullRomPoints(List<Vector3> points, int start, int end, int subdivisions)
     {
         var result = new List<Vector3>();
         if (points.Count < 2)
@@ -128,7 +123,10 @@ namespace _GAME.Scripts.Map
                     (2f * p0 - 5f * p1 + 4f * p2 - p3) * t * t +
                     (-p0 + 3f * p1 - 3f * p2 + p3) * t * t * t
                 );
-                result.Add(pos);
+                if(i>=start && i<end-1)
+                {
+                    result.Add(pos);
+                }
             }
         }
 
