@@ -1,8 +1,10 @@
 using System;
 using _GAME.Scripts.Battle.Enemy;
+using _GAME.Scripts.Battle.Player;
 using _GAME.Scripts.Common;
 using _GAME.Scripts.Events;
 using _GAME.Scripts.Map;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -16,12 +18,14 @@ namespace _GAME.Scripts.Battle.Level
         [SerializeField] private Transform _stageInConnector;
         [SerializeField] private Transform _stageOutConnector;
         [SerializeField] private PlayerPosition _playerPosition;
+        [SerializeField] private BigWeapon _bigWeapon;
+        [SerializeField] private levelStageConditionBase _prestartCondition;
         [SerializeField] private levelStageConditionBase _playCondition;
         [SerializeField] private levelStageConditionBase _completeCondition;
         [SerializeField] private UnityEvent _prestartLevelEvent;
         [SerializeField] private UnityEvent _startLevelEvent;
         [SerializeField] private UnityEvent _endLevelEvent;
-
+        
         private UnitsController _unitsController = null;
         
         public MapManager.LocationType LocationType => _locationType;
@@ -29,6 +33,10 @@ namespace _GAME.Scripts.Battle.Level
         public Transform OutConnector => _stageOutConnector;
         public PlayerPosition PlayerPosition => _playerPosition;
         public UnitsController UnitsController => _unitsController;
+
+        public BigWeapon BigWeapon => _bigWeapon;
+        
+        public bool IsPrestart => _prestartCondition == null || _prestartCondition.IsNext;
         public bool IsPlay => _playCondition == null || _playCondition.IsNext;
         public bool IsCompleted => _completeCondition ==null || _completeCondition.IsNext;
 
@@ -54,9 +62,10 @@ namespace _GAME.Scripts.Battle.Level
         private void SetupPosition(LevelStage previewStage)
         {
             var connector = previewStage? previewStage.OutConnector: null;
-            Vector3 offset = _stageInConnector.localPosition * -1f;
             transform.forward = connector? connector.forward: Vector3.forward;
-            transform.position =(connector? connector.position: Vector3.zero) + offset;
+            Vector3 offset = _stageInConnector.position - transform.position;
+            transform.position = (connector? connector.position: Vector3.zero) - offset;
+
         }
         
         private void SetupPlayerPosition()
@@ -73,6 +82,7 @@ namespace _GAME.Scripts.Battle.Level
 
         public void PreStart()
         {
+            _prestartCondition?.Setup(this);
             _prestartLevelEvent?.Invoke();
         }
 

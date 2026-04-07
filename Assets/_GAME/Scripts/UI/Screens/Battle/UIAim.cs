@@ -1,5 +1,7 @@
 using System;
+using _GAME.Scripts.Audio;
 using _GAME.Scripts.Battle.Player;
+using _GAME.Scripts.Events;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,6 +27,7 @@ namespace _GAME.Scripts.UI.Screens.Battle
             _holderCanvasGroup.alpha = 0;
             _player.OnBattleReady += PlayerOnOnBattleReady;
             _player.OnHit += PlayerOnOnHit;
+            
             SetBaseState();
         }
 

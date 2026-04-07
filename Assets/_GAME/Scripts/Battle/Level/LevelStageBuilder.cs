@@ -7,7 +7,8 @@ namespace _GAME.Scripts.Battle.Level
     public class LevelStageBuilder:MonoBehaviour
     {
         [SerializeField] private List<LevelStage> _startStages = new();
-        [SerializeField] private List<LevelStage> _rotateStages = new();
+        [SerializeField] private List<LevelStage> _rotateLStages = new();
+        [SerializeField] private List<LevelStage> _rotateRStages = new();
         [SerializeField] private List<LevelStage> _endStages = new();
 
         public List<LevelStage> GetStages(LevelData levelData)
@@ -29,24 +30,39 @@ namespace _GAME.Scripts.Battle.Level
                 stageList.Add(_startStages.GetRandomItem());
             }
             
-            var rotators = new List<LevelStage>();
+            var rotatorsL = new List<LevelStage>();
             if (levelData.UseRotators)
             {
-                foreach (LevelStage stage in _rotateStages)
+                foreach (LevelStage stage in _rotateLStages)
                 {
                     if(stage.LocationType == levelData.LocationType)
-                        rotators.Add(stage);
+                        rotatorsL.Add(stage);
                 }
             }
             
+            var rotatorsR = new List<LevelStage>();
+            if (levelData.UseRotators)
+            {
+                foreach (LevelStage stage in _rotateRStages)
+                {
+                    if(stage.LocationType == levelData.LocationType)
+                        rotatorsR.Add(stage);
+                }
+            }
+            bool nextRotarorIsLeft = Random.Range(0, 1000) < 500;
             for (int i = 0; i < levelData.StageCount; i++)
             {
                 stageList.Add(levelData.GetStageData(i).GetRandomStage());
-                if (i < levelData.StageCount - 1 && rotators.Count > 0)
+                if (i < levelData.StageCount - 1)
                 {
-                    if (Random.Range(0, 1000) < 500)
+                    var rotators = nextRotarorIsLeft?rotatorsL:rotatorsR;
+                    if(rotators.Count>0)
                     {
-                        stageList.Add(rotators.GetRandomItem());
+                        if (Random.Range(0, 1000) < 500)
+                        {
+                            stageList.Add(rotators.GetRandomItem());
+                            nextRotarorIsLeft = !nextRotarorIsLeft;
+                        }
                     }
                 }
             }

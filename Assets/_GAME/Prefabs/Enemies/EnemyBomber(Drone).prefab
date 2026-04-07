@@ -4944,6 +4944,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -9913,6 +9916,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -10068,14 +10074,16 @@ MonoBehaviour:
     _isBomber: 1
     _explosionData:
       _type: 0
-      _damage: 5
-      _radius: 2
-    _health: 5
+      _damage: 8
+      _radius: 4
+    _health: 8
     _armor: 0
-    _moveSpeed: 5
-    _attackDistance: 5
+    _moveSpeed: 6
+    _attackDistance: 10
+    _stoppingDistance: 5
   _enemyViewer: {fileID: 4527147319405898005}
   _ragDoll: {fileID: 5752181068087353808}
+  _targetPoint: {fileID: 0}
   _enemyMover: {fileID: 6643660224397700166}
   _weapon: {fileID: 0}
   _weaponBomb: {fileID: 4760161841177813438}
@@ -10093,7 +10101,11 @@ MonoBehaviour:
   - {fileID: 8924279735726201296}
   - {fileID: 2866545649233466132}
   _deadEffectType: -1
+  _deadEffectSoundType: 7
+  _deadEffectOffset: {x: 0, y: 0, z: 0}
+  _damagePointOffset: {x: 0, y: 0, z: 0}
   _spawnEffectType: -1
+  _spawnEffectOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &6643660224397700166
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10107,6 +10119,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _model: {fileID: 9009928312794399682}
+  _avoidanceLayerMask:
+    serializedVersion: 2
+    m_Bits: 4352
+  _avoidanceDetectRadius: 4.5
+  _avoidanceStrength: 5
   _borderDistance: 2
   _heightRange: {x: 2, y: 2.5}
   _borderLayerMask:
@@ -15035,6 +15052,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -15231,7 +15251,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 3735c59946c85024faa3f026850c602a, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 421aa0ced53b840b49cff11c891f8cb5, type: 2}
     m_RemovedComponents: []
@@ -15303,7 +15323,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
 --- !u!95 &674978688737887404
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -15317,6 +15337,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -15760,7 +15781,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8128779216279831161, guid: d6c1e980118ff4fc48cb4bff584307b7,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 421aa0ced53b840b49cff11c891f8cb5, type: 2}
     m_RemovedComponents:

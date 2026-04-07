@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dfac486e1184f1bb8a62e6c0756d5aa, type: 3}
+  m_Name: Level7_RoundStation_EnemyStageData 3
+  m_EditorClassIdentifier: 
+  _stages:
+  - {fileID: 2830144146711484168, guid: 6a61e9aa9a0684cd6b2fe143cef009fc, type: 3}
+  - {fileID: 2413312098661293401, guid: f51faddec93e8417da4d0c002888ea8b, type: 3}
+  - {fileID: 8148531501987374381, guid: 547819f8de63b486ba3742fc9cd68394, type: 3}
+  - {fileID: 801822500467019384, guid: 419f203788dfc40d581bb4158ce85e8a, type: 3}
+  - {fileID: 8666156824073635745, guid: 1955b9d30de944d379593b543a1e700f, type: 3}
+  _enemies:
+  - _datas:
+    - Type: 1
+      SpawnRangeAmount: {x: 3, y: 5}
+      SpawnDelayBetwenUnits: 0.3
+    SpawnDelayGroup: 0.5
+  - _datas:
+    - Type: 1
+      SpawnRangeAmount: {x: 5, y: 7}
+      SpawnDelayBetwenUnits: 0.3
+    SpawnDelayGroup: 3
+  - _datas:
+    - Type: 2
+      SpawnRangeAmount: {x: 4, y: 6}
+      SpawnDelayBetwenUnits: 0.3
+    SpawnDelayGroup: 5

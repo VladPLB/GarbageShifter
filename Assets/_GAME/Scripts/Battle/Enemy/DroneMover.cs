@@ -76,7 +76,7 @@ namespace _GAME.Scripts.Battle.Player
         {
             if (!_isActive)
             {
-                _rigidBody.velocity = Vector3.zero;
+                _rigidBody.linearVelocity = Vector3.zero;
                 return;
             }
                 
@@ -87,7 +87,7 @@ namespace _GAME.Scripts.Battle.Player
             {
                 _forward = (_target.transform.position - transform.position);
                 move = _forward * _speed * 90f * Time.fixedDeltaTime;
-                _rigidBody.velocity = move;
+                _rigidBody.linearVelocity = move;
                 var selfPos = transform.position;
                 var targetPos = _target.position;
                 selfPos.y = targetPos.y = 0;
@@ -106,7 +106,7 @@ namespace _GAME.Scripts.Battle.Player
                 }
                 _forward = (_targetPosition - _rigidBody.position).normalized;
                 move = _forward * _speed * 30f * Time.fixedDeltaTime;
-                _rigidBody.velocity = move;
+                _rigidBody.linearVelocity = move;
                 if (DestinationReached())
                 {
                     if (IsStoppingDistance)
@@ -118,7 +118,7 @@ namespace _GAME.Scripts.Battle.Player
             }
             else
             {
-                _rigidBody.velocity = Vector3.zero;
+                _rigidBody.linearVelocity = Vector3.zero;
                 _forward = ((_target.transform.position+Vector3.up) - transform.position);
             }
             _model.rotation = Quaternion.Lerp(_model.rotation, Quaternion.LookRotation(_forward.normalized), .1f);

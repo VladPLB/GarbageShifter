@@ -144,10 +144,44 @@ namespace _GAME
             return Random.Range(vector.x, vector.y);
         }
 
+        public static T GetRandom<T>(this T enumValue) where T : Enum
+        {
+            var values = Enum.GetValues(typeof(T));
+            return (T)values.GetValue(Random.Range(0, values.Length));
+        }
+        
+        public static T[] GetAllValues<T>(this T enumValue) where T : Enum
+        {
+            return (T[])Enum.GetValues(typeof(T));
+        }
+        
+        public static T GetRandom<T>() where T : Enum
+        {
+            var values = Enum.GetValues(typeof(T));
+            return (T)values.GetValue(Random.Range(0, values.Length));
+        }
+        
+        public static T[] GetAllValues<T>() where T : Enum
+        {
+            return (T[])Enum.GetValues(typeof(T));
+        }
+
+
         public static Vector3 ZeroHeightRotation(this Vector3 from, Vector3 to)
         {
             to.y = from.y;
             return (to - from).normalized;
+        }
+        
+        public static float ZeroHeightSqrDistanceTo(this Vector3 from, Vector3 to)
+        {
+            from.y = to.y = 0;
+
+            to.x -= from.x;
+            to.y -= from.y;
+            to.z -= from.z;
+
+            return to.sqrMagnitude;
         }
         
         public static string ToRoman(this int number)

@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using _GAME.Scripts.Audio;
+using _GAME.Scripts.Events;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.AI;
@@ -19,9 +22,21 @@ namespace _GAME.Scripts.Battle.Player
         private bool _isEnableFly = true;
         private float _delayToFly = 0;
         private bool _isFly = false;
+        
+        [SerializeField]
+        private SoundType _footstepSound;
+
+        [SerializeField] private Transform _leftFoot;
+        [SerializeField] private Transform _rightFoot;
+        
+        bool _isLeftFoot = false;
+        private float _footStepDelay = .1f;
+        
+        [SerializeField]
+        private AmbientType _flySound;
 
         public event Action OnMoveCompleted;
-        public event Action OnFly; 
+        public event Action OnFly;
 
         private void Awake()
         {
@@ -60,6 +75,8 @@ namespace _GAME.Scripts.Battle.Player
             _navMeshAgent.isStopped = true;
             OnMoveCompleted?.Invoke();
             OnMoveCompleted = null;
+            AudioManager.Stop(_flySound, false);
+            _footStepDelay = .08f;
         }
 
         private void Update()
@@ -74,31 +91,52 @@ namespace _GAME.Scripts.Battle.Player
                 if (DestinationReached())
                 {
                     Stop();
+                    return;
                 }
 
-                if (!_isFly && _isEnableFly)
+                if (!_isFly)
                 {
-                    _delayToFly -= Time.deltaTime;
-                    if (_delayToFly <= 0)
+                    if(_isEnableFly)
                     {
-                        Fly();
+                        _delayToFly -= Time.deltaTime;
+                        if (_delayToFly <= 0)
+                        {
+                            Fly();
+                        }
+                    }
+
+                    if (_footStepDelay < 0f)
+                    {
+                        if (Physics.Raycast(_isLeftFoot ? _leftFoot.position : _rightFoot.position, Vector3.down,
+                                out RaycastHit hit, .1f))
+                        {
+                            AudioManager.Play(_footstepSound,
+                                (_isLeftFoot ? _leftFoot.position : _rightFoot.position) + Vector3.up);
+                            _isLeftFoot = !_isLeftFoot;
+                            _footStepDelay = .08f;
+                        }
+                    }
+                    else
+                    {
+                        _footStepDelay -= Time.deltaTime;
                     }
                 }
-                
             }
             else
             {
-                transform.rotation = Quaternion.Lerp(transform.rotation, _targetRotation, .1f);
-                transform.position = Vector3.Lerp(transform.position, _targetPosition, .1f);
+                transform.rotation = Quaternion.Lerp(transform.rotation, _targetRotation, .05f);
+                transform.position = Vector3.Lerp(transform.position, _targetPosition, .05f);
             }
         }
 
         private void Fly()
         {
             _isFly = true;
+            _footStepDelay = .08f;
             OnFly?.Invoke();
             OnFly = null;
             DOTween.To(() => _navMeshAgent.speed, SetSpeed, FLY_SPEED, FLY_SPEED_LERP_TIME).SetEase(Ease.OutSine);
+            AudioManager.Play(_flySound);
         }
         
         private bool DestinationReached() => Vector3.Distance(transform.position, _targetPosition) <= _navMeshAgent.stoppingDistance;

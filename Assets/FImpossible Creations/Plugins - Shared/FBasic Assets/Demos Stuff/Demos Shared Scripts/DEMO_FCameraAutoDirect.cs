@@ -38,7 +38,7 @@ namespace FIMSpace.FProceduralAnimation
 
             Vector3 currentVelocity;
 
-            if (rig) currentVelocity = rig.velocity;
+            if (rig) currentVelocity = rig.linearVelocity;
             else
                 currentVelocity = CameraScript.FollowObject.position - prePos;
 

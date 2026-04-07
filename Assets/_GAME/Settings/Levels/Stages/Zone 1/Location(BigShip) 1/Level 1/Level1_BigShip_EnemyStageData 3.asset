@@ -14,18 +14,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _stages:
   - {fileID: 1278395700101569717, guid: 6da0c1e7f6ca647a89f8fa4cd08aceda, type: 3}
+  - {fileID: 8806060869963039531, guid: 8b969403613f64b48a4c3707521d17c4, type: 3}
+  - {fileID: 4828197474132573242, guid: a358e6706fe4e43f6aaf8f4e957d0601, type: 3}
   _enemies:
   - _datas:
     - Type: 1
-      SpawnRangeAmount: {x: 5, y: 7}
+      SpawnRangeAmount: {x: 8, y: 10}
       SpawnDelayBetwenUnits: 0.3
     SpawnDelayGroup: 0.5
   - _datas:
     - Type: 1
-      SpawnRangeAmount: {x: 5, y: 7}
+      SpawnRangeAmount: {x: 8, y: 10}
       SpawnDelayBetwenUnits: 0.3
     SpawnDelayGroup: 0.5
   - _datas:
+    - Type: 2
+      SpawnRangeAmount: {x: 3, y: 4}
+      SpawnDelayBetwenUnits: 0.3
     - Type: 2
       SpawnRangeAmount: {x: 3, y: 4}
       SpawnDelayBetwenUnits: 0.3
@@ -36,7 +41,7 @@ MonoBehaviour:
       SpawnDelayBetwenUnits: 1
     SpawnDelayGroup: 5
   - _datas:
-    - Type: 2
-      SpawnRangeAmount: {x: 3, y: 4}
+    - Type: 6
+      SpawnRangeAmount: {x: 4, y: 6}
       SpawnDelayBetwenUnits: 0.3
     SpawnDelayGroup: 5

@@ -79,7 +79,7 @@ MonoBehaviour:
   _panelRoot: {fileID: 2601587055991945511}
   _positions:
   - Type: 0
-    RectPosition: {x: 0.25, y: -451.5}
+    RectPosition: {x: 0.25, y: -501.5}
   - Type: 1
     RectPosition: {x: 0.25, y: -982}
   - Type: 2
@@ -200,7 +200,7 @@ RectTransform:
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &5269544956438975454
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -214,6 +214,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -522,6 +523,11 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1767820423405472111, guid: 48a6ffa863701ee42b504c00d4cc05fb,
+        type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 4243293766773108789, guid: 48a6ffa863701ee42b504c00d4cc05fb,
         type: 3}
       propertyPath: m_Pivot.x
@@ -810,6 +816,11 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: fe083d8d24a98b84f861559c77fa4bea, type: 2}
     - target: {fileID: 3420556218193743673, guid: a9e8e826ab2a7be4e82b2feedda52835,
         type: 3}
+      propertyPath: m_TextWrappingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3420556218193743673, guid: a9e8e826ab2a7be4e82b2feedda52835,
+        type: 3}
       propertyPath: m_enableAutoSizing
       value: 0
       objectReference: {fileID: 0}
@@ -827,6 +838,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_HorizontalAlignment
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3420556218193743673, guid: a9e8e826ab2a7be4e82b2feedda52835,
+        type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 4546473359128379108, guid: a9e8e826ab2a7be4e82b2feedda52835,
         type: 3}

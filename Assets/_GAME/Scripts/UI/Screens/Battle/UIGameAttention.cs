@@ -1,4 +1,5 @@
 using System;
+using _GAME.Scripts.Audio;
 using _GAME.Scripts.Battle.Player;
 using _GAME.Scripts.Events;
 using Cysharp.Threading.Tasks;
@@ -29,7 +30,12 @@ namespace _GAME.Scripts.UI.Screens.Battle
             _textLabel.text = attentionEvent.Text;
             _canvasGroup.alpha = 0;
             _animator.Rebind();
-            _canvasGroup.DOFade(1, .2f).OnComplete( ()=>_animator.SetBool(ActiveKey, true));
+            _canvasGroup.DOFade(1, .2f).OnComplete( ()=>
+            {
+                _animator.SetBool(ActiveKey, true);
+                AudioManager.Play(SoundType.Notification);
+            });
+            
             await UniTask.Delay(TimeSpan.FromSeconds(_atentionDuration));
             _animator.SetBool(ActiveKey, false);
             await UniTask.Delay(TimeSpan.FromSeconds(_afterHideDuration));

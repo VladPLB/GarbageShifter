@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _GAME.Scripts.Common;
-using _GAME.Scripts.Events;
-using Cinemachine;
-using Cysharp.Threading.Tasks;
+using Unity.Cinemachine;
 using UnityEngine;
 
 namespace _GAME.Scripts.Lobby
@@ -23,7 +21,7 @@ namespace _GAME.Scripts.Lobby
         public struct VCameraByType
         {
             public LobbyPlaceType Type;
-            public CinemachineVirtualCamera VCamera;
+            public CinemachineCamera VCamera;
         }
 
         private void OnEnable()

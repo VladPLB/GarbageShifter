@@ -64,10 +64,10 @@ namespace FIMSpace.FProceduralAnimation
         public float MassMultiplyOnFalling = 1f;
 
         [Tooltip( "Physical Material which will be applied to the generated colliders (not changing if set none)" )]
-        public PhysicMaterial CollidersPhysicMaterial;
+        public PhysicsMaterial CollidersPhysicMaterial;
 
         [Tooltip( "Physical Material which will be applied to the generated colliders when switched to free fall (not changing on fall if set none)" )]
-        public PhysicMaterial PhysicMaterialOnFall;
+        public PhysicsMaterial PhysicMaterialOnFall;
 
         [Tooltip( "(set zero to use deafault project value)\nIf you want to use 'Hard Matching' it's recommended to set this value higher." )]
         public float MaxAngularVelocity = 50f;

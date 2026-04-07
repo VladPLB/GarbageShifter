@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e49a71e7ea4f4f6e95fc8955ce1bb19c, type: 3}
+  m_Name: Item_Credits
+  m_EditorClassIdentifier: 
+  _id: Credits
+  _displayName: Credits
+  _description: Common old republic currency. More people use this currency can trade.
+  _icon: {fileID: 21300000, guid: 448b3f6a0f6b65a47a00bfedc7d35ad5, type: 3}
+  _rank: 0
+  _type: 0
+  _subType: Soft
+  _zeroCountEnabled: 1
+  _maxStack: 999999999
+  _showConditions: []
+  _craftConditions: []
+  _useConditions: []
+  _recipe:
+    ItemCosts: []
+    Loot:
+      Rolls: 1
+      Entries: []
+  _usePipeline: {fileID: 0}

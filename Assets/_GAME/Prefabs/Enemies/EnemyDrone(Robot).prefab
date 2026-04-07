@@ -5037,6 +5037,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5153,6 +5156,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5265,7 +5271,7 @@ MonoBehaviour:
       _type: 0
       _damage: 5
       _radius: 2
-    _health: 20
+    _health: 30
     _armor: 0
     _moveSpeed: 8
     _attackDistance: 15
@@ -5289,7 +5295,9 @@ MonoBehaviour:
   - {fileID: 95446867087008224}
   - {fileID: 7810769278998366535}
   _deadEffectType: 4
+  _deadEffectSoundType: 7
   _deadEffectOffset: {x: 0, y: 0.25, z: 0}
+  _damagePointOffset: {x: 0, y: 0, z: 0}
   _spawnEffectType: -1
   _spawnEffectOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &2595912780412343643
@@ -5305,6 +5313,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _model: {fileID: 250054821877947396}
+  _avoidanceLayerMask:
+    serializedVersion: 2
+    m_Bits: 4352
+  _avoidanceDetectRadius: 4.5
+  _avoidanceStrength: 5
   _borderDistance: 2
   _heightRange: {x: 2, y: 2.5}
   _borderLayerMask:
@@ -5483,7 +5496,7 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 3735c59946c85024faa3f026850c602a, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: abcb3cdc6503647fbb1bec11bc9eaf85, type: 2}
     - target: {fileID: 3300000, guid: 3735c59946c85024faa3f026850c602a, type: 3}
@@ -5549,7 +5562,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
 --- !u!95 &8808792516234927112
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -5563,6 +5576,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1

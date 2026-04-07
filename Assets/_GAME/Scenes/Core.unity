@@ -13,7 +13,7 @@ OcclusionCullingSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 9
+  serializedVersion: 10
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
@@ -38,13 +38,12 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731704, g: 0.1341472, b: 0.121078566, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 12
-  m_GIWorkflowMode: 1
+  serializedVersion: 13
+  m_BakeOnSceneLoad: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -67,9 +66,6 @@ LightmapSettings:
     m_LightmapParameters: {fileID: 0}
     m_LightmapsBakeMode: 1
     m_TextureCompression: 1
-    m_FinalGather: 0
-    m_FinalGatherFiltering: 1
-    m_FinalGatherRayCount: 256
     m_ReflectionCompression: 2
     m_MixedBakeMode: 2
     m_BakeBackend: 1
@@ -255,6 +251,354 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.29270458, y: 3.1810484, z: -107.16675}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1330298107
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1330298109}
+  - component: {fileID: 1330298108}
+  m_Layer: 0
+  m_Name: InventoryManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1330298108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1330298107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22c94ad3f8784e0ab323348dc9556bae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1330298109
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1330298107}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 116.63379, y: 1.6209962, z: -19.014345}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1403290866
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1403290868}
+  - component: {fileID: 1403290867}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1403290867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1403290866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad08d222ad094f7780204403e4f1dd92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _masterVolume: 1
+  _musicVolume: 0.3
+  _sfxVolume: 1
+  _ambientVolume: 0.7
+  _musicCrossfadeTime: 1
+  _musicTracks:
+  - Track: 1
+    Clip: {fileID: 8300000, guid: c498c7fdc8276419d92f26b252751206, type: 3}
+  - Track: 2
+    Clip: {fileID: 8300000, guid: 7f2e364a53bb943a5b16037a7065a145, type: 3}
+  - Track: 6
+    Clip: {fileID: 8300000, guid: 60fd8ed651e7e4543ad45c23b9518bb0, type: 3}
+  _soundEffects:
+  - Type: 0
+    Group:
+      Name: Shot
+      Clips:
+      - Clip: {fileID: 8300000, guid: 9c7e1019059b64ec8967f89acc38e304, type: 3}
+        Volume: 0.759
+        Pitch: 1
+        RandomVolume: 0.217
+        RandomPitch: 0.214
+      GroupVolume: 0.644
+  - Type: 2
+    Group:
+      Name: Hit
+      Clips:
+      - Clip: {fileID: 8300000, guid: 99f2a582806f51047a60eea98fc34cdc, type: 3}
+        Volume: 0.843
+        Pitch: 1.59
+        RandomVolume: 0.217
+        RandomPitch: 0.214
+      - Clip: {fileID: 8300000, guid: 33134f0521c14e0459ad36eb47a00177, type: 3}
+        Volume: 0.879
+        Pitch: 1.74
+        RandomVolume: 0.217
+        RandomPitch: 0.214
+      GroupVolume: 1
+  - Type: 3
+    Group:
+      Name: LHit
+      Clips:
+      - Clip: {fileID: 8300000, guid: 9d8701d0b74b6f640a580b3aa7912273, type: 3}
+        Volume: 1
+        Pitch: 2.06
+        RandomVolume: 0.217
+        RandomPitch: 0.214
+      - Clip: {fileID: 8300000, guid: f5de0ec990d085e4db5fe66b780cc509, type: 3}
+        Volume: 1
+        Pitch: 1.99
+        RandomVolume: 0.217
+        RandomPitch: 0.214
+      GroupVolume: 1
+  - Type: 1
+    Group:
+      Name: Explosion
+      Clips:
+      - Clip: {fileID: 8300000, guid: 36de3d863c9814747992fd8620643ebf, type: 3}
+        Volume: 0.929
+        Pitch: 2.12
+        RandomVolume: 0.217
+        RandomPitch: 0.214
+      - Clip: {fileID: 8300000, guid: af1e7c5ebea411d4b826bb5d643a4b54, type: 3}
+        Volume: 0.979
+        Pitch: 2.23
+        RandomVolume: 0.217
+        RandomPitch: 0.214
+      GroupVolume: 1
+  - Type: 6
+    Group:
+      Name: Death
+      Clips:
+      - Clip: {fileID: 8300000, guid: 4543286aae358194c94ca71e64323867, type: 3}
+        Volume: 0.759
+        Pitch: 1
+        RandomVolume: 0.217
+        RandomPitch: 0.214
+      - Clip: {fileID: 8300000, guid: c7cf25692eba9774aa97feccf4443e95, type: 3}
+        Volume: 0.759
+        Pitch: 1
+        RandomVolume: 0.217
+        RandomPitch: 0.214
+      GroupVolume: 1
+  - Type: 7
+    Group:
+      Name: Death
+      Clips:
+      - Clip: {fileID: 8300000, guid: 384703c7f44ee4470a3fa8bfc9ea0621, type: 3}
+        Volume: 0.579
+        Pitch: 1.91
+        RandomVolume: 0.217
+        RandomPitch: 0.214
+      GroupVolume: 1
+  - Type: 8
+    Group:
+      Name: Death
+      Clips:
+      - Clip: {fileID: 8300000, guid: 56d7a558b88d9419a90aaa8fd2720000, type: 3}
+        Volume: 1
+        Pitch: 1
+        RandomVolume: 0.217
+        RandomPitch: 0.214
+      - Clip: {fileID: 8300000, guid: 384703c7f44ee4470a3fa8bfc9ea0621, type: 3}
+        Volume: 1
+        Pitch: 1
+        RandomVolume: 0.217
+        RandomPitch: 0.214
+      GroupVolume: 1
+  - Type: 5
+    Group:
+      Name: Coin
+      Clips:
+      - Clip: {fileID: 8300000, guid: 6689f7046e97b7242957e9f6a070911d, type: 3}
+        Volume: 0.759
+        Pitch: 1
+        RandomVolume: 0.4
+        RandomPitch: 0.309
+      GroupVolume: 1
+  - Type: 4
+    Group:
+      Name: LExplosion
+      Clips:
+      - Clip: {fileID: 8300000, guid: 57f3c93f88d4c934db0dc6933a0c240f, type: 3}
+        Volume: 1
+        Pitch: 1
+        RandomVolume: 0.217
+        RandomPitch: 0.214
+      GroupVolume: 1
+  - Type: 11
+    Group:
+      Name: SCommunicator
+      Clips:
+      - Clip: {fileID: 8300000, guid: 2f597a0126e6a4b419c445cfd8ef7e29, type: 3}
+        Volume: 1
+        Pitch: 1
+        RandomVolume: 0.217
+        RandomPitch: 0.214
+      GroupVolume: 1
+  - Type: 12
+    Group:
+      Name: HCommunicator
+      Clips:
+      - Clip: {fileID: 8300000, guid: f70b2cbcd0ee06a4b997b7dface099ff, type: 3}
+        Volume: 1
+        Pitch: 1
+        RandomVolume: 0.217
+        RandomPitch: 0.214
+      GroupVolume: 1
+  - Type: 10
+    Group:
+      Name: Dialog
+      Clips:
+      - Clip: {fileID: 8300000, guid: 0745d239150f14fefb2c682f626f5acd, type: 3}
+        Volume: 1
+        Pitch: 1
+        RandomVolume: 0.217
+        RandomPitch: 0.214
+      - Clip: {fileID: 8300000, guid: f2aa863edaaf94c1698a78c98d81f30a, type: 3}
+        Volume: 1
+        Pitch: 1
+        RandomVolume: 0.217
+        RandomPitch: 0.214
+      - Clip: {fileID: 8300000, guid: 6a70461915106422fb9caedeaca3e9bc, type: 3}
+        Volume: 1
+        Pitch: 1
+        RandomVolume: 0.217
+        RandomPitch: 0.214
+      GroupVolume: 1
+  - Type: 13
+    Group:
+      Name: FStep
+      Clips:
+      - Clip: {fileID: 8300000, guid: 7fdbaff9ff79ae743a4ad0494939f2b6, type: 3}
+        Volume: 1
+        Pitch: 1
+        RandomVolume: 0.217
+        RandomPitch: 0.214
+      - Clip: {fileID: 8300000, guid: 88aea0483b40d3c44b775ff4d6fdd7eb, type: 3}
+        Volume: 1
+        Pitch: 1
+        RandomVolume: 0.217
+        RandomPitch: 0.214
+      - Clip: {fileID: 8300000, guid: 2149b54aa7085964c82bcc384c5d0c93, type: 3}
+        Volume: 1
+        Pitch: 1
+        RandomVolume: 0.217
+        RandomPitch: 0.214
+      GroupVolume: 1
+  - Type: 14
+    Group:
+      Name: notification
+      Clips:
+      - Clip: {fileID: 8300000, guid: 3577d81f4d3d64443b11eea2b6dee274, type: 3}
+        Volume: 1
+        Pitch: 1
+        RandomVolume: 0.217
+        RandomPitch: 0.214
+      GroupVolume: 1
+  - Type: 15
+    Group:
+      Name: doorOpen
+      Clips:
+      - Clip: {fileID: 8300000, guid: 956d1a82144de1843898c845d0fc2ed1, type: 3}
+        Volume: 1
+        Pitch: 1
+        RandomVolume: 0.217
+        RandomPitch: 0.214
+      GroupVolume: 1
+  - Type: 16
+    Group:
+      Name: doorOpen
+      Clips:
+      - Clip: {fileID: 8300000, guid: 41fd6062fe9bc4a1ba6f653eafa86522, type: 3}
+        Volume: 1
+        Pitch: 1
+        RandomVolume: 0.217
+        RandomPitch: 0.214
+      GroupVolume: 1
+  - Type: 17
+    Group:
+      Name: doorOpen
+      Clips:
+      - Clip: {fileID: 8300000, guid: 83c2bfc7ea4fedb4589fc9d51c9da80e, type: 3}
+        Volume: 1
+        Pitch: 1
+        RandomVolume: 0.217
+        RandomPitch: 0.214
+      GroupVolume: 1
+  _ambientSounds:
+  - Type: 1
+    Clip: {fileID: 8300000, guid: 3f8a4bd2410a36f4692a6d451f119603, type: 3}
+    Volume: 1
+    Is3D: 0
+    Position: {x: 0, y: 0, z: 0}
+  - Type: 4
+    Clip: {fileID: 8300000, guid: 3e0f4ad505de2804984f9e02c2c87aee, type: 3}
+    Volume: 1
+    Is3D: 0
+    Position: {x: 0, y: 0, z: 0}
+  - Type: 3
+    Clip: {fileID: 8300000, guid: 3010a6c89b75e4661a6c26d8ca29090d, type: 3}
+    Volume: 0.579
+    Is3D: 0
+    Position: {x: 0, y: 0, z: 0}
+  - Type: 2
+    Clip: {fileID: 8300000, guid: bf9b6d2727f14cd498155ceb076106e5, type: 3}
+    Volume: 0.4
+    Is3D: 0
+    Position: {x: 0, y: 0, z: 0}
+  - Type: 5
+    Clip: {fileID: 8300000, guid: e81a5cb2ddaf14266b072b3bf679aeaa, type: 3}
+    Volume: 0.579
+    Is3D: 0
+    Position: {x: 0, y: 0, z: 0}
+  - Type: 6
+    Clip: {fileID: 8300000, guid: 79ae0f0df0b373a47a481514e16bb909, type: 3}
+    Volume: 0.342
+    Is3D: 0
+    Position: {x: 0, y: 0, z: 0}
+  _initialPoolSize: 20
+--- !u!4 &1403290868
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1403290866}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -30.319221, y: -9.114753, z: -10.075829}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -549,3 +893,5 @@ SceneRoots:
   - {fileID: 113848434}
   - {fileID: 428886085}
   - {fileID: 705984741}
+  - {fileID: 1403290868}
+  - {fileID: 1330298109}

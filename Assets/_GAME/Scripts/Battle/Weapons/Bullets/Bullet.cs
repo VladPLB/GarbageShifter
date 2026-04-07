@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using _GAME;
 using _GAME.Scripts;
+using _GAME.Scripts.Audio;
 using _GAME.Scripts.Battle.Context;
 using _GAME.Scripts.Battle.Enemy;
 using _GAME.Scripts.Common;
+using _GAME.Scripts.Events;
 using _GAME.Scripts.Pools;
 using _GAME.Scripts.Weapons.Bullets;
 using Cysharp.Threading.Tasks;
@@ -88,6 +90,8 @@ public class Bullet : MonoBehaviour, IPoolableItem<BulletType>
       {
          SpawnDecal(hit.transform, hitPoint, hitNormal);
       }
+      
+      EventBus.Push(new SoundPlayEvent(SoundType.Hit, hit.point), EventBus.EventRegion.GLOBAL);
 
       Remove();
    }

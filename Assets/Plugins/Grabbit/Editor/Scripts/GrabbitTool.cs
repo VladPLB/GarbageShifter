@@ -8,7 +8,7 @@ using UnityEditor.Compilation;
 using UnityEditor.EditorTools;
 #if UNITY_2021_OR_NEWER
 #else
-using UnityEditor.Experimental.SceneManagement;
+
 #endif
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -1448,8 +1448,8 @@ namespace Grabbit
                         //temporarilly disable the colliders so that the hits are registered properly
                         handler.DisableAllColliders(settings);
                         //TODO adjust to local/ global later
-                        if (handler.Body.velocity.sqrMagnitude > 0.8f && Physics.Raycast(handler.Body.position,
-                                handler.Body.velocity, out var hit))
+                        if (handler.Body.linearVelocity.sqrMagnitude > 0.8f && Physics.Raycast(handler.Body.position,
+                                handler.Body.linearVelocity, out var hit))
                         {
                             ShowRayHandle(Color.yellow, handler.Body.position, hit.point, hit.normal);
                         }
@@ -1675,8 +1675,8 @@ namespace Grabbit
                 }
                 else
                 {
-                    body.drag = 0;
-                    body.angularDrag = 0;
+                    body.linearDamping = 0;
+                    body.angularDamping = 0;
 
                     body.maxAngularVelocity = float.MaxValue;
                     body.maxDepenetrationVelocity = float.MaxValue;
@@ -1710,7 +1710,7 @@ namespace Grabbit
                     body.angularVelocity = angularVelocity;
 
                     SetBodyVelocityLimits(handler);
-                    body.drag += settings.ExtraDragForRotationMode;
+                    body.linearDamping += settings.ExtraDragForRotationMode;
                 }
             }
             else
@@ -1725,7 +1725,7 @@ namespace Grabbit
                     var body = handler.Body;
                     PrepareHandler(handler);
 
-                    body.velocity = Vector3.zero;
+                    body.linearVelocity = Vector3.zero;
                     body.angularVelocity = Vector3.zero;
                 }
             }
@@ -1786,7 +1786,7 @@ namespace Grabbit
 
                 var velocity = (distance + relativeDistance) / Time.fixedDeltaTime;
 
-                body.velocity = velocity;
+                body.linearVelocity = velocity;
 
                 SetBodyVelocityLimits(handler);
 
@@ -1920,7 +1920,7 @@ namespace Grabbit
 
                     var velocity = (distance + relativeDistance) / Time.fixedDeltaTime;
 
-                    body.velocity = velocity;
+                    body.linearVelocity = velocity;
 
                     SetBodyVelocityLimits(handler);
 
@@ -1954,7 +1954,7 @@ namespace Grabbit
                     if (!body || body.isKinematic)
                         continue;
 
-                    body.velocity = Vector3.zero;
+                    body.linearVelocity = Vector3.zero;
                     body.angularVelocity = Vector3.zero;
 
                     if (settings.resetCentroidRelativeTransformOnMouseUp)
@@ -2000,7 +2000,7 @@ namespace Grabbit
                         towardCenter = (wantedCenter - body.position).Mult(Vector3.one - pullToCenter) *
                                        (0.1f * settings.AlignStrength);
 
-                    body.velocity = towardCenter / Time.fixedDeltaTime;
+                    body.linearVelocity = towardCenter / Time.fixedDeltaTime;
 
                     SetBodyVelocityLimits(handler);
 
@@ -2029,7 +2029,7 @@ namespace Grabbit
                     PrepareHandler(handler);
 
                     var body = handler.Body;
-                    body.velocity = Vector3.zero;
+                    body.linearVelocity = Vector3.zero;
                     body.angularVelocity = Vector3.zero;
                 }
             }
@@ -2054,12 +2054,12 @@ namespace Grabbit
             }
 
             var body = handler.Body;
-            body.drag = settings.Drag;
-            body.angularDrag = settings.AngularDrag;
+            body.linearDamping = settings.Drag;
+            body.angularDamping = settings.AngularDrag;
 
             body.maxAngularVelocity = settings.MaxAngularVelocity;
             body.maxDepenetrationVelocity = settings.MaxDepenetrationVelocity;
-            var velocity = body.velocity;
+            var velocity = body.linearVelocity;
 
             var collisionMaxVelocity = settings.CollisionMaxVelocity;
 
@@ -2087,7 +2087,7 @@ namespace Grabbit
 
             var maxVelocity = collisionFound ? collisionMaxVelocity : settings.MaxVelocity;
 
-            body.velocity = velocity.normalized * Mathf.Clamp(velocity.magnitude, 0f,
+            body.linearVelocity = velocity.normalized * Mathf.Clamp(velocity.magnitude, 0f,
                 maxVelocity);
             body.angularVelocity = Vector3.ClampMagnitude(body.angularVelocity, settings.MaxAngularVelocity);
         }

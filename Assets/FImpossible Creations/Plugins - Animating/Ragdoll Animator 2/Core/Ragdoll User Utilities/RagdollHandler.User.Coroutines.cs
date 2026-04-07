@@ -404,7 +404,7 @@ namespace FIMSpace.FProceduralAnimation
                 {
                     if( b.GameRigidbody.isKinematic == false )
                     {
-                        b.GameRigidbody.velocity = Vector3.zero;
+                        b.GameRigidbody.linearVelocity = Vector3.zero;
                         b.GameRigidbody.angularVelocity = Vector3.zero;
                     }
                 } );
@@ -426,7 +426,7 @@ namespace FIMSpace.FProceduralAnimation
                 {
                     if( b.GameRigidbody.isKinematic == false )
                     {
-                        b.GameRigidbody.velocity = Vector3.zero;
+                        b.GameRigidbody.linearVelocity = Vector3.zero;
                         b.GameRigidbody.angularVelocity = Vector3.zero;
                     }
                 } );

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a09395eb1a44fb4a55a25910faea0d0, type: 3}
   m_Name: BigShip_LevelData 2
   m_EditorClassIdentifier: 
-  _start: {fileID: 0}
-  _end: {fileID: 0}
+  _start: {fileID: 8935014589991792522, guid: fbf814097fe374a639864ba21590c52a, type: 3}
+  _end: {fileID: 7626451560120023427, guid: f361dd613283f48cdaa65e555bd7717e, type: 3}
   _locationType: 4
   _levelTypes: 0
   _stages:

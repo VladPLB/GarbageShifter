@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using _GAME.Scripts.Audio;
 using _GAME.Scripts.Battle.Player;
 using _GAME.Scripts.Battle.Weapons;
 using _GAME.Scripts.Common;
+using _GAME.Scripts.Events;
 using _GAME.Scripts.Pools;
 using Cysharp.Threading.Tasks;
 using Unity.Collections;
@@ -26,6 +28,7 @@ namespace _GAME.Scripts.Battle.Enemy
         [SerializeField] private StateIntAttribute _armor;
         [SerializeField, ReadOnly] private DamageRepeater[] _damageRepeaters;
         [SerializeField] private GameEffectType _deadEffectType = GameEffectType.None;
+        [SerializeField] private SoundType _deadEffectSoundType = SoundType.EnemyDeath_droid;
         [SerializeField] private Vector3 _deadEffectOffset = Vector3.zero;
         [SerializeField] private Vector3 _damagePointOffset = Vector3.zero;
         [SerializeField] private GameEffectType _spawnEffectType = GameEffectType.None;
@@ -116,6 +119,8 @@ namespace _GAME.Scripts.Battle.Enemy
             
             _lastHitPoint = hitPoint;
             _lastDamageTextType = DamageTextType.Default;
+
+            bool isLargeHit = false;
             
             var dmg = damageAmount;
             if (additiveAttributes.Find(a => a.Key == EffectAttributeType.ExplosionDamage) != null)
@@ -129,6 +134,7 @@ namespace _GAME.Scripts.Battle.Enemy
             {
                 dmg = Mathf.RoundToInt(dmg * GameConstants.HEADSHOT_DAMAGE_MULTIPLIER);
                 _lastDamageTextType = DamageTextType.Headshot;
+                isLargeHit = true;
             }
             if (additiveAttributes.Find(a => a.Key == EffectAttributeType.ShieldShot) != null)
             {
@@ -143,9 +149,15 @@ namespace _GAME.Scripts.Battle.Enemy
             {
                 dmg = Mathf.RoundToInt(dmg * GameConstants.WEAK_DAMAGE_MULTIPLIER);
                 _lastDamageTextType = DamageTextType.Weak;
+                isLargeHit = true;
             }
             
-            _health.Remove(damageAmount);
+            if(isLargeHit)
+            {
+                EventBus.Push(new SoundPlayEvent(SoundType.LargeHit, hitPoint), EventBus.EventRegion.GLOBAL);
+            }
+            
+            _health.Remove(dmg);
             _lastHitPoint = null;
             _explosionForce = null;
         }
@@ -220,6 +232,8 @@ namespace _GAME.Scripts.Battle.Enemy
             {
                 GameEffect.Create(_deadEffectType, transform.position + _deadEffectOffset);
             }
+            
+            EventBus.Push(new SoundPlayEvent(_deadEffectSoundType, transform.position + _deadEffectOffset), EventBus.EventRegion.GLOBAL);
             OnDead?.Invoke(this);
             Deactivate(false);
         }

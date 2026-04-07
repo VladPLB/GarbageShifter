@@ -13,25 +13,42 @@ MonoBehaviour:
   m_Name: Level3_BigShip_EnemyStageData 3
   m_EditorClassIdentifier: 
   _stages:
-  - {fileID: 5545286064349580182, guid: 3a82db5e497ec481a87f15ab7fb1ba0b, type: 3}
-  - {fileID: 5886632636518724776, guid: b8d9f7d78c18b46b09cec56372b6ac3d, type: 3}
-  - {fileID: 5827544587021009972, guid: 5a4870765fc7345758e0f15ef39e0519, type: 3}
-  - {fileID: 5707544574969342554, guid: 8b9ad0d05b24f4905a8236fb732f3259, type: 3}
-  - {fileID: 6062505486891536774, guid: 2a38a377264fe4601b65453d43c163d2, type: 3}
-  - {fileID: 4707103645163744107, guid: a7e0ebfbfea6d4a6dbbd3c55e37d0e42, type: 3}
+  - {fileID: 1278395700101569717, guid: 6da0c1e7f6ca647a89f8fa4cd08aceda, type: 3}
+  - {fileID: 8806060869963039531, guid: 8b969403613f64b48a4c3707521d17c4, type: 3}
+  - {fileID: 4828197474132573242, guid: a358e6706fe4e43f6aaf8f4e957d0601, type: 3}
   _enemies:
   - _datas:
-    - Type: 1
-      SpawnRangeAmount: {x: 3, y: 5}
+    - Type: 6
+      SpawnRangeAmount: {x: 3, y: 6}
       SpawnDelayBetwenUnits: 0.3
     SpawnDelayGroup: 0.5
   - _datas:
     - Type: 1
       SpawnRangeAmount: {x: 5, y: 7}
       SpawnDelayBetwenUnits: 0.3
-    SpawnDelayGroup: 3
+    SpawnDelayGroup: 1
   - _datas:
     - Type: 2
       SpawnRangeAmount: {x: 4, y: 6}
       SpawnDelayBetwenUnits: 0.3
+    SpawnDelayGroup: 1
+  - _datas:
+    - Type: 6
+      SpawnRangeAmount: {x: 4, y: 6}
+      SpawnDelayBetwenUnits: 0.3
     SpawnDelayGroup: 5
+  - _datas:
+    - Type: 6
+      SpawnRangeAmount: {x: 4, y: 6}
+      SpawnDelayBetwenUnits: 0.3
+    SpawnDelayGroup: 5
+  - _datas:
+    - Type: 4
+      SpawnRangeAmount: {x: 4, y: 6}
+      SpawnDelayBetwenUnits: 0.3
+    SpawnDelayGroup: 1
+  - _datas:
+    - Type: 4
+      SpawnRangeAmount: {x: 4, y: 6}
+      SpawnDelayBetwenUnits: 0.3
+    SpawnDelayGroup: 1

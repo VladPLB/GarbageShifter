@@ -67,8 +67,8 @@ namespace Grabbit
             IsKinematic = body.isKinematic;
             MaxAngularVelocity = body.maxAngularVelocity;
             MaxDepenetrationVelocity = body.maxDepenetrationVelocity;
-            AngularDrag = body.angularDrag;
-            Drag = body.drag;
+            AngularDrag = body.angularDamping;
+            Drag = body.linearDamping;
             CollisionMode = body.collisionDetectionMode;
             Layer = body.gameObject.layer;
             DetectCollision = body.detectCollisions;
@@ -85,8 +85,8 @@ namespace Grabbit
             body.isKinematic = IsKinematic;
             body.maxAngularVelocity = MaxAngularVelocity;
             body.maxDepenetrationVelocity = MaxDepenetrationVelocity;
-            body.angularDrag = AngularDrag;
-            body.drag = Drag;
+            body.angularDamping = AngularDrag;
+            body.linearDamping = Drag;
             body.gameObject.layer = Layer;
             body.detectCollisions = DetectCollision;
             body.interpolation = Interpolation;

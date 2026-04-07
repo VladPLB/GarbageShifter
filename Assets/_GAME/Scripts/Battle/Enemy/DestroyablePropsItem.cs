@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using _GAME.Scripts.Audio;
+using _GAME.Scripts.Battle.Items;
 using _GAME.Scripts.Common;
+using _GAME.Scripts.Events;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -18,6 +21,8 @@ namespace _GAME.Scripts.Battle.Enemy
         [SerializeField] private List<DeadHandler> _deadHandlers = new();
         [SerializeField] private GameEffectType _deadEffectType = GameEffectType.Explosion_Small;
         [SerializeField] private Vector3 _deadEffectOffset = Vector3.zero;
+        
+        private DropManager _dropManager;
 
         public override Team Team => Team.None;
 
@@ -25,6 +30,7 @@ namespace _GAME.Scripts.Battle.Enemy
 
         private void Start()
         {
+            _dropManager = Core.Get<DropManager>();
             _health.OnChangeValue += OnHealthChange;
             Revive();
         }
@@ -44,6 +50,7 @@ namespace _GAME.Scripts.Battle.Enemy
                 return;
 
             _lastHitPoint = hitPoint;
+            EventBus.Push(new SoundPlayEvent(SoundType.LargeHit, hitPoint), EventBus.EventRegion.GLOBAL);
             _health.Remove(damageAmount);
         }
 
@@ -65,9 +72,12 @@ namespace _GAME.Scripts.Battle.Enemy
             {
                 GameEffect.Create(_deadEffectType, transform.position + _deadEffectOffset);
             }
+            _dropManager?.DropCoins(transform.position + _deadEffectOffset, Random.Range(2,5));
             _activeItems.ForEach(a => a.SetActive(false));
             _destroyedItems.ForEach(a => a.SetActive(true));
             _colliders.ForEach(a => a.enabled = false);
+            EventBus.Push(new SoundPlayEvent(SoundType.Explosion, transform.position + _deadEffectOffset), EventBus.EventRegion.GLOBAL);
+
             if(_autoRevive)
             {
                 await UniTask.Delay(TimeSpan.FromSeconds(2));

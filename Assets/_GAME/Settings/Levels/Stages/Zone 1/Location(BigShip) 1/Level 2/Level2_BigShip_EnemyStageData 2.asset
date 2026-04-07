@@ -21,15 +21,20 @@ MonoBehaviour:
   - {fileID: 4707103645163744107, guid: a7e0ebfbfea6d4a6dbbd3c55e37d0e42, type: 3}
   _enemies:
   - _datas:
-    - Type: 1
+    - Type: 6
       SpawnRangeAmount: {x: 3, y: 5}
       SpawnDelayBetwenUnits: 0.3
     SpawnDelayGroup: 0.5
   - _datas:
-    - Type: 1
+    - Type: 2
       SpawnRangeAmount: {x: 5, y: 7}
       SpawnDelayBetwenUnits: 0.3
     SpawnDelayGroup: 3
+  - _datas:
+    - Type: 6
+      SpawnRangeAmount: {x: 4, y: 6}
+      SpawnDelayBetwenUnits: 0.3
+    SpawnDelayGroup: 5
   - _datas:
     - Type: 2
       SpawnRangeAmount: {x: 4, y: 6}

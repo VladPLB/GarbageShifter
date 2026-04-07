@@ -2,30 +2,47 @@ using System;
 using System.Collections.Generic;
 using _GAME.Scripts.Common;
 using _GAME.Scripts.Events;
-using Cinemachine;
 using Cysharp.Threading.Tasks;
+using Unity.Cinemachine;
 using UnityEngine;
 
 namespace _GAME.Scripts.Battle.Player
 {
     public class CameraController : MonoBehaviour
     {
+        [Serializable]
+        public struct VCameraByType
+        {
+            public GameCameraType Type;
+            public CinemachineCamera VCamera;
+        }
+        
         [SerializeField] private List<VCameraByType> _cameras;
         [SerializeField] private CinemachineImpulseSource _impulseSource;
         [SerializeField] private Light _directionLight;
 
         private float _defaultIntencity;
 
-        public void SetCamera(GameCameraType type)
+        public void SetCamera(GameCameraType type, Transform follow= null,  Transform target=null)
         {
-            _cameras.ForEach(c=>c.VCamera.enabled = c.Type == type);
-        }
+            foreach (VCameraByType camera in _cameras)
+            {
+                if (camera.Type == type)
+                {
+                    if (follow != null)
+                    {
+                        camera.VCamera.Follow = follow;
+                    }
 
-        [Serializable]
-        public struct VCameraByType
-        {
-            public GameCameraType Type;
-            public CinemachineVirtualCamera VCamera;
+                    if (target != null)
+                    {
+                        camera.VCamera.LookAt = target;
+                    }
+                }
+                camera.VCamera.enabled = camera.Type == type;
+                
+            }
+            _cameras.ForEach(c=>c.VCamera.enabled = c.Type == type);
         }
 
         private void OnEnable()

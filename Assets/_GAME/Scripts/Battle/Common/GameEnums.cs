@@ -28,7 +28,8 @@ namespace _GAME.Scripts.Common
 
     public enum WeaponType
     {
-        Riffle
+        Riffle,
+        BigRiffle_1
     }
 
     public enum BulletType
@@ -38,6 +39,28 @@ namespace _GAME.Scripts.Common
         Laser_red,
         Laser_blue,
         Rocket_red
+    }
+    
+    public enum CoinType
+    {
+        Default,
+        Metal,
+        Blueprint,
+        Scrap,
+        Material,
+        Electronic
+    }
+
+    public enum RareType
+    {
+        Common,
+        Uncommon,
+        Unique,
+        Special,
+        Rare,
+        Legendary,
+        Universe,
+        BlackHole
     }
     
     public enum ExplosionType
@@ -50,7 +73,9 @@ namespace _GAME.Scripts.Common
         Start,
         End,
         Normal,
-        Rotate
+        Rotate,
+        Rage,
+        Boss,
     }
 
     public enum PlayerPositionType
@@ -82,7 +107,8 @@ namespace _GAME.Scripts.Common
         Run,
         Battle,
         Dead,
-        Victory
+        Victory,
+        BigWeapon
     }
 
     public enum TextEffectType

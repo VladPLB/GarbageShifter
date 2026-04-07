@@ -230,7 +230,7 @@ namespace FIMSpace.RagdollAnimatorDemo
             directMovement *= Mathf.Lerp(1f, Mathf.InverseLerp( 180f, 50f, Mathf.Abs( yAngleDiff )), Interia);
 
             targetVelo = Vector3.Lerp( targetVelo, ( transform.forward ) * targetVelo.magnitude, directMovement );
-            targetVelo.y = Rigb.velocity.y;
+            targetVelo.y = Rigb.linearVelocity.y;
 
             toJump -= Time.fixedDeltaTime;
 
@@ -254,7 +254,7 @@ namespace FIMSpace.RagdollAnimatorDemo
 
             if( wasRootmotion == false )
             {
-                if ( Rigb.isKinematic == false) Rigb.velocity = targetVelo;
+                if ( Rigb.isKinematic == false) Rigb.linearVelocity = targetVelo;
             }
 
             if ( FixedRotation)

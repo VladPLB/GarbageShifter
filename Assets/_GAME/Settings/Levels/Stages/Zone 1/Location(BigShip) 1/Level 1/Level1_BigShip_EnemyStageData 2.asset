@@ -22,16 +22,16 @@ MonoBehaviour:
   _enemies:
   - _datas:
     - Type: 1
-      SpawnRangeAmount: {x: 3, y: 5}
+      SpawnRangeAmount: {x: 5, y: 10}
       SpawnDelayBetwenUnits: 0.3
     SpawnDelayGroup: 0.5
   - _datas:
     - Type: 2
       SpawnRangeAmount: {x: 4, y: 6}
       SpawnDelayBetwenUnits: 0.3
-    SpawnDelayGroup: 3
+    SpawnDelayGroup: 5
   - _datas:
     - Type: 1
       SpawnRangeAmount: {x: 5, y: 7}
       SpawnDelayBetwenUnits: 0.3
-    SpawnDelayGroup: 5
+    SpawnDelayGroup: 3

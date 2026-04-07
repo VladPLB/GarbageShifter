@@ -491,7 +491,7 @@ namespace Grabbit
                 Body.detectCollisions = true;
                 Body.isKinematic = false;
                 Body.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-                Body.angularDrag = 99999;
+                Body.angularDamping = 99999;
                 Body.WakeUp();
             }
 
@@ -510,8 +510,8 @@ namespace Grabbit
                         join.connectedBody = data.Body;
                         join.enableCollision = false;
                         AddedJoints.Add(join);
-                        data.Body.drag = 9999;
-                        data.Body.angularDrag = 9999;
+                        data.Body.linearDamping = 9999;
+                        data.Body.angularDamping = 9999;
                       //  join.connectedMassScale = 100f;
                         data.SetBodiesAsDynamic(false);
                     }

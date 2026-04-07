@@ -13,6 +13,11 @@ namespace _GAME.Scripts.Battle.Player
     {
         
         [SerializeField] protected Transform _model;
+        [Header("Avoidance")] 
+        [SerializeField] protected LayerMask _avoidanceLayerMask;
+        [SerializeField] protected float _avoidanceDetectRadius = 4.5f;
+        [SerializeField] protected float _avoidanceStrength = 5f;
+        
         private CharacterController _characterController;
         protected float _stoppingDistance = .3f;
         protected bool _isActive = false;
@@ -30,6 +35,9 @@ namespace _GAME.Scripts.Battle.Player
         protected bool _isStopped = true;
         protected Vector3 _forward;
         protected bool _isJumpToPlayer = false;
+        
+        protected float _avoidanceDetectSqrRadius;
+        protected Collider[] _avoidanceDetectedColliders;
         
         protected Action _jumpToPlayerCallback;
         public Action OnMoveCompleted;
@@ -86,6 +94,8 @@ namespace _GAME.Scripts.Battle.Player
 
         public virtual void TeleportTo(Vector3 position, Quaternion rotation)
         {
+            if(NavMesh.SamplePosition(position, out var hit, 100, NavMesh.AllAreas))
+                position = hit.position;
             transform.position = _targetPosition = position;
             _model.rotation  = rotation;
             _isStopped = true;
@@ -93,6 +103,10 @@ namespace _GAME.Scripts.Battle.Player
 
         public virtual void MoveTo(Vector3 targetPosition)
         {
+            if (NavMesh.SamplePosition(targetPosition, out var hit, 100, NavMesh.AllAreas))
+            {
+                targetPosition = hit.position;
+            }
             _targetPosition = targetPosition;
             _isStopped = false;
         }
@@ -132,7 +146,12 @@ namespace _GAME.Scripts.Battle.Player
             if (!_isStopped)
             {
                 _forward = (_targetPosition - transform.position).normalized;
-                move = _forward * _speed * Time.deltaTime;
+                move = _forward * _speed;
+                if (TryGetAvoidanceForce(out var avoidanceForce))
+                {
+                    move += avoidanceForce;
+                }
+                move *=Time.deltaTime;
                 _characterController.Move(move);
                 if (DestinationReached())
                 {
@@ -155,6 +174,37 @@ namespace _GAME.Scripts.Battle.Player
             }
             var moveDelta = (transform.position - previewPosition).magnitude;
             OnMoveSpeed?.Invoke(move == Vector3.zero? 0: Mathf.Clamp01(moveDelta/move.magnitude));
+        }
+        
+        protected bool TryGetAvoidanceForce(out Vector3 force)
+        {
+            var selfPosition = transform.position;
+            var collidersCount = Physics.OverlapSphereNonAlloc(selfPosition, _avoidanceDetectRadius, _avoidanceDetectedColliders,
+                _avoidanceLayerMask);
+            Vector3 avoidanceForce = Vector3.zero;
+            int count = 0;
+
+            for (int i = 0; i < collidersCount; i++)
+            {
+                Collider hit = _avoidanceDetectedColliders[i];
+                if (hit.transform == transform) continue;
+
+                Vector3 hitTransformPosition = hit.transform.position;
+                Vector3 dir = selfPosition - hitTransformPosition;
+                dir.y = 0;
+                float sqrDistance = selfPosition.ZeroHeightSqrDistanceTo(hitTransformPosition);
+
+                Vector3 repelDir = dir.normalized;
+
+                float strength = Mathf.Lerp(_avoidanceStrength, 0, sqrDistance / _avoidanceDetectSqrRadius);
+                strength *= strength;
+
+                avoidanceForce += repelDir * strength;
+                count++;
+            }
+
+            force = count > 0 ? avoidanceForce / count : Vector3.zero;
+            return force != Vector3.zero;
         }
         
         protected bool DestinationReached() => Vector3.Distance(transform.position, _targetPosition) <= _stoppingDistance || IsStoppingDistance;

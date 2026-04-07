@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a09395eb1a44fb4a55a25910faea0d0, type: 3}
+  m_Name: RoundStation_LevelData 5
+  m_EditorClassIdentifier: 
+  _start: {fileID: 369967229005288196, guid: f032d6ca1e10b437bb5583132a27bfb6, type: 3}
+  _end: {fileID: 6997951856829166896, guid: a27d8ed95daf648b2b712623e4226bd5, type: 3}
+  _locationType: 0
+  _levelTypes: 0
+  _stages:
+  - {fileID: 11400000, guid: 15ac2f2aeda964788b3a8244fbd60eca, type: 2}
+  - {fileID: 11400000, guid: 4d3f8fd4a499b4ac28e1257af259fb7e, type: 2}
+  - {fileID: 11400000, guid: 2eedebe31bea94c5ba098b5b21c0ea7e, type: 2}
+  _useRotators: 1

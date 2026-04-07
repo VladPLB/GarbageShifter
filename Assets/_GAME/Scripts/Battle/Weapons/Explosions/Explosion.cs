@@ -1,7 +1,9 @@
 using System;
 using _GAME.Scripts;
+using _GAME.Scripts.Audio;
 using _GAME.Scripts.Battle.Context;
 using _GAME.Scripts.Common;
+using _GAME.Scripts.Events;
 using _GAME.Scripts.Pools;
 using _GAME.Scripts.Weapons.Bullets;
 using Cysharp.Threading.Tasks;
@@ -52,6 +54,8 @@ public class Explosion : MonoBehaviour, IPoolableItem<ExplosionType>
       }
 
       var gameEffect = GameEffect.Create(_effectType, transform.position);
+      EventBus.Push(new SoundPlayEvent(SoundType.Explosion, transform.position), EventBus.EventRegion.GLOBAL);
+
       Remove();
    }
 

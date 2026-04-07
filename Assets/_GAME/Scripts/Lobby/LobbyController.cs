@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using _GAME.Scripts.Audio;
 using _GAME.Scripts.Cores.Save.SavesConfigs;
 using _GAME.Scripts.Events;
 using _GAME.Scripts.Map;
@@ -40,6 +41,7 @@ namespace _GAME.Scripts.Lobby
             LevelZoneData zoneData = _mapManager.GetZone(zoneIndex);
             zoneData.Setup();
             EventBus.Push(new KeyEvent("RoomsLoaded"), EventBus.EventRegion.LOBBY);
+            EventBus.Push(new MusicPlayEvent(MusicTrack.Menu), EventBus.EventRegion.GLOBAL);
             await UniTask.DelayFrame(1);
             await ShowLobbyScreen();
             _mapController.Initialize(zoneData, locationIndex, levelIndex);
@@ -68,7 +70,9 @@ namespace _GAME.Scripts.Lobby
 
         private void OnDisable()
         {
+            EventBus.Push(new AmbientStopEvent(AmbientType.All), EventBus.EventRegion.GLOBAL);
             _uiManager.ClearWindowPool();
+            _uiManager.CloseAllWindows();
             EventBus.Unsubscribe<OpenDialogScreenEvent>(OnOpenDialogScreen, EventBus.EventRegion.LOBBY);
         }
     }

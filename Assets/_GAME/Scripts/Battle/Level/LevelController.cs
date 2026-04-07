@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using _GAME;
 using _GAME.Scripts;
+using _GAME.Scripts.Audio;
 using _GAME.Scripts.Battle.Enemy;
+using _GAME.Scripts.Battle.Items;
 using _GAME.Scripts.Battle.Level;
 using _GAME.Scripts.Battle.Player;
 using _GAME.Scripts.Common;
@@ -31,6 +33,7 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
     
     private UIManager _uiManager;
     private MapManager _mapManager;
+    private DropManager _dropManager;
     private SaveManager _saveManager;
     private ProgressData _progressData;
     
@@ -49,7 +52,7 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
 
     private void Awake()
     {
-        Core.Registry(this, typeof(PoolProvider), typeof(UIManager));
+        Core.Registry(this, typeof(PoolProvider), typeof(UIManager), typeof(DropManager));
     }
     
     public void RuntimeSetup()
@@ -57,6 +60,7 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
         _uiManager = Core.Get<UIManager>();
         _mapManager = Core.Get<MapManager>();
         _saveManager = Core.Get<SaveManager>();
+        _dropManager = Core.Get<DropManager>();
         _progressData = _saveManager.GetData<ProgressData>();
         
         BuildLevel();
@@ -84,6 +88,7 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
         _uiManager.OpenWindow<GameplayScreen>();
         PlayCurrentStage();
         EventBus.Push(new KeyEvent("SceneLoaded"), EventBus.EventRegion.GLOBAL);
+        EventBus.Push(new MusicPlayEvent(MusicTrack.Battle), EventBus.EventRegion.GLOBAL);
     }
 
     [ContextMenu("Build Level")]
@@ -142,6 +147,7 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
         _realStages[_currentStageIndex].End();
         _player.BattleStop();
         await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.STAGE_COMPLETE_PLAYER_DELAY));
+        _dropManager.StartAttraction();
         _currentStageIndex++;
         if (_currentStageIndex >= _stagesCount)
         {
@@ -151,6 +157,7 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
         
         var nextPosition = _playerPositions[_currentStageIndex];
         _realStages[_currentStageIndex].PreStart();
+        await UniTask.WaitWhile(() => !_realStages[_currentStageIndex].IsPrestart);
         _player.MoveToPosition(previewPosition, nextPosition);
         _player.OnDestinationTargetPosition += PlayCurrentStage;
     }
@@ -164,8 +171,15 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
         }
         EventBus.Push(new KeyEvent("StageStart"), EventBus.EventRegion.GAMEPLAY);
         await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.STAGE_PLAY_PLAYER_DELAY));
-        _player.BattleReady();
         var stage = _realStages[_currentStageIndex];
+        if (stage.BigWeapon != null)
+        {
+            _player.BattleReady(stage.BigWeapon);
+        }
+        else
+        {
+            _player.BattleReady();
+        }
         stage.CheckPlay();
         await UniTask.WaitWhile(() => !stage.IsPlay);
         await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.STAGE_PLAY_ENEMY_DELAY));
@@ -193,12 +207,15 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
 
     public void EndLevel()
     {
+        EventBus.Push(new KeyEvent("ToLobby"), EventBus.EventRegion.GLOBAL);
         _player.Victory();
         OnSpawnWarning = null;
     }
 
     private void OnDestroy()
     {
+        EventBus.Push(new AmbientStopEvent(AmbientType.All), EventBus.EventRegion.GLOBAL);
+        _uiManager.CloseAllWindows();
         Core.Unregistry(this);
     }
 }

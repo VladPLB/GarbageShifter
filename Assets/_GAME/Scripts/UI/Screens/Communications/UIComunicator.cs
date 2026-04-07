@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _GAME.Scripts.Audio;
 using _GAME.Scripts.Events;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -47,6 +48,7 @@ namespace _GAME.Scripts.UI.Screens.Communications
             if (!_showed)
             {
                 _animator.SetTrigger(ShowKey);
+                EventBus.Push(new SoundPlayEvent(SoundType.ShowCommunicator, null),  EventBus.EventRegion.GLOBAL);
             }
             await UniTask.Delay(ShowedTime);
             _showed = true;
@@ -60,6 +62,7 @@ namespace _GAME.Scripts.UI.Screens.Communications
             if (_showed)
             {
                 _animator.SetTrigger(HideKey);
+                EventBus.Push(new SoundPlayEvent(SoundType.HideCommunicator, null),  EventBus.EventRegion.GLOBAL);
             }
             
             await UniTask.Delay(HideTime);

@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dfac486e1184f1bb8a62e6c0756d5aa, type: 3}
+  m_Name: Level4_RoundStation_EnemyStageData 1
+  m_EditorClassIdentifier: 
+  _stages:
+  - {fileID: 1886767650116402183, guid: af1d65389c36445738aac3d7c32fd6d8, type: 3}
+  _enemies:
+  - _datas:
+    - Type: 1
+      SpawnRangeAmount: {x: 30, y: 50}
+      SpawnDelayBetwenUnits: 1.5
+    SpawnDelayGroup: 0.5
+  - _datas:
+    - Type: 1
+      SpawnRangeAmount: {x: 30, y: 50}
+      SpawnDelayBetwenUnits: 1.5
+    SpawnDelayGroup: 3
+  - _datas:
+    - Type: 2
+      SpawnRangeAmount: {x: 10, y: 20}
+      SpawnDelayBetwenUnits: 1
+    SpawnDelayGroup: 10
+  - _datas:
+    - Type: 4
+      SpawnRangeAmount: {x: 20, y: 30}
+      SpawnDelayBetwenUnits: 1
+    SpawnDelayGroup: 20

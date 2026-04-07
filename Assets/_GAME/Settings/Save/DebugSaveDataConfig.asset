@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: DebugSaveDataConfig
   m_EditorClassIdentifier: 
   _progressData:
-    Level: 1
+    Level: 4
   _tutorialEntryData:
     TutorialStep: 2

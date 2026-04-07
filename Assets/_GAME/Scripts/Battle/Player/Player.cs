@@ -8,6 +8,7 @@ using _GAME.Scripts.Common;
 using _GAME.Scripts.Events;
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 namespace _GAME.Scripts.Battle.Player
 {
@@ -16,10 +17,12 @@ namespace _GAME.Scripts.Battle.Player
         [SerializeField] private PlayerData _data;
         [SerializeField] private PlayerViewer _viewer;
         [SerializeField] private PlayerMover _mover;
+        [SerializeField] private Transform _weaponRoot;
         [SerializeField] private Weapon _weapon;
         [SerializeField] private SecondaryWeaponController _secondaryWeaponController;
         [SerializeField] private PlayerAim _aim;
         [SerializeField] private Transform _freeWeaponHolder;
+        [SerializeField] private RigBuilder _rig;
         [SerializeField] private StateIntAttribute _health;
         
         [SerializeField, ReadOnly]
@@ -41,6 +44,7 @@ namespace _GAME.Scripts.Battle.Player
         
         public event Action OnDestinationTargetPosition;
         public event Action<bool> OnBattleReady;
+        private Action OnBattleStop;
         public event Action OnHit;
         public event Action OnShot;
         
@@ -112,22 +116,56 @@ namespace _GAME.Scripts.Battle.Player
 
         public void BattleReady()
         {
+            //_rig.enabled = false;
+            _weaponRoot.gameObject.SetActive(true);
             _aim.SetActive(true);
             _weapon.SetActive(true, false);
 
             _gameInput.Enable();
             _battleReady = true;
             _cameraController.SetCamera(GameCameraType.Battle);
+            _rig.Build();
+            OnBattleStop += () =>
+            {
+                //_rig.enabled = false;
+                _aim.SetActive(false);
+                _weapon.SetActive(false, false);
+                _rig.Build();
+            };
+            OnBattleReady?.Invoke(true);
+        }
+        public void BattleReady(BigWeapon bigWeapon)
+        {
+            //_rig.enabled = false;
+            _weaponRoot.gameObject.SetActive(false);
+            bigWeapon.Setup(this,IsFire, OnHitHandler);
+            bigWeapon.SetActive(true);
+            bigWeapon.Aim.Setup(_gameInput);
+            _gameInput.Enable();
+            _aim.SetAim(bigWeapon.ArmIkL, bigWeapon.ArmIkR, bigWeapon.Target);
+            _battleReady = true;
+            //_cameraController.SetCamera(GameCameraType.Battle);
+            _cameraController.SetCamera(GameCameraType.BigWeapon, bigWeapon.CameraFollowTransform, bigWeapon.CameraTargetTransform);
+            //_rig.enabled = true;
+            _rig.Build();
+            OnBattleStop += () =>
+            {
+                //_rig.enabled = false;
+                bigWeapon.SetActive(false);
+                _weaponRoot.gameObject.SetActive(true);
+                _aim.SetActive(false);
+                //_rig.enabled = true;
+                _rig.Build();
+            };
             OnBattleReady?.Invoke(true);
         }
 
         public void BattleStop()
         {
-            _aim.SetActive(false);
-            _weapon.SetActive(false, false);
-
             _gameInput.Disable();
             _battleReady = false;
+            OnBattleStop?.Invoke();
+            OnBattleStop = null;
             OnBattleReady?.Invoke(false);
         }
 

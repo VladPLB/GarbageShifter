@@ -16,10 +16,10 @@ MonoBehaviour:
     _name: First Step
     _locations:
     - type: 4
-      levels: 0000000000000000000000000000000000000000
+      levels: 000000000000000000000000
       uiPosition: {x: 0, y: 0, z: 0}
-    - type: 4
-      levels: 0000000000000000000000000000000000000000
+    - type: 0
+      levels: 00000000000000000000000000000000
       uiPosition: {x: 0, y: 0, z: 0}
     - type: 4
       levels: 0000000000000000000000000000000000000000

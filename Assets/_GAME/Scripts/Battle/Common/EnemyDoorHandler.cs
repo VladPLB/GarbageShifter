@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using _GAME.Scripts.Audio;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ public class EnemyDoorHandler : MonoBehaviour
     
     [SerializeField] private Animator _animator;
     [SerializeField] private float _delay;
+    [SerializeField] private SoundType _sound = SoundType.DoorOpen;
 
     private bool _isOpened = false;
 
@@ -29,6 +31,7 @@ public class EnemyDoorHandler : MonoBehaviour
     public void Open()
     {
         _animator.SetTrigger(OpenKey);
+        AudioManager.Play(_sound);
         _isOpened = true;
     }
 }

@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using _GAME.Scripts.Battle.Items;
 using _GAME.Scripts.Common;
 using _GAME.Scripts.Events;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace _GAME.Scripts.Battle.Enemy
 {
@@ -12,6 +14,7 @@ namespace _GAME.Scripts.Battle.Enemy
         private const float REMOVE_UNIT_TIME = 5f;
         
         private Pool<EnemyController,EnemyType> _pool;
+        private DropManager _dropManager;
 
         private List<EnemyController> _activeUnits = new();
         private Transform _playerTransform;
@@ -40,6 +43,7 @@ namespace _GAME.Scripts.Battle.Enemy
         public void Setup(Transform player)
         {
             _pool = Core.Get<PoolProvider>().Enemies;
+            _dropManager ??= Core.Get<DropManager>();
             _activeUnits = new();
             _playerTransform = player;
         }
@@ -71,6 +75,7 @@ namespace _GAME.Scripts.Battle.Enemy
         private async void RemoveUnit(EnemyController enemy, bool isForce)
         {
             _activeUnits.Remove(enemy);
+            _dropManager.DropCoins(enemy.TargetPoint, Random.Range(3,6));
             OnRemoved?.Invoke(enemy);
             EnemyCount--;
             if(EnemyCount==0)

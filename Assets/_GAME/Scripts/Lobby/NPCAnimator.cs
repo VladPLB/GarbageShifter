@@ -27,7 +27,7 @@ public class NPCAnimator : MonoBehaviour
             _eventBusConnected = true;
         }
         
-        AnimatorsByName.Add(_name, this);
+        AnimatorsByName[_name] = this;
         UpdateIdleAnimationTiming();
     }
 

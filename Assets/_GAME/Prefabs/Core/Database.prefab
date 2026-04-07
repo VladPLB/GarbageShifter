@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc768f57b0264b9290afe102610b7d63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _itemDatabase: {fileID: 11400000, guid: de2048685204c434eb2db173bb944e5a, type: 2}
   _enemyDatabase: {fileID: 11400000, guid: fb7f9b890f1de45108f06a2e2029ff33, type: 2}
   _weaponDatabase: {fileID: 11400000, guid: 7ffca6c91b0304fc09b6ff6e7fa0c9f4, type: 2}
   _bulletDatabase: {fileID: 11400000, guid: 43588a4a0d9c7486db8fc0443adedb8d, type: 2}
@@ -52,6 +53,7 @@ MonoBehaviour:
     type: 2}
   _gameEffectsDatabase: {fileID: 11400000, guid: 1c39092beb0b9479dbc0992c8d1dca83,
     type: 2}
+  _coinDatabase: {fileID: 11400000, guid: 829176af9da6e4df483206956d871a5c, type: 2}
   _uiEnemyMarkersDatabase: {fileID: 11400000, guid: 1fca8eb96de544d5db7e2a0874a0f466,
     type: 2}
   _uiEnemyHealthBarsDatabase: {fileID: 11400000, guid: 963f628f31b4d48e6bd8f13994d32e13,

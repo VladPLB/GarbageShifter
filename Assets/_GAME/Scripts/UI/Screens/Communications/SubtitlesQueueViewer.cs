@@ -5,6 +5,8 @@ using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using System.Collections;
+using _GAME.Scripts.Audio;
+using _GAME.Scripts.Events;
 using Cysharp.Threading.Tasks;
 using Random = UnityEngine.Random;
 
@@ -89,9 +91,10 @@ namespace _GAME.Scripts.UI.Screens.Communications
             for (int i = 0; i < message.Length; i++)
             {
                 _text.text += message[i];
-
+                
                 if(!_isFaster)
                 {
+                    EventBus.Push(new SoundPlayEvent(SoundType.DialogTap, null),  EventBus.EventRegion.GLOBAL);
                     if (message[i] == ' ')
                         await UniTask.WhenAny(UniTask.WaitWhile(()=>!_isFaster), UniTask.Delay(TimeSpan.FromSeconds(Random.Range(_wordPause.x, _wordPause.y))));
                     else

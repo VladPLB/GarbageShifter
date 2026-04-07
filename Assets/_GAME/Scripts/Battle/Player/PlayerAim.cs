@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using _GAME.Scripts.Events;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.Animations.Rigging;
 
 public class PlayerAim : MonoBehaviour
@@ -15,6 +16,13 @@ public class PlayerAim : MonoBehaviour
     [SerializeField] private Vector2 _rotateDeadZoneX = new Vector2(-75f,75f);
     [SerializeField] private Vector2 _rotateDeadZoneY = new Vector2(-160, 130);
 
+    [SerializeField] private TwoBoneIKConstraint _armRigL;
+    [SerializeField] private Transform _armIkL;
+    [SerializeField] private TwoBoneIKConstraint _armRigR;
+    [SerializeField] private Transform _armIkR;
+    [SerializeField] private MultiAimConstraint _bodyRig;
+    [SerializeField] private AimConstraint _headRig;
+    [SerializeField] private Transform _targetIk;
     [SerializeField] private Rig _rig;
 
     private bool _isActive = false;
@@ -38,10 +46,25 @@ public class PlayerAim : MonoBehaviour
 
     public void SetActive(bool isActive)
     {
+        SetAim();
         _isActive = isActive;
         _rig.weight = isActive ? 1f : 0f;
 
         ResetCameraDirection();
+    }
+    
+    private void SetAim()
+    {
+        SetAim(_armIkL, _armIkR, _targetIk);
+    }
+    
+    public void SetAim(Transform armL, Transform armR, Transform target)
+    {
+        _armRigL.data.target = armL;
+        _armRigR.data.target = armR;
+        _bodyRig.data.sourceObjects = new WeightedTransformArray() { new WeightedTransform(target, .8f) };
+        var cSource = new ConstraintSource() { sourceTransform = target, weight = 1f };
+        _headRig.SetSource(0, cSource);
     }
 
     private void ResetCameraDirection()

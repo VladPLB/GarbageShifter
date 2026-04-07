@@ -1,6 +1,8 @@
 using System;
+using _GAME.Scripts.Audio;
 using _GAME.Scripts.Battle.Context;
 using _GAME.Scripts.Common;
+using _GAME.Scripts.Events;
 using _GAME.Scripts.Weapons.Bullets;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -66,6 +68,7 @@ namespace _GAME.Scripts.Battle.Weapons
             for(int i =0;i<_data.BulletAmount;i++)
             {
                 _muzzleFlash?.Play();
+                EventBus.Push(new SoundPlayEvent(SoundType.Shot, _barrel.position), EventBus.EventRegion.GLOBAL);
                 var bullet = Bullet.Create(_defaultBulletData.Type);
                 bullet.transform.position = _barrel.position;
                 var offset = (Mathf.PerlinNoise1D(Time.time) * 2f - 1f) * _data.AimOffset;

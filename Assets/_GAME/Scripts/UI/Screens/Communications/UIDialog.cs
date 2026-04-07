@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _GAME.Scripts.Audio;
 using _GAME.Scripts.Events;
 using Cysharp.Threading.Tasks;
 using TMPro;
@@ -83,6 +84,7 @@ namespace _GAME.Scripts.UI.Screens.Communications
             _nameLabel.text = _name.ToString();
             if (!_showed)
             {
+                EventBus.Push(new SoundPlayEvent(SoundType.ShowCommunicator, null),  EventBus.EventRegion.GLOBAL);
                 _animator.SetTrigger(ShowKey);
             }
             await UniTask.Delay(ShowedTime);
@@ -118,6 +120,7 @@ namespace _GAME.Scripts.UI.Screens.Communications
             if (_showed)
             {
                 _animator.SetTrigger(HideKey);
+                EventBus.Push(new SoundPlayEvent(SoundType.HideCommunicator, null),  EventBus.EventRegion.GLOBAL);
             }
             
             await UniTask.Delay(HideTime);
