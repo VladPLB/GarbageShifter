@@ -5,6 +5,7 @@ using System.Linq;
 using _GAME.Scripts.Audio;
 using _GAME.Scripts.Common;
 using _GAME.Scripts.Cores.Save.SavesConfigs;
+using _GAME.Scripts.Inventory;
 using _GAME.Scripts.Save;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -20,12 +21,17 @@ namespace _GAME.Scripts.Battle.Items
         private Transform _player;
         private bool _isAttractionActive = false;
         
-        PoolProvider _poolProvider;
+        private PoolProvider _poolProvider;
         private SaveManager _saveManager;
         private ProgressData _progressData;
+        private InventoryManager _inventoryManager;
+        [SerializeField]
+        private LocalInventory _localInventory;
         
-        Pool<Coin, CoinType> _pool;
+        private Pool<Coin, CoinType> _pool;
+        private Dictionary<ItemInfo, Vector2Int> _dropItemTypes = new();
         
+        public LocalInventory LocalInventory => _localInventory;
 
         private void Awake()
         {
@@ -36,7 +42,25 @@ namespace _GAME.Scripts.Battle.Items
         {
             _poolProvider = Core.Get<PoolProvider>();
             _saveManager = Core.Get<SaveManager>();
+            _inventoryManager = Core.Get<InventoryManager>();
             _progressData = _saveManager.GetData<ProgressData>();
+            _localInventory = new LocalInventory(3);
+            _dropItemTypes.Clear();
+            var datas = _inventoryManager.GetAll(ItemType.Material, false);
+            foreach (var data in datas)
+            {
+                var mul = (1f / (int)data.Rank);
+                if (data.SubType == "Scrap")
+                {
+                    var scrapCountRange = new Vector2Int((int)(300f*mul), (int)(600f*mul));
+                    _dropItemTypes.Add(data, scrapCountRange);
+                }
+                else if (data.SubType == "Tools")
+                {
+                    var toolsCountRange = new Vector2Int((int)(10f*mul), (int)(20f*mul));
+                    _dropItemTypes.Add(data, toolsCountRange);
+                }
+            }
             _pool = _poolProvider.Coins;
             Setup(FindObjectOfType<Player.Player>().transform);
         }
@@ -67,7 +91,7 @@ namespace _GAME.Scripts.Battle.Items
             
             for (int i = 0; i < coinsCount; i++)
             {
-                var type = CoinType.Metal;// Extentions.GetRandom<CoinType>();
+                var type = CoinType.Metal;
                 SpawnCoin(type, position, i, coinsCount);
             }
 
@@ -79,6 +103,10 @@ namespace _GAME.Scripts.Battle.Items
                     _activeCoins[i].Hide();
                 }
             }
+            
+            var info = _dropItemTypes.Keys.ElementAt(Random.Range(0, _dropItemTypes.Count));
+            var count = Random.Range(_dropItemTypes[info].x, _dropItemTypes[info].y);
+            _localInventory.Add(info, count);
         }
 
         public void StartAttraction()
@@ -101,7 +129,8 @@ namespace _GAME.Scripts.Battle.Items
             _activeCoins.Remove(coin);
             _pool.Push(coin);
             coin.OnCollected -= OnCoinCollected;
-            if (Random.Range(0, 100) < 25)
+            
+            if (Random.Range(0, 100) < 15)
             {
                 AudioManager.Play(SoundType.Coin);
             }

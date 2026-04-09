@@ -3,11 +3,12 @@ using System.Collections.Generic;
 
 namespace _GAME.Scripts.Inventory
 {
+    [Serializable]
     public class LocalInventory
     {
-        private readonly Dictionary<string, int> _counts;
-        private readonly InventoryManager _inventoryManager;
-        private readonly List<ItemAmount> _outItems;
+        private Dictionary<string, int> _counts;
+        private InventoryManager _inventoryManager;
+        private List<ItemAmount> _outItems;
         public int Capacity { get; protected set; }
 
         public LocalInventory(int capacity =-1 )

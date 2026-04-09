@@ -12,6 +12,7 @@ using _GAME.Scripts.Battle.Player;
 using _GAME.Scripts.Common;
 using _GAME.Scripts.Cores.Save.SavesConfigs;
 using _GAME.Scripts.Events;
+using _GAME.Scripts.Inventory;
 using _GAME.Scripts.Map;
 using _GAME.Scripts.Save;
 using _GAME.Scripts.Tutorial;
@@ -37,6 +38,7 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
     private SaveManager _saveManager;
     private ProgressData _progressData;
     
+    
     private Player _player;
     private List<LevelStage> _stages;
     private List<LevelStage> _realStages;
@@ -52,7 +54,7 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
 
     private void Awake()
     {
-        Core.Registry(this, typeof(PoolProvider), typeof(UIManager), typeof(DropManager));
+        Core.Registry(this, typeof(PoolProvider), typeof(UIManager), typeof(DropManager), typeof(InventoryManager));
     }
     
     public void RuntimeSetup()
@@ -62,6 +64,7 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
         _saveManager = Core.Get<SaveManager>();
         _dropManager = Core.Get<DropManager>();
         _progressData = _saveManager.GetData<ProgressData>();
+        
         
         BuildLevel();
         Setup(FindObjectOfType<Player>());
