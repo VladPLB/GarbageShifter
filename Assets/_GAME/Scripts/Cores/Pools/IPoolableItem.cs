@@ -1,6 +1,9 @@
 namespace _GAME.Scripts.Pools
 {
-    public interface IPoolableItem<T>
+    public interface IPoolableItem
+    {
+    }
+    public interface IPoolableItem<T>: IPoolableItem
     {
         T Type { get; }
     }

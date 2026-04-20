@@ -23,8 +23,11 @@ namespace _GAME.Scripts.Battle.Items
         
         private PoolProvider _poolProvider;
         private SaveManager _saveManager;
-        private ProgressData _progressData;
         private InventoryManager _inventoryManager;
+        
+        private ProgressData _progressData;
+        private InventoryData _inventoryData;
+        
         [SerializeField]
         private LocalInventory _localInventory;
         
@@ -44,20 +47,21 @@ namespace _GAME.Scripts.Battle.Items
             _saveManager = Core.Get<SaveManager>();
             _inventoryManager = Core.Get<InventoryManager>();
             _progressData = _saveManager.GetData<ProgressData>();
-            _localInventory = new LocalInventory(3);
+            _inventoryData = _saveManager.GetData<InventoryData>();
+            _localInventory = new LocalInventory(_inventoryData.GameplayStorageCapacity);
             _dropItemTypes.Clear();
             var datas = _inventoryManager.GetAll(ItemType.Material, false);
             foreach (var data in datas)
             {
-                var mul = (1f / (int)data.Rank);
+                var mul = (1f / ((int)data.Rank * 5f));
                 if (data.SubType == "Scrap")
                 {
-                    var scrapCountRange = new Vector2Int((int)(300f*mul), (int)(600f*mul));
+                    var scrapCountRange = new Vector2Int((int)(40f*mul), (int)(80f*mul));
                     _dropItemTypes.Add(data, scrapCountRange);
                 }
                 else if (data.SubType == "Tools")
                 {
-                    var toolsCountRange = new Vector2Int((int)(10f*mul), (int)(20f*mul));
+                    var toolsCountRange = new Vector2Int((int)(20f*mul), (int)(30f*mul));
                     _dropItemTypes.Add(data, toolsCountRange);
                 }
             }
@@ -130,7 +134,7 @@ namespace _GAME.Scripts.Battle.Items
             _pool.Push(coin);
             coin.OnCollected -= OnCoinCollected;
             
-            if (Random.Range(0, 100) < 15)
+            if (Random.Range(0, 100) < 12)
             {
                 AudioManager.Play(SoundType.Coin);
             }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace _GAME.Scripts.Inventory
 {
@@ -13,11 +14,31 @@ namespace _GAME.Scripts.Inventory
 
         public LocalInventory(int capacity =-1 )
         {
-            Capacity = capacity;
+            Capacity =  capacity;
             _counts = new Dictionary<string, int>(StringComparer.Ordinal);
             _outItems = new();
             _inventoryManager = Core.Get<InventoryManager>();
         }
+
+        public List<ItemAmount> GetLootItems()
+        {
+            var lootItems = new List<ItemAmount>();
+            foreach (var itemAmount in _counts)
+            {
+                if (itemAmount.Value > 0 && _inventoryManager.ItemDatabase.TryGet(itemAmount.Key, out var itemData))
+                {
+                    lootItems.Add(new ItemAmount()
+                    {
+                        Item = itemData,
+                        Amount = itemAmount.Value
+                    });
+                }
+            }
+            
+            return lootItems;
+        }
+
+        public List<ItemAmount> GetStorageItems() => _outItems.ToList();
         
         public int GetCount(string id)
         {
@@ -108,6 +129,25 @@ namespace _GAME.Scripts.Inventory
                 TryToOut(itemAmount.Key, out var isFull);
                 if (isFull) break;
             }
+        }
+
+        public bool TryToOut(int index)
+        {
+            int i = 0;
+            foreach (var itemAmount in _counts)
+            {
+                if(i == index)
+                {
+                    if(itemAmount.Value>0)
+                    {
+                        if(TryToOut(itemAmount.Key, out _))
+                            return true;
+                    }
+                    break;
+                }
+                i++;
+            }
+            return false;
         }
 
         public bool TryToOut(string id, out bool isFull)
@@ -216,6 +256,11 @@ namespace _GAME.Scripts.Inventory
                     });
             }
             TakeOut();
+        }
+
+        public void AddCapacity(int capacity = 1)
+        {
+            Capacity += capacity;
         }
         
         public void Clear()

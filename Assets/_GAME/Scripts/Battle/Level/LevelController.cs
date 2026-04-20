@@ -154,7 +154,7 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
         _currentStageIndex++;
         if (_currentStageIndex >= _stagesCount)
         {
-            EndLevel();
+            ShowCompletedScreen();
             return;
         }
         
@@ -208,11 +208,18 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
         OnSpawnWarning?.Invoke(position);
     }
 
+    private async void ShowCompletedScreen()
+    { 
+        _player.Victory();
+        
+        OnSpawnWarning = null;
+        await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.LEVEL_COMPLETE_PLAYER_DELAY));
+        _uiManager.OpenWindow<GameplayCompetedScreen>();
+    }
+
     public void EndLevel()
     {
         EventBus.Push(new KeyEvent("ToLobby"), EventBus.EventRegion.GLOBAL);
-        _player.Victory();
-        OnSpawnWarning = null;
     }
 
     private void OnDestroy()

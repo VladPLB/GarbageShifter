@@ -14,6 +14,8 @@ namespace _GAME.Scripts.Cores.Save.SavesConfigs
 
         public List<ItemStackSave> Items = new();
 
+        public int GameplayStorageCapacity = 3;
+
         public void MarkDirty(bool forced = false)
         {
             OnDataChanged?.Invoke(forced);

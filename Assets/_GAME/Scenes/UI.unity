@@ -350,6 +350,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5317357249210957320, guid: e0e448ae254744e6eb93533c2b2663bd,
         type: 3}
+      propertyPath: windowPrefabs.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5317357249210957320, guid: e0e448ae254744e6eb93533c2b2663bd,
+        type: 3}
       propertyPath: layers.Array.data[0].root
       value: 
       objectReference: {fileID: 602926864}
@@ -358,6 +363,12 @@ PrefabInstance:
       propertyPath: layers.Array.data[1].root
       value: 
       objectReference: {fileID: 602926864}
+    - target: {fileID: 5317357249210957320, guid: e0e448ae254744e6eb93533c2b2663bd,
+        type: 3}
+      propertyPath: 'windowPrefabs.Array.data[3]'
+      value: 
+      objectReference: {fileID: 7267631213814288097, guid: e720d25f316324a63ac44a25d8a2d51e,
+        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -700,7 +711,7 @@ RectTransform:
   m_Father: {fileID: 7812142628510060702}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1.4625, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}

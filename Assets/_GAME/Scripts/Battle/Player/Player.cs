@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _GAME.Scripts.Audio;
 using _GAME.Scripts.Battle.Enemy;
 using _GAME.Scripts.Battle.Level;
 using _GAME.Scripts.Battle.Player.SecondaryWeapon;
@@ -194,6 +195,7 @@ namespace _GAME.Scripts.Battle.Player
         public void Victory()
         {
             PlayAnimationByPositionType(PlayerPositionType.End);
+            EventBus.Push(new SoundPlayEvent(SoundType.Notification, transform.position), EventBus.EventRegion.GLOBAL);
         }
         
         private void PlayAnimationByPositionType(PlayerPositionType type)
