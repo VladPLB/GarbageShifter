@@ -141,7 +141,7 @@ MonoBehaviour:
   _targetMoveBoxes:
   - m_Center: {x: -2.91, y: 0, z: -0.41}
     m_Extent: {x: 1, y: 0, z: 3.73}
-  - m_Center: {x: 15.8, y: 0, z: 10.09}
+  - m_Center: {x: 15.8, y: 0, z: 10.99}
     m_Extent: {x: 0.5, y: 0, z: 2}
   _direction: (0.00, 0.00, 1.00)
   _sBox:
@@ -150,7 +150,7 @@ MonoBehaviour:
   _tBoxes:
   - m_Center: {x: -2.91, y: 0, z: -0.41}
     m_Extent: {x: 1, y: 0, z: 3.73}
-  - m_Center: {x: 15.8, y: 0, z: 10.09}
+  - m_Center: {x: 15.8, y: 0, z: 10.99}
     m_Extent: {x: 0.5, y: 0, z: 2}
 --- !u!1 &277831816400020513
 GameObject:
@@ -349,7 +349,7 @@ MonoBehaviour:
   _targetMoveBoxes:
   - m_Center: {x: 8.66, y: 0, z: -9.08}
     m_Extent: {x: 0.86, y: 0, z: 2.01}
-  - m_Center: {x: 16.27, y: 0, z: -12.59}
+  - m_Center: {x: 16.27, y: 0, z: -13.1}
     m_Extent: {x: 0.5, y: 0, z: 2}
   _direction: (0.00, 0.00, 1.00)
   _sBox:
@@ -358,7 +358,7 @@ MonoBehaviour:
   _tBoxes:
   - m_Center: {x: 8.66, y: 0, z: -9.08}
     m_Extent: {x: 0.86, y: 0, z: 2.01}
-  - m_Center: {x: 16.27, y: 0, z: -12.59}
+  - m_Center: {x: 16.27, y: 0, z: -13.1}
     m_Extent: {x: 0.5, y: 0, z: 2}
 --- !u!1 &580144157395008637
 GameObject:
@@ -991,8 +991,8 @@ MonoBehaviour:
   _targetMoveBoxes:
   - m_Center: {x: 11.8, y: 0, z: -3.07}
     m_Extent: {x: 0.5, y: 0, z: 1.68}
-  - m_Center: {x: 20.6, y: 0, z: -0.78}
-    m_Extent: {x: 0.5, y: 0, z: 1.98}
+  - m_Center: {x: 20.6, y: 0, z: 0.19}
+    m_Extent: {x: 0.5, y: 0, z: 1.54}
   _direction: (0.00, 0.00, 1.00)
   _sBox:
     m_Center: {x: 1.56, y: 0, z: -13.49}
@@ -1000,8 +1000,8 @@ MonoBehaviour:
   _tBoxes:
   - m_Center: {x: 11.8, y: 0, z: -3.07}
     m_Extent: {x: 0.5, y: 0, z: 1.68}
-  - m_Center: {x: 20.6, y: 0, z: -0.78}
-    m_Extent: {x: 0.5, y: 0, z: 1.98}
+  - m_Center: {x: 20.6, y: 0, z: 0.19}
+    m_Extent: {x: 0.5, y: 0, z: 1.54}
 --- !u!1 &3787100789197590222
 GameObject:
   m_ObjectHideFlags: 0
@@ -1459,8 +1459,8 @@ MonoBehaviour:
   _targetMoveBoxes:
   - m_Center: {x: 11.8, y: 0, z: 3.24}
     m_Extent: {x: 0.5, y: 0, z: 2.08}
-  - m_Center: {x: 20.6, y: 0, z: 0.66}
-    m_Extent: {x: 0.5, y: 0, z: 2.06}
+  - m_Center: {x: 20.6, y: 0, z: 0.42}
+    m_Extent: {x: 0.5, y: 0, z: 1.54}
   _direction: (0.00, 0.00, 1.00)
   _sBox:
     m_Center: {x: 1.56, y: 0, z: 15.82}
@@ -1468,8 +1468,8 @@ MonoBehaviour:
   _tBoxes:
   - m_Center: {x: 11.8, y: 0, z: 3.24}
     m_Extent: {x: 0.5, y: 0, z: 2.08}
-  - m_Center: {x: 20.6, y: 0, z: 0.66}
-    m_Extent: {x: 0.5, y: 0, z: 2.06}
+  - m_Center: {x: 20.6, y: 0, z: 0.42}
+    m_Extent: {x: 0.5, y: 0, z: 1.54}
 --- !u!1 &6199401838213696103
 GameObject:
   m_ObjectHideFlags: 0
@@ -2128,8 +2128,8 @@ MonoBehaviour:
   _targetMoveBoxes:
   - m_Center: {x: 2.57, y: -5.61, z: 0}
     m_Extent: {x: 0.8, y: 0, z: 3.44}
-  - m_Center: {x: 11.7, y: -5.61, z: 0}
-    m_Extent: {x: 0.5, y: 0, z: 2.23}
+  - m_Center: {x: 11.7, y: -5.61, z: 1.1}
+    m_Extent: {x: 0.5, y: 0, z: 1.6}
   _direction: (0.00, 0.00, 1.00)
   _sBox:
     m_Center: {x: -3.23, y: 11.98, z: 0}
@@ -2137,8 +2137,8 @@ MonoBehaviour:
   _tBoxes:
   - m_Center: {x: 2.57, y: -5.61, z: 0}
     m_Extent: {x: 0.8, y: 0, z: 3.44}
-  - m_Center: {x: 11.7, y: -5.61, z: 0}
-    m_Extent: {x: 0.5, y: 0, z: 2.23}
+  - m_Center: {x: 11.7, y: -5.61, z: 1.1}
+    m_Extent: {x: 0.5, y: 0, z: 1.6}
 --- !u!1 &8385883677382971772
 GameObject:
   m_ObjectHideFlags: 0
@@ -3975,21 +3975,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3761253314529869392}
     m_Modifications:
-    - target: {fileID: 300972538818995142, guid: 4a6800e0a65764fc4a2d63af49c343d4,
-        type: 3}
-      propertyPath: m_RotationOffset.x
-      value: 0.15845725
-      objectReference: {fileID: 0}
-    - target: {fileID: 300972538818995142, guid: 4a6800e0a65764fc4a2d63af49c343d4,
-        type: 3}
-      propertyPath: m_RotationOffset.y
-      value: -5.9855313
-      objectReference: {fileID: 0}
-    - target: {fileID: 300972538818995142, guid: 4a6800e0a65764fc4a2d63af49c343d4,
-        type: 3}
-      propertyPath: m_RotationOffset.z
-      value: -0.016614053
-      objectReference: {fileID: 0}
     - target: {fileID: 4631688882455840381, guid: 4a6800e0a65764fc4a2d63af49c343d4,
         type: 3}
       propertyPath: m_Name
@@ -3998,7 +3983,7 @@ PrefabInstance:
     - target: {fileID: 8670070247660698654, guid: 4a6800e0a65764fc4a2d63af49c343d4,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.545
+      value: -1.647
       objectReference: {fileID: 0}
     - target: {fileID: 8670070247660698654, guid: 4a6800e0a65764fc4a2d63af49c343d4,
         type: 3}

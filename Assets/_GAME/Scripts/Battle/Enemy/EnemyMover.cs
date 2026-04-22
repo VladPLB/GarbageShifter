@@ -61,6 +61,8 @@ namespace _GAME.Scripts.Battle.Player
             _enemyBounds = enemyBounds;
             _forward = _target.transform.position - transform.position;
             _isJumpToPlayer = false;
+            if(_characterController!=null)
+                _characterController.enabled = true;
             var targetRotation = _path.Count>1
                 ? Quaternion.LookRotation((_path[1] - _path[0]).normalized)
                 : _model.rotation;
@@ -133,6 +135,8 @@ namespace _GAME.Scripts.Battle.Player
             _isStopped = true;
             OnMoveCompleted = null;
             OnMoveSpeed = null;
+            if(_characterController!=null)
+                _characterController.enabled = false;
             TryClearPathCoroutine();
         }
 
@@ -152,7 +156,8 @@ namespace _GAME.Scripts.Battle.Player
                     move += avoidanceForce;
                 }
                 move *=Time.deltaTime;
-                _characterController.Move(move);
+                if(_characterController!=null)
+                    _characterController.Move(move);
                 if (DestinationReached())
                 {
                     if (IsStoppingDistance)
@@ -170,7 +175,8 @@ namespace _GAME.Scripts.Battle.Player
             
             if(_enemyBounds.TryCorrectPositionWithBounds(transform.position, out var correctedPosition))
             {
-                _characterController.transform.position = correctedPosition;
+                if(_characterController!=null)
+                    _characterController.transform.position = correctedPosition;
             }
             var moveDelta = (transform.position - previewPosition).magnitude;
             OnMoveSpeed?.Invoke(move == Vector3.zero? 0: Mathf.Clamp01(moveDelta/move.magnitude));

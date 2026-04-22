@@ -124,9 +124,9 @@ namespace _GAME.Scripts.Inventory
 
         public void TryToOut()
         {
-            foreach (var itemAmount in _counts)
+            foreach (var key in _counts.Keys.ToList())
             {
-                TryToOut(itemAmount.Key, out var isFull);
+                TryToOut(key, out var isFull);
                 if (isFull) break;
             }
         }
@@ -136,16 +136,16 @@ namespace _GAME.Scripts.Inventory
             int i = 0;
             foreach (var itemAmount in _counts)
             {
-                if(i == index)
+                if(itemAmount.Value>0)
                 {
-                    if(itemAmount.Value>0)
+                    if(i == index)
                     {
                         if(TryToOut(itemAmount.Key, out _))
                             return true;
+                        break;
                     }
-                    break;
+                    i++;
                 }
-                i++;
             }
             return false;
         }
@@ -153,7 +153,7 @@ namespace _GAME.Scripts.Inventory
         public bool TryToOut(string id, out bool isFull)
         {
             isFull = false;
-            if (_counts.TryGetValue(id, out var count) && _inventoryManager.ItemDatabase.TryGet(id, out var itemData))
+            if (_counts.TryGetValue(id, out var count) && count>0 && _inventoryManager.ItemDatabase.TryGet(id, out var itemData))
             {
                 var startCount = count;
                 var maxStack = itemData.MaxStack;
@@ -210,7 +210,7 @@ namespace _GAME.Scripts.Inventory
             if (index >= 0 && index < _outItems.Count)
             {
                 var count = _outItems[index].Amount;
-                _counts[(_outItems[index].Item.Id)] += count;
+                _counts[_outItems[index].Item.Id] += count;
                 _outItems.RemoveAt(index);
                 return true;
             }
