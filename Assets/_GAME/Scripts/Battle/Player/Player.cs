@@ -19,7 +19,7 @@ namespace _GAME.Scripts.Battle.Player
         [SerializeField] private PlayerViewer _viewer;
         [SerializeField] private PlayerMover _mover;
         [SerializeField] private Transform _weaponRoot;
-        [SerializeField] private Weapon _weapon;
+        [SerializeField] private WeaponType _weaponType;
         [SerializeField] private SecondaryWeaponController _secondaryWeaponController;
         [SerializeField] private PlayerAim _aim;
         [SerializeField] private Transform _freeWeaponHolder;
@@ -29,7 +29,8 @@ namespace _GAME.Scripts.Battle.Player
         [SerializeField, ReadOnly]
         private DamageRepeater[] _damageRepeaters;
         [SerializeField] private DamageReactionViewer _damageReactionViewer;
-        
+        [SerializeField]
+        private Weapon _weapon;
         private CameraController _cameraController;
         private GameInput _gameInput;
         private bool _battleReady = false;
@@ -62,8 +63,9 @@ namespace _GAME.Scripts.Battle.Player
         {
             _cameraController = cameraController;
             _gameInput = new GameInput();
-            _aim.Setup(_gameInput);
+            
             SetupWeapon();
+            _aim.Setup(_gameInput, _weapon);
             _secondaryWeaponController.Setup(this, _aim);
             _health.Set(_data.Health);
             
@@ -77,11 +79,22 @@ namespace _GAME.Scripts.Battle.Player
 
         private void SetupWeapon()
         {
-            var weaponData = Core.Get<DataBase>().Weapons.GetData(WeaponType.Riffle);
+            _rig.enabled = false;
+            var weaponData = Core.Get<DataBase>().Weapons.GetData(_weaponType);
             weaponData.Setup(this, _data.WeaponLevel);
+            if (_weapon != null)
+            {
+                Weapon.Release(_weapon);
+            }
+            _weapon = Weapon.Create(weaponData.Type);
+            _weapon.transform.SetParent(_weaponRoot);
+            _weapon.transform.localPosition = Vector3.zero;
+            _weapon.transform.localRotation = Quaternion.identity;
+            _weapon.gameObject.SetActive(true);
             _weapon.Setup(weaponData, IsFire, OnHitHandler, _freeWeaponHolder, OnFire);
             OnHit += _secondaryWeaponController.OnHit;
             OnShot += _viewer.Fire;
+            _rig.enabled = true;
         }
 
         private void OnHitHandler()
@@ -234,6 +247,10 @@ namespace _GAME.Scripts.Battle.Player
             OnSeccondaryShot = null;
             OnDestinationTargetPosition = null;
             OnDamaged = null;
+            if (_weapon != null)
+            {
+                Weapon.Release(_weapon);
+            }
             EventBus.Unsubscribe<AimLockEvent>(OnAimLock, EventBus.EventRegion.GAMEPLAY);
         }
         

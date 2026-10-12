@@ -5,6 +5,7 @@ using System.Linq;
 using _GAME;
 using _GAME.Scripts;
 using _GAME.Scripts.Audio;
+using _GAME.Scripts.Battle.Context;
 using _GAME.Scripts.Battle.Enemy;
 using _GAME.Scripts.Battle.Items;
 using _GAME.Scripts.Battle.Level;
@@ -21,9 +22,12 @@ using UnityEngine;
 
 public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
 {
+    [Header("Lights")]
+    [SerializeField] private Light _light;
     [Header("Debug")]
     [SerializeField] private bool _useOverrideLevelData = true;
     [SerializeField] private LevelData _overrideLevelData;
+    [SerializeField] private BattleSettings _battleSettings;
     [Header("General")]
     [SerializeField] private LevelDatasController _levelDatasController;
     [SerializeField] private LevelStageBuilder _levelStageBuilder;
@@ -36,6 +40,7 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
     private MapManager _mapManager;
     private DropManager _dropManager;
     private SaveManager _saveManager;
+    private Settings _settings;
     private ProgressData _progressData;
     
     
@@ -54,7 +59,7 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
 
     private void Awake()
     {
-        Core.Registry(this, typeof(PoolProvider), typeof(UIManager), typeof(DropManager), typeof(InventoryManager));
+        Core.Registry(this, typeof(PoolProvider), typeof(UIManager), typeof(DropManager), typeof(InventoryManager), typeof(Settings));
     }
     
     public void RuntimeSetup()
@@ -63,6 +68,8 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
         _mapManager = Core.Get<MapManager>();
         _saveManager = Core.Get<SaveManager>();
         _dropManager = Core.Get<DropManager>();
+        _settings = Core.Get<Settings>();
+        
         _progressData = _saveManager.GetData<ProgressData>();
         
         
@@ -72,26 +79,34 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
 
     public async void Setup(Player player)
     {
-        _player = player;
-        _player.Setup(_cameraController);
-        _unitsController.Setup(_player.transform);
-
-        _realStages = _stages.Where(stage => stage.PlayerPosition != null).ToList();
-        _stagesCount = _realStages.Count;
-        _playerPositions = _realStages.Select(stage => stage.PlayerPosition).ToList();
-
-        _pathfinder = new LevelPathFinder();
-        await UniTask.DelayFrame(1);
-        _pathfinder.Rebuild();
-        
-        foreach (var tutorialController in _tutorialControllers)
+        var ct = this.GetCancellationTokenOnDestroy();
+        try
         {
-            tutorialController.Initialize();
+            _player = player;
+            _player.Setup(_cameraController);
+            _unitsController.Setup(_player.transform);
+
+            _realStages = _stages.Where(stage => stage.PlayerPosition != null).ToList();
+            _stagesCount = _realStages.Count;
+            _playerPositions = _realStages.Select(stage => stage.PlayerPosition).ToList();
+
+            _pathfinder = new LevelPathFinder();
+            await UniTask.DelayFrame(1, cancellationToken: ct);
+            _pathfinder.Rebuild();
+
+            foreach (var tutorialController in _tutorialControllers)
+            {
+                tutorialController.Initialize();
+            }
+            _uiManager.OpenWindow<GameplayScreen>();
+            PlayCurrentStage();
+            EventBus.Push(new KeyEvent("SceneLoaded"), EventBus.EventRegion.GLOBAL);
+            EventBus.Push(new MusicPlayEvent(MusicTrack.Battle), EventBus.EventRegion.GLOBAL);
         }
-        _uiManager.OpenWindow<GameplayScreen>();
-        PlayCurrentStage();
-        EventBus.Push(new KeyEvent("SceneLoaded"), EventBus.EventRegion.GLOBAL);
-        EventBus.Push(new MusicPlayEvent(MusicTrack.Battle), EventBus.EventRegion.GLOBAL);
+        catch (OperationCanceledException)
+        {
+            // component destroyed mid-await, expected
+        }
     }
 
     [ContextMenu("Build Level")]
@@ -99,6 +114,10 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
     {
         var levelData = _overrideLevelData;
         _stages = _levelStageBuilder.GetStages(levelData);
+        
+        var lightSettings = _battleSettings.GetLightSettings(levelData.LocationType);
+        _light.color = lightSettings.Color;
+        _light.intensity = lightSettings.Intensity;
         for (int i = 0; i < _stages.Count; i++)
         {
             switch (_stages[i].StageType)
@@ -119,10 +138,14 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
         zoneData.Setup();
         var locationType = zoneData.GetLocationType(locationIndex);
         var levelType = zoneData.GetLevelType(locationIndex, levelIndex);
-        
+
         var levels = _levelDatasController.GetLevelDataList(_progressData.Level, locationType, levelType);
         var levelData = _useOverrideLevelData? _overrideLevelData: levels.GetRandomItem();
         _stages = _levelStageBuilder.GetStages(levelData);
+        
+        var lightSettings = _settings.Battle.GetLightSettings(levelData.LocationType);
+        _light.color = lightSettings.Color;
+        _light.intensity = lightSettings.Intensity;
         
         var _stageDataIndex = 0;
         for (int i = 0; i < _stages.Count; i++)
@@ -146,23 +169,31 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
 
     public async void ToNextStage()
     {
-        var previewPosition = _playerPositions[_currentStageIndex];
-        _realStages[_currentStageIndex].End();
-        _player.BattleStop();
-        await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.STAGE_COMPLETE_PLAYER_DELAY));
-        _dropManager.StartAttraction();
-        _currentStageIndex++;
-        if (_currentStageIndex >= _stagesCount)
+        var ct = this.GetCancellationTokenOnDestroy();
+        try
         {
-            ShowCompletedScreen();
-            return;
+            var previewPosition = _playerPositions[_currentStageIndex];
+            _realStages[_currentStageIndex].End();
+            _player.BattleStop();
+            await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.STAGE_COMPLETE_PLAYER_DELAY), cancellationToken: ct);
+            _dropManager.StartAttraction();
+            _currentStageIndex++;
+            if (_currentStageIndex >= _stagesCount)
+            {
+                ShowCompletedScreen();
+                return;
+            }
+
+            var nextPosition = _playerPositions[_currentStageIndex];
+            _realStages[_currentStageIndex].PreStart();
+            await UniTask.WaitWhile(() => !_realStages[_currentStageIndex].IsPrestart, cancellationToken: ct);
+            _player.MoveToPosition(previewPosition, nextPosition);
+            _player.OnDestinationTargetPosition += PlayCurrentStage;
         }
-        
-        var nextPosition = _playerPositions[_currentStageIndex];
-        _realStages[_currentStageIndex].PreStart();
-        await UniTask.WaitWhile(() => !_realStages[_currentStageIndex].IsPrestart);
-        _player.MoveToPosition(previewPosition, nextPosition);
-        _player.OnDestinationTargetPosition += PlayCurrentStage;
+        catch (OperationCanceledException)
+        {
+            // component destroyed mid-await, expected
+        }
     }
 
     private async void PlayCurrentStage()
@@ -172,49 +203,73 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
             PlayFirstStage();
             return;
         }
-        EventBus.Push(new KeyEvent("StageStart"), EventBus.EventRegion.GAMEPLAY);
-        await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.STAGE_PLAY_PLAYER_DELAY));
-        var stage = _realStages[_currentStageIndex];
-        if (stage.BigWeapon != null)
+        var ct = this.GetCancellationTokenOnDestroy();
+        try
         {
-            _player.BattleReady(stage.BigWeapon);
+            EventBus.Push(new KeyEvent("StageStart"), EventBus.EventRegion.GAMEPLAY);
+            await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.STAGE_PLAY_PLAYER_DELAY), cancellationToken: ct);
+            var stage = _realStages[_currentStageIndex];
+            if (stage.BigWeapon != null)
+            {
+                _player.BattleReady(stage.BigWeapon);
+            }
+            else
+            {
+                _player.BattleReady();
+            }
+            stage.CheckPlay();
+            await UniTask.WaitWhile(() => !stage.IsPlay, cancellationToken: ct);
+            await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.STAGE_PLAY_ENEMY_DELAY), cancellationToken: ct);
+            stage.Play(OnSpawnWarningHandler);
+            await UniTask.WaitWhile(() => !stage.IsCompleted, cancellationToken: ct);
+            await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.STAGE_COMPLETE_DELAY), cancellationToken: ct);
+            ToNextStage();
         }
-        else
+        catch (OperationCanceledException)
         {
-            _player.BattleReady();
+            // component destroyed mid-await, expected
         }
-        stage.CheckPlay();
-        await UniTask.WaitWhile(() => !stage.IsPlay);
-        await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.STAGE_PLAY_ENEMY_DELAY));
-        stage.Play(OnSpawnWarningHandler);
-        await UniTask.WaitWhile(() => !stage.IsCompleted);
-        await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.STAGE_COMPLETE_DELAY));
-        ToNextStage();
     }
-    
+
     private async void PlayFirstStage()
     {
-        _currentStageIndex = 0;
-        _player.SetPosition(_playerPositions[_currentStageIndex]);
-        _player.BattleStop();
-        var stage = _realStages[_currentStageIndex];
-        stage.Play(null);
-        await UniTask.WaitWhile(() => !stage.IsCompleted);
-        ToNextStage();
+        var ct = this.GetCancellationTokenOnDestroy();
+        try
+        {
+            _currentStageIndex = 0;
+            _player.SetPosition(_playerPositions[_currentStageIndex]);
+            _player.BattleStop();
+            var stage = _realStages[_currentStageIndex];
+            stage.Play(null);
+            await UniTask.WaitWhile(() => !stage.IsCompleted, cancellationToken: ct);
+            ToNextStage();
+        }
+        catch (OperationCanceledException)
+        {
+            // component destroyed mid-await, expected
+        }
     }
-    
+
     private void OnSpawnWarningHandler(Vector3 position)
     {
         OnSpawnWarning?.Invoke(position);
     }
 
     private async void ShowCompletedScreen()
-    { 
-        _player.Victory();
-        
-        OnSpawnWarning = null;
-        await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.LEVEL_COMPLETE_PLAYER_DELAY));
-        _uiManager.OpenWindow<GameplayCompetedScreen>();
+    {
+        var ct = this.GetCancellationTokenOnDestroy();
+        try
+        {
+            _player.Victory();
+
+            OnSpawnWarning = null;
+            await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.LEVEL_COMPLETE_PLAYER_DELAY), cancellationToken: ct);
+            _uiManager.OpenWindow<GameplayCompetedScreen>();
+        }
+        catch (OperationCanceledException)
+        {
+            // component destroyed mid-await, expected
+        }
     }
 
     public void EndLevel()

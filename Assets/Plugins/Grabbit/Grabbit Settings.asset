@@ -79,6 +79,7 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 1
     m_StretchHeight: 0
+    m_IsSDF: 0
   RichParagraph:
     m_Name: label
     m_Normal:
@@ -146,6 +147,7 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 1
     m_StretchHeight: 0
+    m_IsSDF: 0
   RichCenter:
     m_Name: label
     m_Normal:
@@ -213,6 +215,7 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 1
     m_StretchHeight: 0
+    m_IsSDF: 0
   RichTitle:
     m_Name: label
     m_Normal:
@@ -280,6 +283,7 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 1
     m_StretchHeight: 0
+    m_IsSDF: 0
   BigButton:
     m_Name: button
     m_Normal:
@@ -299,7 +303,7 @@ MonoBehaviour:
     m_Focused:
       m_Background: {fileID: 0}
       m_ScaledBackgrounds: []
-      m_TextColor: {r: 0.8235294, g: 0.8235294, b: 0.8235294, a: 1}
+      m_TextColor: {r: 0.93333334, g: 0.93333334, b: 0.93333334, a: 1}
     m_OnNormal:
       m_Background: {fileID: 0}
       m_ScaledBackgrounds:
@@ -313,11 +317,11 @@ MonoBehaviour:
       m_Background: {fileID: 0}
       m_ScaledBackgrounds:
       - {fileID: 1411127090212124673, guid: 0000000000000000d000000000000000, type: 0}
-      m_TextColor: {r: 0.8235294, g: 0.8235294, b: 0.8235294, a: 1}
+      m_TextColor: {r: 0.93333334, g: 0.93333334, b: 0.93333334, a: 1}
     m_OnFocused:
       m_Background: {fileID: 0}
       m_ScaledBackgrounds: []
-      m_TextColor: {r: 0.8235294, g: 0.8235294, b: 0.8235294, a: 1}
+      m_TextColor: {r: 0.93333334, g: 0.93333334, b: 0.93333334, a: 1}
     m_Border:
       m_Left: 6
       m_Right: 6
@@ -351,6 +355,7 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 1
     m_StretchHeight: 0
+    m_IsSDF: 0
   RegularButton:
     m_Name: button
     m_Normal:
@@ -370,7 +375,7 @@ MonoBehaviour:
     m_Focused:
       m_Background: {fileID: 0}
       m_ScaledBackgrounds: []
-      m_TextColor: {r: 0.8235294, g: 0.8235294, b: 0.8235294, a: 1}
+      m_TextColor: {r: 0.93333334, g: 0.93333334, b: 0.93333334, a: 1}
     m_OnNormal:
       m_Background: {fileID: 0}
       m_ScaledBackgrounds:
@@ -384,11 +389,11 @@ MonoBehaviour:
       m_Background: {fileID: 0}
       m_ScaledBackgrounds:
       - {fileID: 1411127090212124673, guid: 0000000000000000d000000000000000, type: 0}
-      m_TextColor: {r: 0.8235294, g: 0.8235294, b: 0.8235294, a: 1}
+      m_TextColor: {r: 0.93333334, g: 0.93333334, b: 0.93333334, a: 1}
     m_OnFocused:
       m_Background: {fileID: 0}
       m_ScaledBackgrounds: []
-      m_TextColor: {r: 0.8235294, g: 0.8235294, b: 0.8235294, a: 1}
+      m_TextColor: {r: 0.93333334, g: 0.93333334, b: 0.93333334, a: 1}
     m_Border:
       m_Left: 6
       m_Right: 6
@@ -422,6 +427,7 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 1
     m_StretchHeight: 0
+    m_IsSDF: 0
   NumberMarginStyle:
     m_Name: textfield
     m_Normal:
@@ -491,6 +497,7 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 1
     m_StretchHeight: 0
+    m_IsSDF: 0
   ToggleMarginStyle:
     m_Name: toggle
     m_Normal:
@@ -564,6 +571,7 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 1
     m_StretchHeight: 0
+    m_IsSDF: 0
   MarginStyle:
     m_Name: 
     m_Normal:
@@ -631,6 +639,7 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 1
     m_StretchHeight: 0
+    m_IsSDF: 0
   FontMarginStyleBig:
     m_Name: 
     m_Normal:
@@ -698,6 +707,7 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 1
     m_StretchHeight: 0
+    m_IsSDF: 0
   EnumMarginStyle:
     m_Name: 
     m_Normal:
@@ -765,6 +775,7 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 1
     m_StretchHeight: 0
+    m_IsSDF: 0
   LabelMarginStyle:
     m_Name: label
     m_Normal:
@@ -832,6 +843,7 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 1
     m_StretchHeight: 0
+    m_IsSDF: 0
   TabStyle:
     m_Name: window
     m_Normal:
@@ -903,6 +915,7 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 1
     m_StretchHeight: 1
+    m_IsSDF: 0
   ErrorStyle:
     m_Name: textarea
     m_Normal:
@@ -972,6 +985,7 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 1
     m_StretchHeight: 0
+    m_IsSDF: 0
   LayerStyle:
     m_Name: 
     m_Normal:
@@ -1039,6 +1053,7 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 1
     m_StretchHeight: 0
+    m_IsSDF: 0
   ShowStartupWindow: 0
   LastVersion: 0.0
   LimitationRange:

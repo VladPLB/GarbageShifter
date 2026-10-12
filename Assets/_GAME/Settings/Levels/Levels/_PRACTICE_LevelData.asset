@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a09395eb1a44fb4a55a25910faea0d0, type: 3}
+  m_Name: _PRACTICE_LevelData
+  m_EditorClassIdentifier: 
+  _start: {fileID: 3341926155754645290, guid: ff5fa6aa530294d8eaf0d1e09edc400e, type: 3}
+  _end: {fileID: 275023507706698291, guid: e5b4b179ef3b349dbba73089ba66478e, type: 3}
+  _locationType: 9
+  _levelTypes: 0
+  _stages:
+  - {fileID: 11400000, guid: 3d9cc48b4f5b4422fade9b743802813b, type: 2}
+  - {fileID: 11400000, guid: 3d9cc48b4f5b4422fade9b743802813b, type: 2}
+  - {fileID: 11400000, guid: 3d9cc48b4f5b4422fade9b743802813b, type: 2}
+  _useRotators: 0

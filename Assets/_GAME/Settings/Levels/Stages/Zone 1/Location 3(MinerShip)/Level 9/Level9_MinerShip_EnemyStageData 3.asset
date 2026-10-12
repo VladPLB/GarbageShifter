@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dfac486e1184f1bb8a62e6c0756d5aa, type: 3}
+  m_Name: Level9_MinerShip_EnemyStageData 3
+  m_EditorClassIdentifier: 
+  _stages:
+  - {fileID: 507759371512477550, guid: 911a3c6b8e26649789b8a1e442f3a5b4, type: 3}
+  - {fileID: 3987650750440242318, guid: 79cbbfe7fcfcb4d48904403a54ed5b70, type: 3}
+  - {fileID: 9183102341217969607, guid: f200bd13c273b426098c97fc96a54f4d, type: 3}
+  _enemies:
+  - _datas:
+    - Type: 1
+      SpawnRangeAmount: {x: 3, y: 5}
+      SpawnDelayBetwenUnits: 0.3
+    SpawnDelayGroup: 0.5
+  - _datas:
+    - Type: 1
+      SpawnRangeAmount: {x: 5, y: 7}
+      SpawnDelayBetwenUnits: 0.3
+    SpawnDelayGroup: 3
+  - _datas:
+    - Type: 2
+      SpawnRangeAmount: {x: 4, y: 6}
+      SpawnDelayBetwenUnits: 0.3
+    SpawnDelayGroup: 5
+  - _datas:
+    - Type: 6
+      SpawnRangeAmount: {x: 4, y: 6}
+      SpawnDelayBetwenUnits: 0.3
+    SpawnDelayGroup: 5

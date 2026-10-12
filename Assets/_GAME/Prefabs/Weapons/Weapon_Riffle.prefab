@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9163533508574837770}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32,6 +32,68 @@ Transform:
   - {fileID: 5685376676380350178}
   m_Father: {fileID: 4687915315910902671}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4502417333800548145
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 298282848733701841}
+  m_Layer: 11
+  m_Name: RightArmIK_target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &298282848733701841
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4502417333800548145}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.44594043, y: 0.5602614, z: -0.5983247, w: -0.3595161}
+  m_LocalPosition: {x: 0.05999902, y: -0.026000522, z: -0.039995894}
+  m_LocalScale: {x: 0.099999934, y: 0.099999934, z: 0.09999996}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1484030039650874476}
+  m_LocalEulerAnglesHint: {x: 97.65799, y: -78.962006, z: 31.423004}
+--- !u!1 &5306165236809005201
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8253283530644280970}
+  m_Layer: 11
+  m_Name: LeftArmIk_target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8253283530644280970
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5306165236809005201}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.29490015, y: 0.11578083, z: 0.9433609, w: -0.098482594}
+  m_LocalPosition: {x: -0.037999958, y: -0.015992165, z: 0.28999567}
+  m_LocalScale: {x: 0.10000001, y: 0.10000004, z: 0.09999994}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1484030039650874476}
+  m_LocalEulerAnglesHint: {x: -9.228, y: -35.93, z: 194.918}
 --- !u!1 &5688438180648408774
 GameObject:
   m_ObjectHideFlags: 0
@@ -4904,6 +4966,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -9858,6 +9923,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -9924,7 +9992,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1484030039650874476}
   - component: {fileID: 6359684540194013533}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Weapon_Riffle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9945,6 +10013,8 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4687915315910902671}
+  - {fileID: 298282848733701841}
+  - {fileID: 8253283530644280970}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6359684540194013533
@@ -9959,9 +10029,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6e6ba01297c4c49976a2919fe95ce7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _type: 0
   _viewer: {fileID: 9066246867206445514}
-  _barrel: {fileID: 9163533508574837770}
-  _muzzleFlash: {fileID: 5491714861031180270}
+  _recoilAnimator: {fileID: 0}
+  _barrels:
+  - {fileID: 9163533508574837770}
+  _muzzleFlashes:
+  - {fileID: 5491714861031180270}
+  _leftIkAnchor: {fileID: 8253283530644280970}
+  _rightIkAnchor: {fileID: 298282848733701841}
 --- !u!1 &8513068861923167039
 GameObject:
   m_ObjectHideFlags: 0
@@ -9974,7 +10050,7 @@ GameObject:
   - component: {fileID: 3526912767750995499}
   - component: {fileID: 7259250162875242860}
   - component: {fileID: 9066246867206445514}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10023,6 +10099,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -10129,6 +10208,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: P_Grip01
       objectReference: {fileID: 0}
+    - target: {fileID: 4134310032146504351, guid: 0bd8422a2babeff4b834a8634db69b57,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10220,18 +10304,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7345246977880518141, guid: 453880e95634ca74f862402dcc0d3ab3,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 0e0d5566fa754f84c95c337f5b7a2ba1, type: 2}
     - target: {fileID: 7345246977880518141, guid: 453880e95634ca74f862402dcc0d3ab3,
         type: 3}
-      propertyPath: m_Materials.Array.data[5]
+      propertyPath: 'm_Materials.Array.data[5]'
       value: 
       objectReference: {fileID: 2100000, guid: cbb2d68c3a497124e91b7db68be98abe, type: 2}
     - target: {fileID: 9066688576670292257, guid: 453880e95634ca74f862402dcc0d3ab3,
         type: 3}
       propertyPath: m_Name
       value: P_SMG01
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066688576670292257, guid: 453880e95634ca74f862402dcc0d3ab3,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -10340,10 +10429,25 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3410151651856115518, guid: ecd8f5b63ccb1214fbdd604ff21218b4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 3782352072128588049, guid: ecd8f5b63ccb1214fbdd604ff21218b4,
         type: 3}
       propertyPath: m_Name
       value: P_Bipod01
+      objectReference: {fileID: 0}
+    - target: {fileID: 3782352072128588049, guid: ecd8f5b63ccb1214fbdd604ff21218b4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 7451632843020949333, guid: ecd8f5b63ccb1214fbdd604ff21218b4,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10419,6 +10523,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: P_ReflexA
       objectReference: {fileID: 0}
+    - target: {fileID: 3488185243286660001, guid: cb191473809927b4e87ad7946975947e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10440,13 +10549,18 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4623492916395141337, guid: 6f11b69e5cfd4454cb8356139e87a61a,
         type: 3}
-      propertyPath: m_Materials.Array.data[2]
+      propertyPath: 'm_Materials.Array.data[2]'
       value: 
       objectReference: {fileID: 2100000, guid: 0e0d5566fa754f84c95c337f5b7a2ba1, type: 2}
     - target: {fileID: 6347019120346029061, guid: 6f11b69e5cfd4454cb8356139e87a61a,
         type: 3}
       propertyPath: m_Name
       value: P_LaserComboM
+      objectReference: {fileID: 0}
+    - target: {fileID: 6347019120346029061, guid: 6f11b69e5cfd4454cb8356139e87a61a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 7948428501277781526, guid: 6f11b69e5cfd4454cb8356139e87a61a,
         type: 3}

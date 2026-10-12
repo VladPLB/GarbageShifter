@@ -22,6 +22,7 @@ namespace _GAME.Scripts
         private string _activeMainScene;
         private bool _activeSceneLoaded = false;
         private List<string> _activeSubScenes = new();
+        private bool _isSwitchingScene = false;
 
         private void Awake()
         {
@@ -30,20 +31,28 @@ namespace _GAME.Scripts
 
         public async void RuntimeSetup()
         {
-            _saveManager = Core.Get<SaveManager>();
-            _tutorialEntryData = _saveManager.GetData<TutorialEntryData>();
-            _isUiSceneLoaded = false;
-            EventBus.Subscribe<KeyEvent>(OnEvent, EventBus.EventRegion.GLOBAL);
-            if (!SceneManager.GetSceneByName(uiScene).isLoaded)
-                await SceneManager.LoadSceneAsync(uiScene, LoadSceneMode.Additive);
-            await UniTask.WaitWhile(() => !_isUiSceneLoaded);
-            if(_tutorialEntryData.TutorialStep == 0)
+            var ct = this.GetCancellationTokenOnDestroy();
+            try
             {
-                await LoadGameplayAsync();
+                _saveManager = Core.Get<SaveManager>();
+                _tutorialEntryData = _saveManager.GetData<TutorialEntryData>();
+                _isUiSceneLoaded = false;
+                EventBus.Subscribe<KeyEvent>(OnEvent, EventBus.EventRegion.GLOBAL);
+                if (!SceneManager.GetSceneByName(uiScene).isLoaded)
+                    await SceneManager.LoadSceneAsync(uiScene, LoadSceneMode.Additive);
+                await UniTask.WaitWhile(() => !_isUiSceneLoaded, cancellationToken: ct);
+                if(_tutorialEntryData.TutorialStep == 0)
+                {
+                    await LoadGameplayAsync();
+                }
+                else
+                {
+                    await LoadLobbyAsync();
+                }
             }
-            else
+            catch (OperationCanceledException)
             {
-                await LoadLobbyAsync();
+                // component destroyed mid-await, expected
             }
         }
 
@@ -78,26 +87,44 @@ namespace _GAME.Scripts
 
         private async UniTask SwitchMainSceneAsync(string newMainScene, string gameplayModeSubScene = "")
         {
-            EventBus.Push(new SceneLoadEvent(), EventBus.EventRegion.GLOBAL);
-            _activeSceneLoaded = false;
-            await UniTask.Delay(TimeSpan.FromSeconds(.5f));
-            if (!string.IsNullOrEmpty(_activeMainScene))
-                await SceneManager.UnloadSceneAsync(_activeMainScene);
-            
-            foreach (var sub in _activeSubScenes)
+            if (_isSwitchingScene)
             {
-                if (SceneManager.GetSceneByName(sub).isLoaded)
-                    await SceneManager.UnloadSceneAsync(sub);
+                Debug.LogWarning($"[ScenesLoader] Ignored request to switch to '{newMainScene}' - a scene switch to '{_activeMainScene}' -> is already in progress.");
+                return;
             }
+            _isSwitchingScene = true;
+            var ct = this.GetCancellationTokenOnDestroy();
+            try
+            {
+                EventBus.Push(new SceneLoadEvent(), EventBus.EventRegion.GLOBAL);
+                _activeSceneLoaded = false;
+                await UniTask.Delay(TimeSpan.FromSeconds(.5f), cancellationToken: ct);
+                if (!string.IsNullOrEmpty(_activeMainScene))
+                    await SceneManager.UnloadSceneAsync(_activeMainScene);
 
-            _activeSubScenes.Clear();
+                foreach (var sub in _activeSubScenes)
+                {
+                    if (SceneManager.GetSceneByName(sub).isLoaded)
+                        await SceneManager.UnloadSceneAsync(sub);
+                }
 
-            await SceneManager.LoadSceneAsync(newMainScene, LoadSceneMode.Additive);
-            _activeMainScene = newMainScene;
-            
-            await LoadSubSceneAsync(gameplayModeSubScene);
-            await UniTask.WaitWhile(() => !_activeSceneLoaded);
-            EventBus.Push(new SceneLoadCompleteEvent(), EventBus.EventRegion.GLOBAL);
+                _activeSubScenes.Clear();
+
+                await SceneManager.LoadSceneAsync(newMainScene, LoadSceneMode.Additive);
+                _activeMainScene = newMainScene;
+
+                await LoadSubSceneAsync(gameplayModeSubScene);
+                await UniTask.WaitWhile(() => !_activeSceneLoaded, cancellationToken: ct);
+                EventBus.Push(new SceneLoadCompleteEvent(), EventBus.EventRegion.GLOBAL);
+            }
+            catch (OperationCanceledException)
+            {
+                // component destroyed mid-await, expected
+            }
+            finally
+            {
+                _isSwitchingScene = false;
+            }
         }
 
         private async UniTask LoadSubSceneAsync(string subSceneName)

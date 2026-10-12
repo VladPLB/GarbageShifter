@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using _GAME.Scripts.Battle.Weapons;
 using _GAME.Scripts.Events;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -27,15 +28,21 @@ public class PlayerAim : MonoBehaviour
 
     private bool _isActive = false;
     private GameInput _gameInput;
+    private Weapon _weapon;
     private Vector3 rotate;
     private Vector3 targetEulerAngles;
     private bool _isAimLock = false;
 
     public Vector3 AimPoint => _precilePoint.position;
 
-    public void Setup(GameInput input)
+    public void Setup(GameInput input, Weapon weapon)
     {
         _gameInput = input;
+        _weapon = weapon;
+        (_armIkL, _armIkR) = _weapon.GetIkAnchors();
+        _armRigL.data.target = _armIkL;
+        _armRigR.data.target = _armIkR;
+        
         EventBus.Subscribe<AimLockEvent>(OnAimLock, EventBus.EventRegion.GAMEPLAY);
     }
 

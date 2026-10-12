@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a09395eb1a44fb4a55a25910faea0d0, type: 3}
+  m_Name: MinerShip_LevelData 8
+  m_EditorClassIdentifier: 
+  _start: {fileID: 1469423870348566763, guid: 559e36e41f12c45339c9748e287e8e37, type: 3}
+  _end: {fileID: 7942617206895689530, guid: bf710d145230d4fcfa6d60507d17fd08, type: 3}
+  _locationType: 5
+  _levelTypes: 0
+  _stages:
+  - {fileID: 11400000, guid: 2538d1d066f314e6c8f839abd9cf8d32, type: 2}
+  - {fileID: 11400000, guid: 487dddffadda6408ca7bf15f93384605, type: 2}
+  - {fileID: 11400000, guid: bf632fcbcd4704c72bef8095f9d9d739, type: 2}
+  _useRotators: 1

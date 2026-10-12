@@ -104,11 +104,19 @@ namespace _GAME.Scripts.Battle.Level
 
         private async void SpawnEnemies(EnemyType type, int count, float delay, EnemySpawnPoint spawnPoint)
         {
-            for (int i = 0; i < count; i++)
+            var ct = this.GetCancellationTokenOnDestroy();
+            try
             {
-                var path = spawnPoint.GetPath();
-                _enemyController.Spawn(type, path);
-                await UniTask.Delay(TimeSpan.FromSeconds(delay));
+                for (int i = 0; i < count; i++)
+                {
+                    var path = spawnPoint.GetPath();
+                    _enemyController.Spawn(type, path);
+                    await UniTask.Delay(TimeSpan.FromSeconds(delay), cancellationToken: ct);
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                // component destroyed mid-await, expected
             }
         }
 

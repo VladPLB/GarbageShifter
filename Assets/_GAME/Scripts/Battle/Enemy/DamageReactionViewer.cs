@@ -40,18 +40,26 @@ namespace _GAME.Scripts.Battle.Enemy
                 TextEffect.Create(TextEffectType.Damage,(int)type, hitPoint,  Mathf.Abs(damage).ToString(), _reactionForce);
                 _reactionForce = Mathf.Min(_reactionForce + REACTION_FORCE_ADDED, MAX_REACTION_FORCE);
             }
-            
+
             if(_animate)
                 return;
 
-            _animate = true;
-            ToReactionMaterials();
-            await UniTask.Delay(TimeSpan.FromSeconds(DURATION));
-            if(_animate)
+            var ct = this.GetCancellationTokenOnDestroy();
+            try
             {
-                ResetMaterials();
-                await UniTask.Delay(TimeSpan.FromSeconds(DELAY_AFTER_ANIMATION));
-                _animate = false;
+                _animate = true;
+                ToReactionMaterials();
+                await UniTask.Delay(TimeSpan.FromSeconds(DURATION), cancellationToken: ct);
+                if(_animate)
+                {
+                    ResetMaterials();
+                    await UniTask.Delay(TimeSpan.FromSeconds(DELAY_AFTER_ANIMATION), cancellationToken: ct);
+                    _animate = false;
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                // component destroyed mid-await, expected
             }
         }
 

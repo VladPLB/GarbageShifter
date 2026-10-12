@@ -37,12 +37,20 @@ namespace Tools
         private async void Update()
         {
             Rect safeArea = Screen.safeArea;
-            
+
             if (safeArea != _lastSafeArea)
             {
                 if(Application.isPlaying)
                 {
-                    await UniTask.NextFrame();
+                    try
+                    {
+                        await UniTask.NextFrame(cancellationToken: this.GetCancellationTokenOnDestroy());
+                    }
+                    catch (System.OperationCanceledException)
+                    {
+                        // component destroyed mid-await, expected
+                        return;
+                    }
                 }
                 UpdateSafeArea();
                 _lastSafeArea = safeArea;

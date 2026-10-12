@@ -12,14 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dfac486e1184f1bb8a62e6c0756d5aa, type: 3}
   m_Name: _DEBUG_EnemyStageData
   m_EditorClassIdentifier: 
+  _stages:
+  - {fileID: 7774390223324517044, guid: 76658f02aa81548b78fd66295ea9bb90, type: 3}
   _enemies:
   - _datas:
-    - Type: 6
-      SpawnRangeAmount: {x: 2, y: 3}
+    - Type: 7
+      SpawnRangeAmount: {x: 5, y: 6}
+      SpawnDelayBetwenUnits: 0.3
+    - Type: 7
+      SpawnRangeAmount: {x: 5, y: 6}
       SpawnDelayBetwenUnits: 0.3
     SpawnDelayGroup: 0.5
   - _datas:
-    - Type: 6
+    - Type: 8
       SpawnRangeAmount: {x: 2, y: 3}
+      SpawnDelayBetwenUnits: 0.3
+    - Type: 8
+      SpawnRangeAmount: {x: 2, y: 3}
+      SpawnDelayBetwenUnits: 0.3
+    SpawnDelayGroup: 3
+  - _datas:
+    - Type: 9
+      SpawnRangeAmount: {x: 2, y: 3}
+      SpawnDelayBetwenUnits: 0.3
+    - Type: 7
+      SpawnRangeAmount: {x: 5, y: 6}
       SpawnDelayBetwenUnits: 0.3
     SpawnDelayGroup: 5

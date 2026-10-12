@@ -74,21 +74,29 @@ namespace _GAME.Scripts.Battle.Player
         {
             if(duration>0)
             {
-                _directionLight.intensity = _defaultIntencity * .3f;
-                await UniTask.Delay(TimeSpan.FromSeconds(.05f));
-                _directionLight.intensity = _defaultIntencity;
-                await UniTask.Delay(TimeSpan.FromSeconds(.05f));
-                _directionLight.intensity = _defaultIntencity * .2f;
-                await UniTask.Delay(TimeSpan.FromSeconds(duration));
-                _directionLight.intensity = _defaultIntencity;
-                await UniTask.Delay(TimeSpan.FromSeconds(.05f));
-                _directionLight.intensity = _defaultIntencity * .2f;
-                await UniTask.Delay(TimeSpan.FromSeconds(.05f));
-                _directionLight.intensity = _defaultIntencity;
-                await UniTask.Delay(TimeSpan.FromSeconds(.05f));
-                _directionLight.intensity = _defaultIntencity * .1f;
-                await UniTask.Delay(TimeSpan.FromSeconds(.05f));
-                _directionLight.intensity = _defaultIntencity;
+                var ct = this.GetCancellationTokenOnDestroy();
+                try
+                {
+                    _directionLight.intensity = _defaultIntencity * .3f;
+                    await UniTask.Delay(TimeSpan.FromSeconds(.05f), cancellationToken: ct);
+                    _directionLight.intensity = _defaultIntencity;
+                    await UniTask.Delay(TimeSpan.FromSeconds(.05f), cancellationToken: ct);
+                    _directionLight.intensity = _defaultIntencity * .2f;
+                    await UniTask.Delay(TimeSpan.FromSeconds(duration), cancellationToken: ct);
+                    _directionLight.intensity = _defaultIntencity;
+                    await UniTask.Delay(TimeSpan.FromSeconds(.05f), cancellationToken: ct);
+                    _directionLight.intensity = _defaultIntencity * .2f;
+                    await UniTask.Delay(TimeSpan.FromSeconds(.05f), cancellationToken: ct);
+                    _directionLight.intensity = _defaultIntencity;
+                    await UniTask.Delay(TimeSpan.FromSeconds(.05f), cancellationToken: ct);
+                    _directionLight.intensity = _defaultIntencity * .1f;
+                    await UniTask.Delay(TimeSpan.FromSeconds(.05f), cancellationToken: ct);
+                    _directionLight.intensity = _defaultIntencity;
+                }
+                catch (OperationCanceledException)
+                {
+                    // component destroyed mid-await, expected
+                }
             }
         }
     }

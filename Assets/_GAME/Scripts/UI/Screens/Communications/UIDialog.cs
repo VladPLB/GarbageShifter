@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using _GAME.Scripts.Audio;
 using _GAME.Scripts.Events;
 using Cysharp.Threading.Tasks;
@@ -80,21 +81,29 @@ namespace _GAME.Scripts.UI.Screens.Communications
         
         private async void Show()
         {
-            EventBus.Push(new KeyEvent("LockUI"), EventBus.EventRegion.GLOBAL);
-            _nameLabel.text = _name.ToString();
-            if (!_showed)
+            var ct = this.GetCancellationTokenOnDestroy();
+            try
             {
-                EventBus.Push(new SoundPlayEvent(SoundType.ShowCommunicator, null),  EventBus.EventRegion.GLOBAL);
-                _animator.SetTrigger(ShowKey);
+                EventBus.Push(new KeyEvent("LockUI"), EventBus.EventRegion.GLOBAL);
+                _nameLabel.text = _name.ToString();
+                if (!_showed)
+                {
+                    EventBus.Push(new SoundPlayEvent(SoundType.ShowCommunicator, null),  EventBus.EventRegion.GLOBAL);
+                    _animator.SetTrigger(ShowKey);
+                }
+                await UniTask.Delay(ShowedTime, cancellationToken: ct);
+                _showed = true;
+                _currentAnimation = 0;
+                _subtitles.OnNextMessage += NextAnimation;
+                _subtitles.OnEnd += OnEnd;
+
+                _subtitles.ShowMessages(_messages);
+                _messages.Clear();
             }
-            await UniTask.Delay(ShowedTime);
-            _showed = true;
-            _currentAnimation = 0;
-            _subtitles.OnNextMessage += NextAnimation;
-            _subtitles.OnEnd += OnEnd;
-            
-            _subtitles.ShowMessages(_messages);
-            _messages.Clear();
+            catch (OperationCanceledException)
+            {
+                // component destroyed mid-await, expected
+            }
         }
 
         private void OnEnd()
@@ -115,24 +124,31 @@ namespace _GAME.Scripts.UI.Screens.Communications
             _currentAnimation++;
         }
 
-        private async UniTask CompleteDialog()
+        private async UniTask CompleteDialog(CancellationToken ct)
         {
             if (_showed)
             {
                 _animator.SetTrigger(HideKey);
                 EventBus.Push(new SoundPlayEvent(SoundType.HideCommunicator, null),  EventBus.EventRegion.GLOBAL);
             }
-            
-            await UniTask.Delay(HideTime);
+
+            await UniTask.Delay(HideTime, cancellationToken: ct);
             _showed = false;
             EventBus.Push(new KeyEvent("UnlockUI"), EventBus.EventRegion.GLOBAL);
         }
 
         public override async void OnClose()
         {
-            await CompleteDialog();
-            EventBus.Unsubscribe<DialogMessageEvent>(ShowMessage, _region);
-            base.OnClose();
+            try
+            {
+                await CompleteDialog(this.GetCancellationTokenOnDestroy());
+                EventBus.Unsubscribe<DialogMessageEvent>(ShowMessage, _region);
+                base.OnClose();
+            }
+            catch (OperationCanceledException)
+            {
+                // component destroyed mid-await, expected
+            }
         }
     }
 }

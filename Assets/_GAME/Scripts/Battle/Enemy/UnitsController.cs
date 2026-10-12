@@ -82,11 +82,19 @@ namespace _GAME.Scripts.Battle.Enemy
             {
                 EventBus.Push(new KeyEvent("ClearEnemies"), EventBus.EventRegion.GAMEPLAY);
             }
-            if (!isForce)
+            try
             {
-                await UniTask.Delay(TimeSpan.FromSeconds(REMOVE_UNIT_TIME));
+                if (!isForce)
+                {
+                    var ct = this.GetCancellationTokenOnDestroy();
+                    await UniTask.Delay(TimeSpan.FromSeconds(REMOVE_UNIT_TIME), cancellationToken: ct);
+                }
+                _pool.Push(enemy);
             }
-            _pool.Push(enemy);
+            catch (OperationCanceledException)
+            {
+                // component destroyed mid-await, expected
+            }
         }
 
         public void ClearCurrentEnemies()

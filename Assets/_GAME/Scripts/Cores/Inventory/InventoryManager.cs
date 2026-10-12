@@ -9,7 +9,9 @@ using Random = System.Random;
 namespace _GAME.Scripts.Inventory
 {
     public enum ItemRank { Common, Uncommon, Rare, Epic, Legendary, Unique }
-    public enum ItemType { Currency, Equipment, Consumable, Material, Quest, Other }
+    // New values must be appended at the end - Unity serializes enum fields on ItemInfo assets by index,
+    // so inserting/reordering here would silently reassign the type of already-authored items.
+    public enum ItemType { Currency, Equipment, Consumable, Material, Quest, Other, Weapon }
 
     public enum PlaceTarget
     {
@@ -17,7 +19,30 @@ namespace _GAME.Scripts.Inventory
         Inventory = 0,
         LocalInventory = 1,
         Shop = 10,
+        
         Store = 20,
+        
+        Upgrade = 30,
+    }
+
+    public enum InventoryCase
+    {
+        Weapon,
+        SubWeapon,
+        Armor,
+        Drone,
+        Crew,
+        Ship
+    }
+
+    public enum UpgradeResult
+    {
+        Available = 0,
+        NotItem = 1,
+        NotEnoughItems = 2,
+        MaxLevel = 3,
+        NoUpgradable = 34,
+        
     }
     
     [Serializable]
@@ -64,6 +89,12 @@ namespace _GAME.Scripts.Inventory
     }
 
     [Serializable]
+    public class ItemAmountGroup
+    {
+        public List<ItemAmount> Items = new();
+    }
+
+    [Serializable]
     public class ItemRecipe
     {
         [Header("Ingredients (required)")]
@@ -81,6 +112,9 @@ namespace _GAME.Scripts.Inventory
         private InventoryData _inventoryData;
 
         private readonly Dictionary<string, int> _counts = new(StringComparer.Ordinal);
+        private readonly Dictionary<string, int> _upgrades = new();
+
+        private readonly Dictionary<InventoryCase, string> _cases = new();
         
         public ItemDatabase ItemDatabase => _dataBase.ItemDatabase;
         public PlaceTarget PlaceTarget { get; set; } = PlaceTarget.None;
@@ -125,7 +159,7 @@ namespace _GAME.Scripts.Inventory
             return !ignoreShowConditions? allItems : allItems.Where(CanShow).ToList();
         }
         
-        public List<ItemInfo> GetAll(ItemType type, string subType = "", bool ignoreShowConditions = false)
+        public List<ItemInfo> GetAll(ItemType type, string subType, bool ignoreShowConditions = false)
         {
             var allItems = string.IsNullOrEmpty(subType)? ItemDatabase.GetByType(type): ItemDatabase.GetByTypeSubType(type, subType);
             return !ignoreShowConditions? allItems : allItems.Where(CanShow).ToList();
@@ -167,13 +201,30 @@ namespace _GAME.Scripts.Inventory
             if (string.IsNullOrWhiteSpace(item.Id)) return false;
 
             var current = GetCount(item);
+            bool isUpgradable = (item is UpgradableItemInfo);
+
+            if (isUpgradable && current > 0)
+            {
+                return false;
+            }
             
             var target = current + amount;
             
             if (target < 0) return false;
 
-            if (target == 0) _counts.Remove(item.Id);
-            else _counts[item.Id] = target;
+            if (target == 0)
+            {
+                _counts.Remove(item.Id);
+                _upgrades.Remove(item.Id);
+            }
+            else
+            {
+                _counts[item.Id] = target;
+                if (isUpgradable)
+                {
+                    _upgrades[item.Id] = 0;
+                }
+            }
             
             WriteCacheToSave();
             return true;
@@ -214,6 +265,124 @@ namespace _GAME.Scripts.Inventory
             }
             return result;
         }
+
+        public int GetLevel(ItemInfo item)
+        {
+            return _upgrades.GetValueOrDefault(item.Id, 0);
+        }
+
+        public bool TryCanUpgrade(ItemInfo info, out UpgradeResult result, out List<ItemAmount> missingIngredients)
+        {
+            missingIngredients = new List<ItemAmount>();
+            result = UpgradeResult.Available;
+            if (GetCount(info) != 1)
+            {
+                result = UpgradeResult.NotItem;
+                return false;
+            }
+            
+            if(!_upgrades.TryGetValue(info.Id, out var upgrade))
+            {
+                result = UpgradeResult.NoUpgradable;
+                return false;
+            }
+
+            if (info is not UpgradableItemInfo upgradeInfo)
+            {
+                result = UpgradeResult.NoUpgradable;
+                return false;
+            }
+
+            if (upgrade >= upgradeInfo.MaxLevel)
+            {
+                result = UpgradeResult.MaxLevel;
+                return false;
+            }
+
+            var price = upgradeInfo.GetPriceByLevel(upgrade);
+            bool hasEnoughItems = true;
+            for (int i = 0; i < price.Count; i++)
+            {
+                var cost = price[i];
+                if (cost.Item == null) return false;
+                if (cost.Amount <= 0) return false;
+
+                var have = GetCount(cost.Item);
+                if (have < cost.Amount)
+                {
+                    hasEnoughItems = false;
+                    missingIngredients.Add(new ItemAmount
+                    {
+                        Item = cost.Item,
+                        Amount = cost.Amount - have
+                    });
+                }
+            }
+            
+            result = hasEnoughItems?  result : UpgradeResult.NotEnoughItems;
+            return hasEnoughItems;
+        }
+
+        public bool TryUpgrade(ItemInfo info, out UpgradeResult result, out List<ItemAmount> missingIngredients)
+        {
+            missingIngredients = new List<ItemAmount>();
+            result = UpgradeResult.Available;
+            if (GetCount(info) != 1)
+            {
+                result = UpgradeResult.NotItem;
+                return false;
+            }
+            
+            if(!_upgrades.TryGetValue(info.Id, out var upgrade))
+            {
+                result = UpgradeResult.NoUpgradable;
+                return false;
+            }
+
+            if (info is not UpgradableItemInfo upgradeInfo)
+            {
+                result = UpgradeResult.NoUpgradable;
+                return false;
+            }
+
+            if (upgrade >= upgradeInfo.MaxLevel)
+            {
+                result = UpgradeResult.MaxLevel;
+                return false;
+            }
+
+            var price = upgradeInfo.GetPriceByLevel(upgrade);
+            bool hasEnoughItems = true;
+            for (int i = 0; i < price.Count; i++)
+            {
+                var cost = price[i];
+                if (cost.Item == null) return false;
+                if (cost.Amount <= 0) return false;
+
+                var have = GetCount(cost.Item);
+                if (have < cost.Amount)
+                {
+                    hasEnoughItems = false;
+                    missingIngredients.Add(new ItemAmount
+                    {
+                        Item = cost.Item,
+                        Amount = cost.Amount - have
+                    });
+                }
+            }
+            
+            result = hasEnoughItems?  result : UpgradeResult.NotEnoughItems;
+
+            if (hasEnoughItems)
+            {
+                Remove(price);
+            }
+            _upgrades[info.Id] = upgrade + 1;
+            
+            WriteCacheToSave();
+            
+            return hasEnoughItems;
+        }
         
         public bool CanCraftByRecipe(ItemInfo craftTarget, out List<ItemAmount> missingIngredients)
         {
@@ -226,6 +395,8 @@ namespace _GAME.Scripts.Inventory
 
             if (recipe.ItemCosts == null || recipe.ItemCosts.Count == 0)
                 return false;
+            
+            if (craftTarget is UpgradableItemInfo && GetCount(craftTarget.Id) > 1) return false;
 
             var canCraft = true;
 
@@ -264,8 +435,7 @@ namespace _GAME.Scripts.Inventory
 
             if (recipe.ItemCosts == null || recipe.ItemCosts.Count == 0)
                 return false;
-
-            // safety: повторная проверка, чтобы не уйти в минус
+            
             for (int i = 0; i < recipe.ItemCosts.Count; i++)
             {
                 var cost = recipe.ItemCosts[i];
@@ -282,21 +452,22 @@ namespace _GAME.Scripts.Inventory
             return true;
         }
         
-        public List<ItemAmount> CraftByRecipe(ItemInfo craftTarget, System.Random rng = null)
+        public bool TryCraftByRecipe(ItemInfo craftTarget, out List<ItemAmount> results, System.Random rng = null)
         {
-            List<ItemAmount> results = null;
-            if (craftTarget == null) return results;
-            if (craftTarget.Recipe == null) return results;
+            results = new List<ItemAmount>();
+            if (craftTarget == null) return false;
+            if (craftTarget.Recipe == null) return false;
+            
 
             if (!CanCraftByRecipe(craftTarget))
-                return results;
+                return false;
 
             if (!ConsumeRecipeIngredients(craftTarget))
-                return results;
+                return false;
 
             results = UnpackLootTable(craftTarget.Recipe.Loot, rng);
 
-            return results;
+            return true;
         }
 
         public List<ItemAmount> UnpackLootTable(LootTable loot, Random rng = null)
@@ -367,9 +538,30 @@ namespace _GAME.Scripts.Inventory
             return results;
         }
 
+        public bool CanEquip(ItemInfo itemInfo)
+        {
+            foreach (var i in _cases)
+            {
+               if(i.Value == itemInfo.Id) return true;
+            }
+            return false;
+        }
+
+        public bool TryEquip(ItemInfo itemInfo)
+        {
+            var data = _dataBase.Weapons.GetData(itemInfo.Id);
+            if(data == null) return false;
+            
+            _cases[data.InventoryCase] = itemInfo.Id;
+            WriteCacheToSave();
+            
+            return true;
+        }
+
         private void RebuildCacheFromSave()
         {
             _counts.Clear();
+            _upgrades.Clear();
 
             if (_inventoryData?.Items == null)
                 return;
@@ -401,6 +593,29 @@ namespace _GAME.Scripts.Inventory
                     ItemId = kv.Key,
                     Amount = kv.Value
                 });
+            }
+            
+            _inventoryData.Upgrades.Clear();
+            foreach (var kv in _upgrades)
+            {
+                _inventoryData.Upgrades.Add(new ItemUpgradeSave
+                {
+                    ItemId = kv.Key,
+                    Level = kv.Value
+                });
+            }
+            
+            _inventoryData.Cases.Clear();
+            foreach (var kv in _cases)
+            {
+                if(kv.Value!=string.Empty)
+                {
+                    _inventoryData.Cases.Add(new ItemCaseSave
+                    {
+                        ItemId = kv.Value,
+                        Case = kv.Key
+                    });
+                }
             }
 
             _inventoryData.MarkDirty(forced: false);

@@ -15,9 +15,16 @@ namespace _GAME.Scripts.Tutorial
         
         public override async void Play()
         {
-            _isComplete = false;
-            await UniTask.Delay(TimeSpan.FromSeconds(_delay));
-            _isComplete = true;
+            try
+            {
+                _isComplete = false;
+                await UniTask.Delay(TimeSpan.FromSeconds(_delay), cancellationToken: this.GetCancellationTokenOnDestroy());
+                _isComplete = true;
+            }
+            catch (OperationCanceledException)
+            {
+                // component destroyed mid-await, expected
+            }
         }
     }
 }

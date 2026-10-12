@@ -26,26 +26,34 @@ namespace _GAME.Scripts.Lobby
         
         private async void OnEnable()
         {
-            _uiManager = Core.Get<UIManager>();
-            _mapManager = Core.Get<MapManager>();
-            _saveManager = Core.Get<SaveManager>();
-
-            _progressData = _saveManager.GetData<ProgressData>();
-            foreach (var tutorialController in _tutorialControllers)
+            var ct = this.GetCancellationTokenOnDestroy();
+            try
             {
-                tutorialController.Initialize();
+                _uiManager = Core.Get<UIManager>();
+                _mapManager = Core.Get<MapManager>();
+                _saveManager = Core.Get<SaveManager>();
+
+                _progressData = _saveManager.GetData<ProgressData>();
+                foreach (var tutorialController in _tutorialControllers)
+                {
+                    tutorialController.Initialize();
+                }
+                _roomsController.Initialize(_mapController);
+
+                var (zoneIndex, locationIndex, levelIndex) = _mapManager.GetInfo(_progressData.Level);
+                LevelZoneData zoneData = _mapManager.GetZone(zoneIndex);
+                zoneData.Setup();
+                EventBus.Push(new KeyEvent("RoomsLoaded"), EventBus.EventRegion.LOBBY);
+                EventBus.Push(new MusicPlayEvent(MusicTrack.Menu), EventBus.EventRegion.GLOBAL);
+                await UniTask.DelayFrame(1, cancellationToken: ct);
+                await ShowLobbyScreen();
+                _mapController.Initialize(zoneData, locationIndex, levelIndex);
+                EventBus.Push(new KeyEvent("SceneLoaded"), EventBus.EventRegion.GLOBAL);
             }
-            _roomsController.Initialize(_mapController);
-            
-            var (zoneIndex, locationIndex, levelIndex) = _mapManager.GetInfo(_progressData.Level);
-            LevelZoneData zoneData = _mapManager.GetZone(zoneIndex);
-            zoneData.Setup();
-            EventBus.Push(new KeyEvent("RoomsLoaded"), EventBus.EventRegion.LOBBY);
-            EventBus.Push(new MusicPlayEvent(MusicTrack.Menu), EventBus.EventRegion.GLOBAL);
-            await UniTask.DelayFrame(1);
-            await ShowLobbyScreen();
-            _mapController.Initialize(zoneData, locationIndex, levelIndex);
-            EventBus.Push(new KeyEvent("SceneLoaded"), EventBus.EventRegion.GLOBAL);
+            catch (System.OperationCanceledException)
+            {
+                // component destroyed mid-await, expected
+            }
         }
 
         private async UniTask ShowLobbyScreen()

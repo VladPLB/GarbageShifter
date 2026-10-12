@@ -8,7 +8,7 @@ namespace _GAME.Scripts.Map
 {
     public class MapManager : MonoBehaviour
     {
-        public enum LocationType { RoundStation, MedicalStation, ConstructStation, AsteroidStation, BigShip, MinerShip, DroidShip, AsteroidShip, AsteroidMine }
+        public enum LocationType { RoundStation, MedicalStation, ConstructStation, AsteroidStation, BigShip, MinerShip, DroidShip, AsteroidShip, AsteroidMine, Practice }
         public enum LevelType { Default, Tutorial, Rage, Elite, Boss }
         
         [SerializeField] private LevelGenerationProfile _generationProfile;

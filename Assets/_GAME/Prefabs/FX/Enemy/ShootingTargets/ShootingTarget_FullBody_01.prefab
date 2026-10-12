@@ -89,6 +89,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -166,10 +169,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _damageReactionViewer: {fileID: 5685719905951695514}
   _health:
-    Current: 1000
-    Max: 1000
-  _deadEffect: 0
-  _deadEffectPoint: {fileID: 8652931501160394250}
+    Current: 100
+    Max: 100
+  _reviveTime: 2
+  _colliders:
+  - {fileID: 149942284186891474}
+  - {fileID: 8804703846952501297}
+  _activeItems:
+  - {fileID: 8732498677768378647}
+  _destroyedItems: []
+  _deadHandlers: []
+  _deadEffectType: 4
+  _deadEffectOffset: {x: 0, y: 1, z: 0}
 --- !u!114 &5685719905951695514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -286,6 +297,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

@@ -39,26 +39,33 @@ namespace _GAME.Scripts.Battle.Weapons
 
         public async void DoPhysicsDrop(float duration)
         {
-            var rigidbody = gameObject.AddComponent<Rigidbody>();
-            if(_collider==null)
+            try
             {
-                _collider = gameObject.AddComponent<BoxCollider>();
+                var rigidbody = gameObject.AddComponent<Rigidbody>();
+                if(_collider==null)
+                {
+                    _collider = gameObject.AddComponent<BoxCollider>();
+                }
+                rigidbody.AddForce(Vector3.up + Random.insideUnitSphere * 10f, ForceMode.Impulse);
+                transform.parent = null;
+                if (_collider != null)
+                {
+                    _collider.enabled = true;
+                }
+                await UniTask.Delay(TimeSpan.FromSeconds(duration), cancellationToken: this.GetCancellationTokenOnDestroy());
+                Destroy(rigidbody);
+                if(_collider!=null)
+                {
+                    _collider.enabled = false;
+                }
+                transform.parent = _defaultParent;
+                transform.localPosition = _defaultPosition;
+                transform.localRotation = _defaultRotation;
             }
-            rigidbody.AddForce(Vector3.up + Random.insideUnitSphere * 10f, ForceMode.Impulse);
-            transform.parent = null;
-            if (_collider != null)
+            catch (OperationCanceledException)
             {
-                _collider.enabled = true;
+                // component destroyed mid-await, expected
             }
-            await UniTask.Delay(TimeSpan.FromSeconds(duration));
-            Destroy(rigidbody);
-            if(_collider!=null)
-            {
-                _collider.enabled = false;
-            }
-            transform.parent = _defaultParent;
-            transform.localPosition = _defaultPosition;
-            transform.localRotation = _defaultRotation;
         }
 
         public void BattleReady()
@@ -108,6 +115,19 @@ namespace _GAME.Scripts.Battle.Weapons
         {
             _freePosition = transform.localPosition;
             _freeRotation = transform.localRotation.eulerAngles;
+        }
+        [ContextMenu("LoadReadyState")]
+        private void LoadReadyState()
+        {
+            transform.localPosition = _readyPosition;
+            transform.localRotation = Quaternion.Euler(_readyRotation);
+        }
+        
+        [ContextMenu("LoadFreeState")]
+        private void LoadFreeState()
+        {
+            transform.localPosition = _freePosition;
+            transform.localRotation = Quaternion.Euler(_freeRotation);
         }
         #endif
     }

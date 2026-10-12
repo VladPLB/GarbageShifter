@@ -13,6 +13,8 @@ namespace _GAME.Scripts.Cores.Save.SavesConfigs
         public event Action<bool> OnDataChanged;
 
         public List<ItemStackSave> Items = new();
+        public List<ItemUpgradeSave> Upgrades = new();
+        public List<ItemCaseSave> Cases = new();
 
         public int GameplayStorageCapacity = 3;
 
@@ -27,6 +29,20 @@ namespace _GAME.Scripts.Cores.Save.SavesConfigs
     {
         public string ItemId;
         public int Amount;
+    }
+    
+    [Serializable]
+    public struct ItemUpgradeSave
+    {
+        public string ItemId;
+        public int Level;
+    }
+    
+    [Serializable]
+    public struct ItemCaseSave
+    {
+        public string ItemId;
+        public InventoryCase Case;
     }
 
 }

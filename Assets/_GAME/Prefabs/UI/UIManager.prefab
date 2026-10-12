@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2979725282156718214}
   - component: {fileID: 5317357249210957320}
+  - component: {fileID: 7224887075954100757}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -54,3 +55,19 @@ MonoBehaviour:
   - {fileID: 7983564946789722226, guid: 9769a50bc480f4a0dbf39d9ae0ab53de, type: 3}
   - {fileID: 5220882650761009497, guid: 7fa3e9e4fdbe74b0e933128917623c39, type: 3}
   - {fileID: -5056959779334714327, guid: 1c92691971f874f2e88050db725c1e20, type: 3}
+  - {fileID: 7267631213814288097, guid: e720d25f316324a63ac44a25d8a2d51e, type: 3}
+  - {fileID: 5181819666987134995, guid: 329ca16b035964274a827ce5e8b37fa0, type: 3}
+  - {fileID: 7125637407578491672, guid: c556cab6ec43e49f6a0e918e5cd3b8d5, type: 3}
+  - {fileID: 7125637407578491672, guid: 547dfc413e5864b8e901f15a10796881, type: 3}
+--- !u!114 &7224887075954100757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 180738939197564904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f999e8356446454da73694b6241bbd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

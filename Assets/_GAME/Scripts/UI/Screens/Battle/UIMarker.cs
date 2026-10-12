@@ -20,8 +20,15 @@ namespace _GAME.Scripts.Common
         
         public async void AutoRemove()
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(1f));
-            Remove();
+            try
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(1f), cancellationToken: this.GetCancellationTokenOnDestroy());
+                Remove();
+            }
+            catch (OperationCanceledException)
+            {
+                // component destroyed mid-await, expected
+            }
         }
 
         public void Remove()

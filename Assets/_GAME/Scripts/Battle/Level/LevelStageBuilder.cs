@@ -52,7 +52,29 @@ namespace _GAME.Scripts.Battle.Level
             bool nextRotarorIsLeft = Random.Range(0, 1000) < 500;
             for (int i = 0; i < levelData.StageCount; i++)
             {
-                stageList.Add(levelData.GetStageData(i).GetRandomStage());
+                var nextStage = levelData.GetStageData(i).GetRandomStage();
+                int fallback = 0;
+                while (nextStage.IsLeftRotate && !nextRotarorIsLeft || nextStage.IsRightRotate && nextRotarorIsLeft)
+                {
+                    if (i == 0 || fallback++ > 100)
+                    {
+                        nextRotarorIsLeft = !nextRotarorIsLeft;
+                        break;
+                    }
+                    nextStage = levelData.GetStageData(i).GetRandomStage();
+                }
+
+                if (nextStage.IsLeftRotate)
+                {
+                    nextRotarorIsLeft = false;
+                }
+
+                if (nextStage.IsRightRotate)
+                {
+                    nextRotarorIsLeft = true;
+                }
+                    
+                stageList.Add(nextStage);
                 if (i < levelData.StageCount - 1)
                 {
                     var rotators = nextRotarorIsLeft?rotatorsL:rotatorsR;

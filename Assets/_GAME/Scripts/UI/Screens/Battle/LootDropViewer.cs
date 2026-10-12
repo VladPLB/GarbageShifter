@@ -26,7 +26,7 @@ namespace _GAME.Scripts.UI.Screens.Battle
         public void Setup(LocalInventory inventory)
         {
             _inventory = inventory;
-
+            
             _pool = new LocalPool<InventoryItemViewer>(_itemViewerPrefabReference);
             _addCapacityButton.SetListener(AddCapacity);
             

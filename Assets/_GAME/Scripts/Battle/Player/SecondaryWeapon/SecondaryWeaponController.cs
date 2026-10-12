@@ -74,12 +74,19 @@ namespace _GAME.Scripts.Battle.Player.SecondaryWeapon
         {
             if(!_weapon.IsReady || _weapon.IsFire)
                 return;
-            
-            
-            _weapon.OnFire();
-            _fill.Progress = 0f;
-            await UniTask.WaitWhile(() => _weapon.IsFire);
-            Hide();
+
+            var ct = this.GetCancellationTokenOnDestroy();
+            try
+            {
+                _weapon.OnFire();
+                _fill.Progress = 0f;
+                await UniTask.WaitWhile(() => _weapon.IsFire, cancellationToken: ct);
+                Hide();
+            }
+            catch (OperationCanceledException)
+            {
+                // component destroyed mid-await, expected
+            }
         }
 
         private void LateUpdate()
@@ -106,18 +113,34 @@ namespace _GAME.Scripts.Battle.Player.SecondaryWeapon
 
         private async void Show()
         {
-            _fillAnimator.SetBool("IsFull", true);
-            await UniTask.Delay(TimeSpan.FromSeconds(.2f));
-            _isReady = true;
-            _previousWeaponHolderOffset = _weaponBase.TransformPoint(_inactiveWeaponOffset);
-            await UniTask.Delay(TimeSpan.FromSeconds(.2f));
-            _weapon.Show();
+            var ct = this.GetCancellationTokenOnDestroy();
+            try
+            {
+                _fillAnimator.SetBool("IsFull", true);
+                await UniTask.Delay(TimeSpan.FromSeconds(.2f), cancellationToken: ct);
+                _isReady = true;
+                _previousWeaponHolderOffset = _weaponBase.TransformPoint(_inactiveWeaponOffset);
+                await UniTask.Delay(TimeSpan.FromSeconds(.2f), cancellationToken: ct);
+                _weapon.Show();
+            }
+            catch (OperationCanceledException)
+            {
+                // component destroyed mid-await, expected
+            }
         }
         private async void Hide()
         {
-            _fillAnimator.SetBool("IsFull", false);
-            await UniTask.Delay(TimeSpan.FromSeconds(.2f));
-            _isReady = false;
+            var ct = this.GetCancellationTokenOnDestroy();
+            try
+            {
+                _fillAnimator.SetBool("IsFull", false);
+                await UniTask.Delay(TimeSpan.FromSeconds(.2f), cancellationToken: ct);
+                _isReady = false;
+            }
+            catch (OperationCanceledException)
+            {
+                // component destroyed mid-await, expected
+            }
         }
 
         private void OnDisable()

@@ -28,8 +28,11 @@ namespace _GAME.Scripts.Common
 
     public enum WeaponType
     {
-        Riffle,
-        BigRiffle_1
+        RiffleLaser = 0,
+        MinigunLaser = 1,
+        PistolLaser = 10,
+        RevolverLaser = 20,
+        ShotgunLaser = 30,
     }
 
     public enum BulletType

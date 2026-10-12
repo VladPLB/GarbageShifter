@@ -39,7 +39,7 @@ namespace _GAME.Scripts.Battle.Enemy
 
         public void Init()
         {
-            _data.WeaponData.Setup(this, 1);
+            _data.WeaponData.Setup(this, 0);
             _weapon.Setup(_data.WeaponData, IsFire, fireCallback:_viewer.Fire);
             
             _health.OnChangeValue -= OnHealthChange;

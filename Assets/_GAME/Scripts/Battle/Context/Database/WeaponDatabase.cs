@@ -11,10 +11,12 @@ namespace _GAME.Scripts.Battle.Context
     {
         [SerializeField] private List<WeaponReferenceData> _weapons = new();
         private Dictionary<WeaponType, WeaponReferenceData> _weaponByType = new();
+        private Dictionary<string, WeaponReferenceData> _weaponByInventoryId = new();
         
         public void RuntimeSetup()
         {
             _weaponByType = _weapons.ToDictionary(w => w.Data.Type);
+            _weaponByInventoryId =  _weapons.ToDictionary(w => w.Data.InventoryId);
         }
         
         public WeaponData GetData(WeaponType type)
@@ -22,6 +24,22 @@ namespace _GAME.Scripts.Battle.Context
             var reference = _weaponByType[type];
             var data = reference.Data.Clone();
             return data;
+        }
+
+        public WeaponData GetData(string inventoryId)
+        {
+            if (!_weaponByInventoryId.TryGetValue(inventoryId, out var reference))
+            {
+                return null;
+            }
+            
+            var data = reference.Data.Clone();
+            return data;
+        }
+        
+        public Weapon GetPrefab(WeaponType type)
+        {
+            return _weaponByType[type].Prefab;
         }
     }
 }

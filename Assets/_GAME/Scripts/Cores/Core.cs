@@ -41,7 +41,21 @@ namespace _GAME.Scripts
             
         }
 
-        private static List<Func<object>> _registryQueue = new();
+        private readonly struct PendingRegistration
+        {
+            public readonly Type Type;
+            public readonly object Module;
+            public readonly Func<bool> IsReady;
+
+            public PendingRegistration(Type type, object module, Func<bool> isReady)
+            {
+                Type = type;
+                Module = module;
+                IsReady = isReady;
+            }
+        }
+
+        private static readonly List<PendingRegistration> _registryQueue = new();
 
         public static void Unregistry<T>(T module) where T : class
         {
@@ -50,69 +64,87 @@ namespace _GAME.Scripts
                 Instance._modules.Remove(typeof(T));
             }
         }
-        
+
         public static void Registry<T>(T module, params Type[] conditions) where T : class
         {
+            var type = typeof(T);
+
             if (!conditions.IsNullOrEmpty())
             {
-                if (!Instance._modules.ContainsKey(typeof(T)))
+                if (!Instance._modules.ContainsKey(type))
                 {
-                    Instance._modules.Add(typeof(T), null);
+                    Instance._modules.Add(type, null);
                 }
 
                 var c = conditions.ToArray();
-                var m = module;
-                var t = typeof(T);
-
-                Func<T> action = () =>
+                bool IsReady()
                 {
                     for (int i = 0; i < c.Length; i++)
                     {
-                        if (!Instance._modules.ContainsKey(c[i]) || Instance._modules[c[i]] == null)
-                            return null;
+                        if (!Instance._modules.TryGetValue(c[i], out var dep) || dep == null)
+                            return false;
                     }
+                    return true;
+                }
 
-                    if (Instance._modules[t] == null)
-                    {
-                        Instance._modules[t] = m;
-                    }
-                    return m;
-                };
-                _registryQueue.Add(action);
+                _registryQueue.Add(new PendingRegistration(type, module, IsReady));
             }
             else
             {
-                if (!Instance._modules.ContainsKey(typeof(T)))
-                {
-                    Instance._modules.Add(typeof(T), module);
-                }
-
-                if (Instance._modules[typeof(T)] == null)
-                {
-                    Instance._modules[typeof(T)] = module;
-                }
-
-                if (module is MonoBehaviour behaviour and not IReparentIgnored)
-                {
-                    behaviour.transform.SetParent(Instance.transform);
-                }
-                
-                if (module is IRuntimeSetup item)
-                {
-                    item.RuntimeSetup();
-                }
+                RegisterImmediate(type, module);
             }
 
-            for (int i = 0; i < _registryQueue.Count; i++)
+            ResolveQueue();
+        }
+
+        // Registers a module that has no outstanding dependencies: stores it (first registration wins;
+        // a later call for the same type with a different instance is dropped, not silently overwritten)
+        // and runs its one-time setup.
+        private static void RegisterImmediate(Type type, object module)
+        {
+            if (Instance._modules.TryGetValue(type, out var existing) && existing != null)
             {
-                var m = _registryQueue[i].Invoke();
-                if (m!=null)
+                if (!ReferenceEquals(existing, module))
                 {
-                    _registryQueue.RemoveAt(i);
-                    Registry(m);
-                    return;
+                    Debug.LogWarning($"[Core] Duplicate registration of '{type.Name}' ignored - '{existing}' is already registered, '{module}' was discarded.");
                 }
+                return;
             }
+
+            Instance._modules[type] = module;
+
+            if (module is MonoBehaviour behaviour and not IReparentIgnored)
+            {
+                behaviour.transform.SetParent(Instance.transform);
+            }
+
+            if (module is IRuntimeSetup item)
+            {
+                item.RuntimeSetup();
+            }
+        }
+
+        // Keeps draining the queue until a full pass resolves nothing, so multiple entries that
+        // become ready from the same Registry() call are all processed immediately instead of
+        // waiting for an unrelated future Registry() call to nudge the queue again.
+        private static void ResolveQueue()
+        {
+            bool resolvedAny;
+            do
+            {
+                resolvedAny = false;
+                for (int i = 0; i < _registryQueue.Count; i++)
+                {
+                    if (!_registryQueue[i].IsReady())
+                        continue;
+
+                    var pending = _registryQueue[i];
+                    _registryQueue.RemoveAt(i);
+                    RegisterImmediate(pending.Type, pending.Module);
+                    resolvedAny = true;
+                    break;
+                }
+            } while (resolvedAny);
         }
 
         public static T Get<T>() where T : class

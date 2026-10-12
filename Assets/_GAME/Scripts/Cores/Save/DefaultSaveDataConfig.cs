@@ -16,12 +16,14 @@ namespace _GAME.Settings.Save
     public class DefaultSaveDataConfig : ScriptableObject
     {
         [SerializeField] private ProgressData _progressData;
+        [SerializeField] private InventoryData _inventoryData;
         [SerializeField] private TutorialEntryData _tutorialEntryData;
         public List<ISaveData> GetDatas()
         {
             List<ISaveData> _datas = new()
             {
                 _progressData.Clone(),
+                _inventoryData.Clone(),
                 _tutorialEntryData.Clone()
             };
             

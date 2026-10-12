@@ -107,9 +107,15 @@ public class Bullet : MonoBehaviour, IPoolableItem<BulletType>
    {
       _data = null;
 
-      await UniTask.Delay(TimeSpan.FromSeconds(REMOVE_DELAY));
-      
-      Core.Get<PoolProvider>().Bullets.Push(this);
+      try
+      {
+         await UniTask.Delay(TimeSpan.FromSeconds(REMOVE_DELAY), cancellationToken: this.GetCancellationTokenOnDestroy());
+         Core.Get<PoolProvider>().Bullets.Push(this);
+      }
+      catch (OperationCanceledException)
+      {
+         // component destroyed mid-await, expected
+      }
    }
 
    public static Bullet Create(BulletType type)

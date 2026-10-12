@@ -2058,7 +2058,7 @@ MonoBehaviour:
   _deadEffectSoundType: 7
   _deadEffectOffset: {x: 0, y: 1, z: 0}
   _damagePointOffset: {x: 0, y: 1, z: 0}
-  _spawnEffectType: -1
+  _spawnEffectType: 3
   _spawnEffectOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &2419557903675809743
 MonoBehaviour:
@@ -2278,11 +2278,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   handler:
-    _Editor_SelectedChain: 0
-    _Editor_ChainCategory: 0
-    _EditorCategory: 3
-    _EditorMainCategory: 0
-    _EditorMotionCategory: 0
     m_hemi: {fileID: -2508796484986968503, guid: 44d994eaad14fdf49a2dd378b4d62094,
       type: 3}
     m_cyli: {fileID: 2534964839176971238, guid: 2ea99bbc50a9266448416f21d645a771,
@@ -2292,6 +2287,11 @@ MonoBehaviour:
     m_box: {fileID: -5495902117074765545, guid: 556fd6baa0902304189e57acd1d60fa6,
       type: 3}
     _EditorBoneScenePreviews: []
+    _Editor_SelectedChain: 0
+    _Editor_ChainCategory: 0
+    _EditorCategory: 3
+    _EditorMainCategory: 0
+    _EditorMotionCategory: 0
     StoredReferenceTPose:
       BonePoses:
       - SourceBone: {fileID: 8960081291793835965}

@@ -21,7 +21,8 @@ MonoBehaviour:
   _subType: Scrap
   _zeroCountEnabled: 0
   _maxStack: 99
-  _showConditions: []
+  _showConditions:
+  - {fileID: 11400000, guid: fa0f5270e456e4bc0ab2c74ba6171c6f, type: 2}
   _craftConditions: []
   _useConditions: []
   _recipe:

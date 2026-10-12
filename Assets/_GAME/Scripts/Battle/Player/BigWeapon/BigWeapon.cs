@@ -77,26 +77,34 @@ namespace _GAME.Scripts.Battle.Player
 
         public async void Fire()
         {
-            int barelIndex = 0;
-            for(int i =0;i<_data.BulletAmount;i++)
+            var ct = this.GetCancellationTokenOnDestroy();
+            try
             {
-                barelIndex = (barelIndex + 1) % _barrelPoints.Count;
-                EventBus.Push(new SoundPlayEvent(SoundType.Shot, _barrelPoints[barelIndex].position), EventBus.EventRegion.GLOBAL);
-                
-                ApplyRecoil();
-                
-                var bullet = Bullet.Create(_bulletData.Type);
-                bullet.transform.position = _barrelPoints[barelIndex].position;
-                var offset = (Mathf.PerlinNoise1D(Time.time) * 2f - 1f) * _data.AimOffset;
-                bullet.transform.forward = (_barrelPoints[barelIndex].forward + _barrelPoints[barelIndex].right * offset + _barrelPoints[barelIndex].up * offset).normalized;
-                var data = _bulletData.Clone();
-                data.Setup(_data.DamageDealer, _data.DamageRandomize, bullet.transform.forward);
-                bullet.Setup(data, OnHit);
-                bullet.gameObject.SetActive(true);
-                if (i < _data.BulletAmount - 1 && _data.BulletSpawnDelay>0f)
+                int barelIndex = 0;
+                for(int i =0;i<_data.BulletAmount;i++)
                 {
-                    await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Abs(_data.BulletSpawnDelay)));
+                    barelIndex = (barelIndex + 1) % _barrelPoints.Count;
+                    EventBus.Push(new SoundPlayEvent(SoundType.Shot, _barrelPoints[barelIndex].position), EventBus.EventRegion.GLOBAL);
+
+                    ApplyRecoil();
+
+                    var bullet = Bullet.Create(_bulletData.Type);
+                    bullet.transform.position = _barrelPoints[barelIndex].position;
+                    var offset = (Mathf.PerlinNoise1D(Time.time) * 2f - 1f) * _data.AimOffset;
+                    bullet.transform.forward = (_barrelPoints[barelIndex].forward + _barrelPoints[barelIndex].right * offset + _barrelPoints[barelIndex].up * offset).normalized;
+                    var data = _bulletData.Clone();
+                    data.Setup(_data.DamageDealer, _data.DamageRandomize, bullet.transform.forward);
+                    bullet.Setup(data, OnHit);
+                    bullet.gameObject.SetActive(true);
+                    if (i < _data.BulletAmount - 1 && _data.BulletSpawnDelay>0f)
+                    {
+                        await UniTask.Delay(TimeSpan.FromSeconds(Mathf.Abs(_data.BulletSpawnDelay)), cancellationToken: ct);
+                    }
                 }
+            }
+            catch (OperationCanceledException)
+            {
+                // component destroyed mid-await, expected
             }
         }
         

@@ -2,6 +2,7 @@ using System;
 using _GAME.Scripts.Battle.Context;
 using _GAME.Scripts.Battle.Enemy;
 using _GAME.Scripts.Battle.Items;
+using _GAME.Scripts.Battle.Weapons;
 using _GAME.Scripts.Common;
 using _GAME.Scripts.Map;
 using UnityEngine;
@@ -10,6 +11,7 @@ namespace _GAME.Scripts
 {
     public class PoolProvider: MonoBehaviour, IRuntimeSetup
     {
+        public Pool<Weapon,WeaponType> Weapons { get; private set; }
         public Pool<Bullet,BulletType> Bullets { get; private set; }
         public Pool<Explosion,ExplosionType> Explosions { get; private set; }
         public Pool<TextEffect,TextEffectType> TextEffects { get; private set; }
@@ -31,6 +33,7 @@ namespace _GAME.Scripts
         public void RuntimeSetup()
         {
             var database = Core.Get<DataBase>();
+            Weapons = new Pool<Weapon, WeaponType>(database.Weapons.GetPrefab);
             Bullets = new Pool<Bullet, BulletType>(database.Bullets.GetPrefab);
             Explosions = new Pool<Explosion, ExplosionType>(database.Explosion.GetPrefab);
             TextEffects = new Pool<TextEffect, TextEffectType>(database.TextsEffects.GetPrefab);

@@ -14,7 +14,7 @@ namespace _GAME.Scripts.Battle.Enemy
     {
         [SerializeField] private DamageReactionViewer _damageReactionViewer;
         [SerializeField] private StateIntAttribute _health;
-        [SerializeField] private bool _autoRevive = false;
+        [SerializeField] private float _reviveTime = 0f;
         [SerializeField] private List<Collider> _colliders = new();
         [SerializeField] private List<GameObject> _activeItems = new();
         [SerializeField] private List<GameObject> _destroyedItems = new();
@@ -78,11 +78,19 @@ namespace _GAME.Scripts.Battle.Enemy
             _colliders.ForEach(a => a.enabled = false);
             EventBus.Push(new SoundPlayEvent(SoundType.Explosion, transform.position + _deadEffectOffset), EventBus.EventRegion.GLOBAL);
 
-            if(_autoRevive)
+            if(_reviveTime > 0)
             {
-                await UniTask.Delay(TimeSpan.FromSeconds(2));
-                gameObject.SetActive(false);
-                Revive();
+                var ct = this.GetCancellationTokenOnDestroy();
+                try
+                {
+                    await UniTask.Delay(TimeSpan.FromSeconds(_reviveTime), cancellationToken: ct);
+                    gameObject.SetActive(false);
+                    Revive();
+                }
+                catch (OperationCanceledException)
+                {
+                    // component destroyed mid-await, expected
+                }
             }
         }
     }

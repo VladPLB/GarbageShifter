@@ -350,11 +350,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5317357249210957320, guid: e0e448ae254744e6eb93533c2b2663bd,
         type: 3}
-      propertyPath: windowPrefabs.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5317357249210957320, guid: e0e448ae254744e6eb93533c2b2663bd,
-        type: 3}
       propertyPath: layers.Array.data[0].root
       value: 
       objectReference: {fileID: 602926864}
@@ -362,40 +357,12 @@ PrefabInstance:
         type: 3}
       propertyPath: layers.Array.data[1].root
       value: 
-      objectReference: {fileID: 602926864}
-    - target: {fileID: 5317357249210957320, guid: e0e448ae254744e6eb93533c2b2663bd,
-        type: 3}
-      propertyPath: 'windowPrefabs.Array.data[3]'
-      value: 
-      objectReference: {fileID: 7267631213814288097, guid: e720d25f316324a63ac44a25d8a2d51e,
-        type: 3}
+      objectReference: {fileID: 197146914}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 180738939197564904, guid: e0e448ae254744e6eb93533c2b2663bd,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 37227181349100238}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e0e448ae254744e6eb93533c2b2663bd, type: 3}
---- !u!1 &37227181349100237 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 180738939197564904, guid: e0e448ae254744e6eb93533c2b2663bd,
-    type: 3}
-  m_PrefabInstance: {fileID: 37227181349100236}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &37227181349100238
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 37227181349100237}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f999e8356446454da73694b6241bbd5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!225 &405587590672503912
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -768,6 +735,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TutorialFade
+      objectReference: {fileID: 0}
+    - target: {fileID: 1298665700671799608, guid: f1262fcd03be6413ab5689e5b7e6bb5e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5142556045888314879, guid: f1262fcd03be6413ab5689e5b7e6bb5e,
         type: 3}

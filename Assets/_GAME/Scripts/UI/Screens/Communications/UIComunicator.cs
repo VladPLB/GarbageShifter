@@ -44,34 +44,49 @@ namespace _GAME.Scripts.UI.Screens.Communications
         
         private async void Show()
         {
-            EventBus.Push(new KeyEvent("LockUI"), EventBus.EventRegion.GLOBAL);
-            if (!_showed)
+            var ct = this.GetCancellationTokenOnDestroy();
+            try
             {
-                _animator.SetTrigger(ShowKey);
-                EventBus.Push(new SoundPlayEvent(SoundType.ShowCommunicator, null),  EventBus.EventRegion.GLOBAL);
+                EventBus.Push(new KeyEvent("LockUI"), EventBus.EventRegion.GLOBAL);
+                if (!_showed)
+                {
+                    _animator.SetTrigger(ShowKey);
+                    EventBus.Push(new SoundPlayEvent(SoundType.ShowCommunicator, null),  EventBus.EventRegion.GLOBAL);
+                }
+                await UniTask.Delay(ShowedTime, cancellationToken: ct);
+                _showed = true;
+                _subtitles.OnEnd += CompleteDialog;
+                _subtitles.ShowMessages(_messages);
+                _messages.Clear();
             }
-            await UniTask.Delay(ShowedTime);
-            _showed = true;
-            _subtitles.OnEnd += CompleteDialog;
-            _subtitles.ShowMessages(_messages);
-            _messages.Clear();
+            catch (OperationCanceledException)
+            {
+                // component destroyed mid-await, expected
+            }
         }
 
         private async void CompleteDialog()
         {
-            if (_showed)
+            var ct = this.GetCancellationTokenOnDestroy();
+            try
             {
-                _animator.SetTrigger(HideKey);
-                EventBus.Push(new SoundPlayEvent(SoundType.HideCommunicator, null),  EventBus.EventRegion.GLOBAL);
+                if (_showed)
+                {
+                    _animator.SetTrigger(HideKey);
+                    EventBus.Push(new SoundPlayEvent(SoundType.HideCommunicator, null),  EventBus.EventRegion.GLOBAL);
+                }
+
+                await UniTask.Delay(HideTime, cancellationToken: ct);
+                EventBus.Push(new KeyEvent("UnlockUI"), EventBus.EventRegion.GLOBAL);
+                _showed = false;
+                OnCompleted?.Invoke();
+                OnCompleted = null;
+                EventBus.Push(new DialogCompleteEvent(), _region);
             }
-            
-            await UniTask.Delay(HideTime);
-            EventBus.Push(new KeyEvent("UnlockUI"), EventBus.EventRegion.GLOBAL);
-            _showed = false;
-            OnCompleted?.Invoke();
-            OnCompleted = null;
-            EventBus.Push(new DialogCompleteEvent(), _region);
-            
+            catch (OperationCanceledException)
+            {
+                // component destroyed mid-await, expected
+            }
         }
 
         public void OnDestroy()

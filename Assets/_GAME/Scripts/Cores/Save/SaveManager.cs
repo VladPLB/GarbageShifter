@@ -21,9 +21,13 @@ namespace _GAME.Scripts.Save
         }
         
         private const string PREF_KEY = "GlobalSave";
-        
+
         [SerializeField] private float _autoSaveDelay = 30f;
-        
+
+        [Header("Debug")]
+        [Tooltip("Skips PlayerPrefs Load() and always starts from DefaultSaveDataConfig. Use to test a specific starting progress.")]
+        [SerializeField] private bool _debugForceDefaultData = false;
+
         private Dictionary<Type, ISaveData> _dataDictionary;
 
         private float _autoSaveTime = 0;
@@ -37,7 +41,10 @@ namespace _GAME.Scripts.Save
         {
             _dataDictionary = new Dictionary<Type, ISaveData>();
             SetupDefaults();
-            //Load();
+            if (_debugForceDefaultData)
+                Debug.LogWarning("[SaveManager] _debugForceDefaultData is enabled - skipping Load(), starting from defaults.");
+            else
+                Load();
             _autoSaveTime = Time.time + _autoSaveDelay;
             _changed = false;
         }

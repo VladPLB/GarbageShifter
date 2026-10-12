@@ -36,19 +36,27 @@ namespace _GAME.Scripts.Battle.Player.SecondaryWeapon
         public override async void OnFire()
         {
             _isFire = true;
-            
-            for(int i = 0; i< _rockets.Count;i++)
+
+            var ct = this.GetCancellationTokenOnDestroy();
+            try
             {
-                SpawnProjectile(_rockets[i].transform);
-                _muzzleFlashes[i]?.Play();
-                _rockets[i].SetActive(false);
-                if(i<_rockets.Count-1)
+                for(int i = 0; i< _rockets.Count;i++)
                 {
-                    await UniTask.Delay(_shotDelay);
+                    SpawnProjectile(_rockets[i].transform);
+                    _muzzleFlashes[i]?.Play();
+                    _rockets[i].SetActive(false);
+                    if(i<_rockets.Count-1)
+                    {
+                        await UniTask.Delay(_shotDelay, cancellationToken: ct);
+                    }
                 }
+                await UniTask.Delay(_shotDelayToHide, cancellationToken: ct);
+                Hide();
             }
-            await UniTask.Delay(_shotDelayToHide);
-            Hide();
+            catch (OperationCanceledException)
+            {
+                // component destroyed mid-await, expected
+            }
         }
 
         private void SpawnProjectile(Transform point)

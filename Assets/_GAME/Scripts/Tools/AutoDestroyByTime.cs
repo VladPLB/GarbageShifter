@@ -10,8 +10,15 @@ namespace _GAME
 
         private async void Start()
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(_delay));
-            Destroy(gameObject);
+            try
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(_delay), cancellationToken: this.GetCancellationTokenOnDestroy());
+                Destroy(gameObject);
+            }
+            catch (OperationCanceledException)
+            {
+                // component destroyed mid-await, expected
+            }
         }
 
         public static void AddTo(GameObject go, float delay = 1f)

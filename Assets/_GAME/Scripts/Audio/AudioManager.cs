@@ -64,6 +64,9 @@ namespace _GAME.Scripts.Audio
         DoorOpen = 15,
         DoorBigOpen = 16,
         DoorSmallOpen = 17,
+        RevolverShot = 18,
+        PistolShot = 19,
+        ShotgunShot = 20,
     }
 
     public enum AmbientType

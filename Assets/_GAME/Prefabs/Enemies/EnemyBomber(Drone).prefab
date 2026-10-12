@@ -10104,7 +10104,7 @@ MonoBehaviour:
   _deadEffectSoundType: 7
   _deadEffectOffset: {x: 0, y: 0, z: 0}
   _damagePointOffset: {x: 0, y: 0, z: 0}
-  _spawnEffectType: -1
+  _spawnEffectType: 3
   _spawnEffectOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &6643660224397700166
 MonoBehaviour:

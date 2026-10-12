@@ -14,6 +14,8 @@ namespace _GAME.Scripts.Battle.Level
     {
         [SerializeField] private MapManager.LocationType _locationType;
         [SerializeField] private LevelStageType _stageType;
+        [SerializeField] private bool _leftRotate = false;
+        [SerializeField] private bool _rightRotate = false;
         [SerializeField] private EnemySpawner _enemySpawner;
         [SerializeField] private Transform _stageInConnector;
         [SerializeField] private Transform _stageOutConnector;
@@ -39,6 +41,9 @@ namespace _GAME.Scripts.Battle.Level
         public bool IsPrestart => _prestartCondition == null || _prestartCondition.IsNext;
         public bool IsPlay => _playCondition == null || _playCondition.IsNext;
         public bool IsCompleted => _completeCondition ==null || _completeCondition.IsNext;
+        
+        public bool IsLeftRotate => _leftRotate;
+        public bool IsRightRotate => _rightRotate;
 
         private Action<Vector3> _onSpawnWarning;
 

@@ -31,9 +31,16 @@ namespace _GAME.Scripts.Battle.Player.SecondaryWeapon
 
         public virtual async void SetReady(bool ready)
         {
-            if (ready && DelayAfterShowing.Milliseconds>0)
-                await UniTask.Delay(DelayAfterShowing);
-            _isReady = ready;
+            try
+            {
+                if (ready && DelayAfterShowing.Milliseconds>0)
+                    await UniTask.Delay(DelayAfterShowing, cancellationToken: this.GetCancellationTokenOnDestroy());
+                _isReady = ready;
+            }
+            catch (OperationCanceledException)
+            {
+                // component destroyed mid-await, expected
+            }
         }
 
         public virtual void OnFire()

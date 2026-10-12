@@ -21,7 +21,7 @@ MonoBehaviour:
     - type: 0
       levels: 00000000000000000000000000000000
       uiPosition: {x: 0, y: 0, z: 0}
-    - type: 4
+    - type: 5
       levels: 0000000000000000000000000000000000000000
       uiPosition: {x: 0, y: 0, z: 0}
     - type: 4

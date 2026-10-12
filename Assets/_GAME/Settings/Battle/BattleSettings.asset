@@ -12,18 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 062198ad300443a584f22b7e1766267d, type: 3}
   m_Name: BattleSettings
   m_EditorClassIdentifier: 
-  _groundLayerMask:
-    serializedVersion: 2
-    m_Bits: 0
-  _neutralDamageLayerMask:
-    serializedVersion: 2
-    m_Bits: 0
-  _playerDamageLayerMask:
-    serializedVersion: 2
-    m_Bits: 0
-  _enemyDamageLayerMask:
-    serializedVersion: 2
-    m_Bits: 0
-  _allyDamageLayerMask:
-    serializedVersion: 2
-    m_Bits: 0
+  _lights:
+  - Location: 4
+    Color: {r: 0.85882354, g: 0.7764706, b: 0.6509804, a: 1}
+    Intensity: 0.7
+  - Location: 0
+    Color: {r: 0.74509805, g: 0.7921569, b: 0.6901961, a: 1}
+    Intensity: 1
+  - Location: 5
+    Color: {r: 0.70980394, g: 0.7764706, b: 0.8392157, a: 1}
+    Intensity: 0.3
+  - Location: 9
+    Color: {r: 0.85882354, g: 0.7764706, b: 0.6509804, a: 1}
+    Intensity: 0.7

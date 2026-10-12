@@ -52,10 +52,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _damageReactionViewer: {fileID: 2926098302019788818}
   _health:
-    Current: 1000
-    Max: 1000
-  _deadEffect: 0
-  _deadEffectPoint: {fileID: 6727247479461999129}
+    Current: 100
+    Max: 100
+  _reviveTime: 2
+  _colliders:
+  - {fileID: 3437302934311495179}
+  - {fileID: 6148522227563682091}
+  _activeItems:
+  - {fileID: 8251373132775149376}
+  _destroyedItems: []
+  _deadHandlers: []
+  _deadEffectType: 4
+  _deadEffectOffset: {x: 0, y: 1, z: 0}
 --- !u!114 &2926098302019788818
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,6 +180,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -286,6 +297,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

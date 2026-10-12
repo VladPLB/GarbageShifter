@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _usePhysicsDrop: 1
+  _collider: {fileID: 0}
   _readyPosition: {x: 0, y: -0, z: 0}
   _readyRotation: {x: 0, y: 0, z: 355}
   _freePosition: {x: 0.115, y: 0.02, z: -0.017}
@@ -110,6 +111,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5033,6 +5037,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5134,9 +5141,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6e6ba01297c4c49976a2919fe95ce7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _type: 0
   _viewer: {fileID: 2527823807316502753}
-  _barrel: {fileID: 607489633874788796}
-  _muzzleFlash: {fileID: 4906775999368516308}
+  _recoilAnimator: {fileID: 0}
+  _barrels:
+  - {fileID: 607489633874788796}
+  _muzzleFlashes:
+  - {fileID: 4906775999368516308}
+  _leftIkAnchor: {fileID: 0}
+  _rightIkAnchor: {fileID: 0}
 --- !u!1 &6504827716908323736
 GameObject:
   m_ObjectHideFlags: 0
@@ -5195,6 +5208,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -10093,6 +10109,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

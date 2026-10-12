@@ -25,23 +25,30 @@ namespace _GAME.Scripts.UI.Screens.Lobby
         {
             if(_isAnimate)
                 return;
-            
+
             _isAnimate = true;
-            float showDelay = .2f;
-            if (_types == null || _types[0] != types[0])
+            try
             {
-                _types = types;
-                for (int i = 0; i < _buttons.Count; i++)
+                float showDelay = .2f;
+                if (_types == null || _types[0] != types[0])
                 {
-                    _buttons[i].Setup(i < _types.Count?_types[i]: LobbyPlaceType.Transition, OnClick);
+                    _types = types;
+                    for (int i = 0; i < _buttons.Count; i++)
+                    {
+                        _buttons[i].Setup(i < _types.Count?_types[i]: LobbyPlaceType.Transition, OnClick);
+                    }
+                    if(types.Count>1)
+                    {
+                        _onClick = onClick;
+                        Select(types.Contains(targetType) ? targetType : types[0]);
+                        await UniTask.Delay(TimeSpan.FromSeconds(showDelay), cancellationToken: this.GetCancellationTokenOnDestroy());
+                        await Show();
+                    }
                 }
-                if(types.Count>1)
-                {
-                    _onClick = onClick;
-                    Select(types.Contains(targetType) ? targetType : types[0]);
-                    await UniTask.Delay(TimeSpan.FromSeconds(showDelay));
-                    await Show();
-                }
+            }
+            catch (OperationCanceledException)
+            {
+                // component destroyed mid-await, expected
             }
             _isAnimate = false;
         }

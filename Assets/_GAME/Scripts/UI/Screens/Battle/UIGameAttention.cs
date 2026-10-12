@@ -27,19 +27,27 @@ namespace _GAME.Scripts.UI.Screens.Battle
 
         private async void Show(AttentionEvent attentionEvent)
         {
-            _textLabel.text = attentionEvent.Text;
-            _canvasGroup.alpha = 0;
-            _animator.Rebind();
-            _canvasGroup.DOFade(1, .2f).OnComplete( ()=>
+            var ct = this.GetCancellationTokenOnDestroy();
+            try
             {
-                _animator.SetBool(ActiveKey, true);
-                AudioManager.Play(SoundType.Notification);
-            });
-            
-            await UniTask.Delay(TimeSpan.FromSeconds(_atentionDuration));
-            _animator.SetBool(ActiveKey, false);
-            await UniTask.Delay(TimeSpan.FromSeconds(_afterHideDuration));
-            _canvasGroup.DOFade(0, .2f);
+                _textLabel.text = attentionEvent.Text;
+                _canvasGroup.alpha = 0;
+                _animator.Rebind();
+                _canvasGroup.DOFade(1, .2f).OnComplete( ()=>
+                {
+                    _animator.SetBool(ActiveKey, true);
+                    AudioManager.Play(SoundType.Notification);
+                });
+
+                await UniTask.Delay(TimeSpan.FromSeconds(_atentionDuration), cancellationToken: ct);
+                _animator.SetBool(ActiveKey, false);
+                await UniTask.Delay(TimeSpan.FromSeconds(_afterHideDuration), cancellationToken: ct);
+                _canvasGroup.DOFade(0, .2f);
+            }
+            catch (OperationCanceledException)
+            {
+                // component destroyed mid-await, expected
+            }
         }
 
         private void OnDestroy()

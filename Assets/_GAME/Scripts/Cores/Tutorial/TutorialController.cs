@@ -43,18 +43,26 @@ namespace _GAME.Scripts.Tutorial
 
         private async void Play(bool forced)
         {
-            foreach (var t in _steps)
+            var ct = this.GetCancellationTokenOnDestroy();
+            try
             {
-                t.Play();
-                _currentStep++;
-                if (t.IsComplete)
+                foreach (var t in _steps)
                 {
-                    continue;
+                    t.Play();
+                    _currentStep++;
+                    if (t.IsComplete)
+                    {
+                        continue;
+                    }
+                    await UniTask.WaitWhile(()=>!t.IsComplete, cancellationToken: ct);
                 }
-                await UniTask.WaitWhile(()=>!t.IsComplete);
+
+                _tutorialEntryData.NextStep();
             }
-            
-            _tutorialEntryData.NextStep();
+            catch (OperationCanceledException)
+            {
+                // component destroyed mid-await, expected
+            }
         }
     }
 }
