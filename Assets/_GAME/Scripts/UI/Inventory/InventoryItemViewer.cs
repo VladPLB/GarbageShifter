@@ -47,6 +47,11 @@ namespace _GAME.Scripts.UI.Inventory
             }, clickHandler);
         }
 
+        public void SetInteractable(bool interactable)
+        {
+            _button.interactable = interactable;
+        }
+
         public void SetupEquipmentInfo(WeaponData data, bool isEquiped)
         {
             if(_equipedMark!=null)

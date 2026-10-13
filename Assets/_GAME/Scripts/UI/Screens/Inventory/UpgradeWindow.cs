@@ -90,12 +90,12 @@ namespace _GAME.Scripts.UI.Screens.Inventory
 
         private void OnItemClicked(ItemInfo itemInfo)
         {
-            var request = new EquipmentInfoRequest(itemInfo)
+            var request = new ItemInfoRequest(itemInfo)
             {
                 StatsMode = EquipmentStatsMode.UpgradePreview,
             };
 
-            var canUpgrade = _inventoryManager.TryCanUpgrade(itemInfo, out var result, out _);
+            _inventoryManager.TryCanUpgrade(itemInfo, out var result, out _);
             if (result == UpgradeResult.MaxLevel)
             {
                 request.PriceOverrideText = "Max Level!";
@@ -103,29 +103,30 @@ namespace _GAME.Scripts.UI.Screens.Inventory
             else if (itemInfo is UpgradableItemInfo upgradable)
             {
                 request.Price = upgradable.GetPriceByLevel(_inventoryManager.GetLevel(itemInfo));
-                request.AddButton("Upgrade", () => OnUpgradeClicked(itemInfo), canUpgrade);
             }
+            request.AddUseButtons(_inventoryManager, OnItemUsed);
 
-            _uiManager.OpenWindow<EquipmentInfoWindow>().Setup(request);
+            _uiManager.OpenWindow<ItemInfoWindow>().Setup(request);
         }
 
-        private void OnUpgradeClicked(ItemInfo itemInfo)
+        private void OnItemUsed(ItemUseResult result)
         {
-            if (_inventoryManager.TryUpgrade(itemInfo, out var results, out var missingIngredients))
+            if (result.Success)
             {
                 RefreshItems();
-                OnItemClicked(itemInfo);
                 //Feel reaction
             }
             else
             {
-                Debug.LogError($"[UpgradeWindow] Failed to upgrade {itemInfo.DisplayName} : {results}");
+                Debug.LogError($"[UpgradeWindow] Failed to use item {result.Item.DisplayName}");
             }
+
+            OnItemClicked(result.Item);
         }
 
         private void CloseItemInfo()
         {
-            _uiManager?.GetWindow<EquipmentInfoWindow>()?.Close();
+            _uiManager?.GetWindow<ItemInfoWindow>()?.Close();
         }
 
         private void ReleaseItems()

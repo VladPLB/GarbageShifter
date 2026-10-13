@@ -13,7 +13,7 @@ namespace _GAME.Scripts.UI.Screens.Lobby
         [SerializeField] protected Vector2 _hidePosition;
         [SerializeField] protected Vector2 _showPosition;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             EventBus.Subscribe<SetEnableLobbyPanelEvent>(OnEnableLobbyPanelEventHandler, EventBus.EventRegion.LOBBY);
         }
@@ -29,7 +29,7 @@ namespace _GAME.Scripts.UI.Screens.Lobby
             }
         }
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
             EventBus.Unsubscribe<SetEnableLobbyPanelEvent>(OnEnableLobbyPanelEventHandler, EventBus.EventRegion.LOBBY);
         }

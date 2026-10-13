@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using _GAME.Scripts.Cores.Save.SavesConfigs;
+using _GAME.Scripts.Events;
 using _GAME.Scripts.Save;
 using UnityEngine;
 using Random = System.Random;
@@ -115,9 +116,22 @@ namespace _GAME.Scripts.Inventory
         private readonly Dictionary<string, int> _upgrades = new();
 
         private readonly Dictionary<InventoryCase, string> _cases = new();
+        private PlaceTarget _placeTarget = PlaceTarget.None;
         
         public ItemDatabase ItemDatabase => _dataBase.ItemDatabase;
-        public PlaceTarget PlaceTarget { get; set; } = PlaceTarget.None;
+
+        public PlaceTarget PlaceTarget
+        {
+            get => _placeTarget;
+            set
+            {
+                if (_placeTarget == value)
+                    return;
+
+                _placeTarget = value;
+                EventBus.Push(new PlaceTargetChangedEvent(value), EventBus.EventRegion.GLOBAL);
+            }
+        }
         
         private void Awake()
         {
@@ -150,19 +164,19 @@ namespace _GAME.Scripts.Inventory
         public List<ItemInfo> GetAll(bool ignoreShowConditions = false)
         {
             var allItems = ItemDatabase.GetAll();
-            return !ignoreShowConditions? allItems : allItems.Where(CanShow).ToList();
+            return ignoreShowConditions ? allItems : allItems.Where(CanShow).ToList();
         }
         
         public List<ItemInfo> GetAll(ItemType type, bool ignoreShowConditions = false)
         {
             var allItems = ItemDatabase.GetByType(type);
-            return !ignoreShowConditions? allItems : allItems.Where(CanShow).ToList();
+            return ignoreShowConditions ? allItems : allItems.Where(CanShow).ToList();
         }
         
         public List<ItemInfo> GetAll(ItemType type, string subType, bool ignoreShowConditions = false)
         {
             var allItems = string.IsNullOrEmpty(subType)? ItemDatabase.GetByType(type): ItemDatabase.GetByTypeSubType(type, subType);
-            return !ignoreShowConditions? allItems : allItems.Where(CanShow).ToList();
+            return ignoreShowConditions ? allItems : allItems.Where(CanShow).ToList();
         }
 
         public int GetCount(string id)
@@ -227,6 +241,7 @@ namespace _GAME.Scripts.Inventory
             }
             
             WriteCacheToSave();
+            EventBus.Push(new InventoryItemChangedEvent(item, current, target), EventBus.EventRegion.GLOBAL);
             return true;
         }
 
@@ -325,63 +340,18 @@ namespace _GAME.Scripts.Inventory
 
         public bool TryUpgrade(ItemInfo info, out UpgradeResult result, out List<ItemAmount> missingIngredients)
         {
-            missingIngredients = new List<ItemAmount>();
-            result = UpgradeResult.Available;
-            if (GetCount(info) != 1)
+            if (!TryCanUpgrade(info, out result, out missingIngredients))
             {
-                result = UpgradeResult.NotItem;
-                return false;
-            }
-            
-            if(!_upgrades.TryGetValue(info.Id, out var upgrade))
-            {
-                result = UpgradeResult.NoUpgradable;
                 return false;
             }
 
-            if (info is not UpgradableItemInfo upgradeInfo)
-            {
-                result = UpgradeResult.NoUpgradable;
-                return false;
-            }
-
-            if (upgrade >= upgradeInfo.MaxLevel)
-            {
-                result = UpgradeResult.MaxLevel;
-                return false;
-            }
-
-            var price = upgradeInfo.GetPriceByLevel(upgrade);
-            bool hasEnoughItems = true;
-            for (int i = 0; i < price.Count; i++)
-            {
-                var cost = price[i];
-                if (cost.Item == null) return false;
-                if (cost.Amount <= 0) return false;
-
-                var have = GetCount(cost.Item);
-                if (have < cost.Amount)
-                {
-                    hasEnoughItems = false;
-                    missingIngredients.Add(new ItemAmount
-                    {
-                        Item = cost.Item,
-                        Amount = cost.Amount - have
-                    });
-                }
-            }
-            
-            result = hasEnoughItems?  result : UpgradeResult.NotEnoughItems;
-
-            if (hasEnoughItems)
-            {
-                Remove(price);
-            }
+            var upgrade = _upgrades[info.Id];
+            Remove(((UpgradableItemInfo)info).GetPriceByLevel(upgrade));
             _upgrades[info.Id] = upgrade + 1;
             
             WriteCacheToSave();
             
-            return hasEnoughItems;
+            return true;
         }
         
         public bool CanCraftByRecipe(ItemInfo craftTarget, out List<ItemAmount> missingIngredients)
@@ -390,6 +360,7 @@ namespace _GAME.Scripts.Inventory
 
             if (craftTarget == null) return false;
             if (craftTarget.Recipe == null) return false;
+            if(!CanCraft(craftTarget)) return false;
 
             var recipe = craftTarget.Recipe;
 
@@ -459,6 +430,9 @@ namespace _GAME.Scripts.Inventory
             if (craftTarget.Recipe == null) return false;
             
 
+            if (!HasLoot(craftTarget.Recipe.Loot))
+                return false;
+
             if (!CanCraftByRecipe(craftTarget))
                 return false;
 
@@ -470,11 +444,16 @@ namespace _GAME.Scripts.Inventory
             return true;
         }
 
+        private static bool HasLoot(LootTable loot)
+        {
+            return loot != null && loot.Entries != null && loot.Entries.Count > 0 && loot.Rolls > 0;
+        }
+
         public List<ItemAmount> UnpackLootTable(LootTable loot, Random rng = null)
         {
-            if (loot == null || loot.Entries == null || loot.Entries.Count == 0 || loot.Rolls <= 0)
+            if (!HasLoot(loot))
             {
-                return null;
+                return new List<ItemAmount>();
             }
             
             List<ItemAmount>  results = new List<ItemAmount>();
@@ -507,7 +486,6 @@ namespace _GAME.Scripts.Inventory
                     EntriesByGroup.Add(e.Group, new List<LootEntry>());
                 }
                 EntriesByGroup[e.Group].Add(e);
-                break;
             }
             
 
@@ -683,11 +661,59 @@ namespace _GAME.Scripts.Inventory
             {
                 var c = list[i];
                 if (c == null) continue;
-                if (!c.CanUse()) return false;
+                if (!c.CanUse())
+                    return false;
             }
             return true;
         }
         
+        public List<ItemUsePipelineSO> GetUseActions(ItemInfo item)
+        {
+            var actions = new List<ItemUsePipelineSO>();
+            if (item == null || !CanUse(item))
+                return actions;
+
+            foreach (var pipeline in item.UsePipelines)
+            {
+                if (pipeline != null)
+                    pipeline.CollectActions(item, actions);
+            }
+            return actions;
+        }
+
+        public List<T> GetUseInfos<T>(ItemInfo item) where T : ItemUseInfo
+        {
+            var infos = new List<ItemUseInfo>();
+            if (item == null)
+                return new List<T>();
+
+            foreach (var pipeline in item.UsePipelines)
+            {
+                if (pipeline != null)
+                    pipeline.CollectUseInfos(item, infos);
+            }
+            return infos.OfType<T>().ToList();
+        }
+
+        public bool CanExecuteUse(ItemInfo item, ItemUsePipelineSO action)
+        {
+            return action != null && GetUseActions(item).Contains(action) && action.CanExecute(item);
+        }
+
+        public bool Use(ItemInfo item, ItemUsePipelineSO action, Action<ItemUseResult> callback = null)
+        {
+            var result = new ItemUseResult(item, action);
+            result.Success = CanExecuteUse(item, action) && action.Use(item, result);
+            callback?.Invoke(result);
+            return result.Success;
+        }
+
+        public bool Use(ItemInfo item, Action<ItemUseResult> callback = null)
+        {
+            var actions = GetUseActions(item);
+            return Use(item, actions.Count > 0 ? actions[0] : null, callback);
+        }
+
         public bool CanUse(string id)
         {
             if (ItemDatabase.TryGet(id, out var item))

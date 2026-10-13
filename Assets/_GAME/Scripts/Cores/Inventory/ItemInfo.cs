@@ -33,7 +33,7 @@ namespace _GAME.Scripts.Inventory
         [SerializeField] private ItemRecipe _recipe = new();
 
         [Header("Use Pipeline")]
-        [SerializeField] private ItemUsePipelineSO _usePipeline;
+        [SerializeField] private List<ItemUsePipelineSO> _usePipelines = new();
 
         public string Id => _id;
         public string DisplayName => _displayName;
@@ -52,6 +52,7 @@ namespace _GAME.Scripts.Inventory
         public IReadOnlyList<ItemConditionUseSO> UseConditions => _useConditions;
 
         public ItemRecipe Recipe => _recipe;
+        public IReadOnlyList<ItemUsePipelineSO> UsePipelines => _usePipelines;
 
 #if UNITY_EDITOR
         private void OnValidate()

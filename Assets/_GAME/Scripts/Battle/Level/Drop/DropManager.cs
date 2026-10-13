@@ -50,7 +50,7 @@ namespace _GAME.Scripts.Battle.Items
             _inventoryData = _saveManager.GetData<InventoryData>();
             _localInventory = new LocalInventory(_inventoryData.GameplayStorageCapacity);
             _dropItemTypes.Clear();
-            var datas = _inventoryManager.GetAll(ItemType.Material, false);
+            var datas = _inventoryManager.GetAll(ItemType.Material, true);
             foreach (var data in datas)
             {
                 var mul = (1f / ((int)data.Rank * 5f));

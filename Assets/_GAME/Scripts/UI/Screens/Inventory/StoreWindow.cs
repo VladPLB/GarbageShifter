@@ -84,34 +84,40 @@ namespace _GAME.Scripts.UI.Screens.Inventory
 
         private void OnItemClicked(ItemInfo itemInfo)
         {
-            var request = new EquipmentInfoRequest(itemInfo)
+            var request = new ItemInfoRequest(itemInfo)
             {
                 StatsMode = EquipmentStatsMode.Current,
                 Price = itemInfo.Recipe?.ItemCosts,
             };
-            request.AddButton("Craft", () => OnCraftClicked(itemInfo), _inventoryManager.CanCraftByRecipe(itemInfo));
+            request.AddUseButtons(_inventoryManager, OnItemUsed);
 
-            _uiManager.OpenWindow<EquipmentInfoWindow>().Setup(request);
+            _uiManager.OpenWindow<ItemInfoWindow>().Setup(request);
         }
 
-        private void OnCraftClicked(ItemInfo itemInfo)
+        private void OnItemUsed(ItemUseResult result)
         {
-            if (_inventoryManager.TryCraftByRecipe(itemInfo, out var results))
-            {
-                Debug.LogError($"[StoreWindow] Craft {itemInfo.DisplayName} : {results}");
-                //Feel reaction
-            }
-            else
-            {
-                Debug.LogError($"[StoreWindow]Failed to craft item {itemInfo.DisplayName}: {results}");
-            }
+            if (!result.Success)
+                Debug.LogError($"[StoreWindow] Failed to use item {result.Item.DisplayName}");
 
-            OnItemClicked(itemInfo);
+            //Feel reaction
+            if (!TryShowReceivedLoot(result))
+                OnItemClicked(result.Item);
+        }
+
+        private bool TryShowReceivedLoot(ItemUseResult result)
+        {
+            if (!result.Success || result.ReceivedLoot.Count == 0)
+                return false;
+
+            _uiManager.GetWindow<ItemInfoWindow>()?.Close();
+            _uiManager.OpenWindow<LootReceivedWindow>().Setup(result.ReceivedLoot);
+            return true;
         }
 
         private void CloseItemInfo()
         {
-            _uiManager?.GetWindow<EquipmentInfoWindow>()?.Close();
+            _uiManager?.GetWindow<ItemInfoWindow>()?.Close();
+            _uiManager?.GetWindow<LootReceivedWindow>()?.Close();
         }
 
         private void ReleaseItems()

@@ -97,34 +97,46 @@ namespace _GAME.Scripts.UI.Screens.Inventory
         private void OnItemClicked(ItemAmount itemAmount)
         {
             var item = itemAmount.Item;
-            var request = new EquipmentInfoRequest(item)
+            var request = new ItemInfoRequest(item)
             {
                 Amount = itemAmount.Amount,
                 ShowAmount = item is not UpgradableItemInfo,
                 StatsMode = EquipmentStatsMode.Current,
             };
 
-            if (item is UpgradableItemInfo)
-            {
-                var isEquipped = _inventoryManager.CanEquip(item);
-                request.AddButton(isEquipped ? "Equipped" : "Equip", () => OnEquipClicked(itemAmount), !isEquipped);
-            }
+            request.AddUseButtons(_inventoryManager, OnItemUsed);
 
-            _uiManager.OpenWindow<EquipmentInfoWindow>().Setup(request);
+            _uiManager.OpenWindow<ItemInfoWindow>().Setup(request);
         }
 
-        private void OnEquipClicked(ItemAmount itemAmount)
+        private void OnItemUsed(ItemUseResult result)
         {
-            if (_inventoryManager.TryEquip(itemAmount.Item))
-            {
-                RefreshItems();
-                OnItemClicked(itemAmount);
-            }
+            RefreshItems();
+
+            if (TryShowReceivedLoot(result))
+                return;
+
+            var count = _inventoryManager.GetCount(result.Item);
+            if (count > 0)
+                OnItemClicked(new ItemAmount { Item = result.Item, Amount = count });
+            else
+                _uiManager.GetWindow<ItemInfoWindow>()?.Close();
+        }
+
+        private bool TryShowReceivedLoot(ItemUseResult result)
+        {
+            if (!result.Success || result.ReceivedLoot.Count == 0)
+                return false;
+
+            _uiManager.GetWindow<ItemInfoWindow>()?.Close();
+            _uiManager.OpenWindow<LootReceivedWindow>().Setup(result.ReceivedLoot);
+            return true;
         }
 
         private void CloseItemInfo()
         {
-            _uiManager?.GetWindow<EquipmentInfoWindow>()?.Close();
+            _uiManager?.GetWindow<ItemInfoWindow>()?.Close();
+            _uiManager?.GetWindow<LootReceivedWindow>()?.Close();
         }
 
         private void ReleaseItems()
