@@ -73,11 +73,19 @@ namespace _GAME.Scripts.UI.Screens.Inventory
             {
                 var viewer = _pool.Pop();
                 var item = pair.Key;
-                int level = _inventoryManager.GetLevel(item);
-                var data = _dataBase.Weapons.GetData(item.Id);
-                data.Setup(null, level);
+                
                 viewer.Setup(item, () => OnItemClicked(item));
-                viewer.SetupInfo(data);
+                
+                if (item is UpgradableItemInfo)
+                {
+                    int level = _inventoryManager.GetLevel(item);
+                    var data = _dataBase.Weapons.GetData(item.Id);
+                    data.Setup(null, level);
+                    viewer.SetupEquipmentInfo(data, _inventoryManager.CanEquip(item));
+                    
+                    _inventoryManager.TryCanUpgrade(item, out var result, out _);
+                    viewer.SetupUpgradeInfo(result);
+                }
                 viewer.transform.SetParent(_itemsHolder, false);
                 viewer.transform.localScale = Vector3.one;
                 viewer.gameObject.SetActive(true);

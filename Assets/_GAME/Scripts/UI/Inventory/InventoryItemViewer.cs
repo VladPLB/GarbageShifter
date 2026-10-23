@@ -23,19 +23,28 @@ namespace _GAME.Scripts.UI.Inventory
         
         public virtual void Setup(ItemAmount itemAmount, Action clickHandler)
         {
-            if(_equipedMark!=null)
-            {
-                _equipedMark.SetActive(false);
-            }
             _itemAmount = itemAmount;
             var info = _itemAmount.Item;
             var count = _itemAmount.Amount;
             _iconImage.sprite = info.Icon;
             _backgroundImage.color = _rangeColors[(int)info.Rank];
             
-            _nameLabel.text = info.DisplayName;
-            _countLabel.text = $"x{count}";
-            _button.SetListener(clickHandler);
+            if(_nameLabel!=null)
+            {
+                _nameLabel.text = info.DisplayName;
+            }
+            if(_countLabel != null)
+            {
+                _countLabel.text =count>1? $"x{count}": String.Empty;
+            }
+            if(_button!=null)
+            {
+                _button.SetListener(clickHandler);
+            }
+            if(_equipedMark!=null)
+            {
+                _equipedMark.SetActive(false);
+            }
         }
         
         public void Setup(ItemInfo itemInfo, Action clickHandler)
@@ -49,10 +58,13 @@ namespace _GAME.Scripts.UI.Inventory
 
         public void SetInteractable(bool interactable)
         {
-            _button.interactable = interactable;
+            if(_button!=null)
+            {
+                _button.interactable = interactable;
+            }
         }
 
-        public void SetupEquipmentInfo(WeaponData data, bool isEquiped)
+        public virtual void SetupEquipmentInfo(WeaponData data, bool isEquiped)
         {
             if(_equipedMark!=null)
             {
