@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b001afebea18411d92f52da006e3981a, type: 3}
+  m_Name: ArmorReference_ArmorShield_Unique
+  m_EditorClassIdentifier: 
+  _data:
+    _inventoryId: ArmorShield_Unique
+    _inventoryCase: 2
+    _type: 502
+    _levels:
+    - _health: 81
+      _defense: 0
+      _energyShield: 97
+    - _health: 86
+      _defense: 0
+      _energyShield: 110
+    - _health: 93
+      _defense: 0
+      _energyShield: 126
+    - _health: 100
+      _defense: 0
+      _energyShield: 143
+    - _health: 107
+      _defense: 0
+      _energyShield: 161
+    - _health: 115
+      _defense: 0
+      _energyShield: 180
+    - _health: 123
+      _defense: 0
+      _energyShield: 199
+    - _health: 132
+      _defense: 0
+      _energyShield: 219
+    - _health: 140
+      _defense: 0
+      _energyShield: 240
+    - _health: 149
+      _defense: 0
+      _energyShield: 260
+    - _health: 158
+      _defense: 0
+      _energyShield: 281
+    - _health: 166
+      _defense: 0
+      _energyShield: 303
+    - _health: 175
+      _defense: 0
+      _energyShield: 324
+    - _health: 185
+      _defense: 0
+      _energyShield: 346
+    - _health: 194
+      _defense: 0
+      _energyShield: 369
+    - _health: 203
+      _defense: 0
+      _energyShield: 391
+    - _health: 213
+      _defense: 0
+      _energyShield: 414
+    - _health: 222
+      _defense: 0
+      _energyShield: 437
+    - _health: 232
+      _defense: 0
+      _energyShield: 460
+    - _health: 242
+      _defense: 0
+      _energyShield: 483
+  _prefab: {fileID: 0}

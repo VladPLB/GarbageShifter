@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using _GAME.Scripts.Common;
 using _GAME.Scripts.Events;
 using _GAME.Scripts.Lobby;
+using _GAME.Scripts.UI.Screens.Lobby.Navigation;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,6 +22,10 @@ namespace _GAME.Scripts.UI.Screens.Lobby
             public Vector2 PointerPosition;
             public Vector2 FingerScale;
             public float FingerRotation;
+            [Tooltip("Hole follows the lobby navigation button of TargetPlace (Position / Size are ignored, the pointer keeps its offset)")]
+            public bool FollowNavigationButton;
+            public LobbyPlaceType TargetPlace;
+            public Vector2 Padding;
         }
 
         [SerializeField] private CanvasGroup _canvasGroup;
@@ -38,6 +43,7 @@ namespace _GAME.Scripts.UI.Screens.Lobby
 
         private LobbyRoomsController _roomsController;
         private PointerPositionState _lastAppliedState;
+        private RectTransform _followTarget;
 
         private void Awake()
         {
@@ -97,8 +103,16 @@ namespace _GAME.Scripts.UI.Screens.Lobby
             _canvasGroup.DOFade(1, .5f);
         }
 
+        // the button may still move (panel show animation, layout) - keep the hole over it
+        private void LateUpdate()
+        {
+            if (_followTarget != null && _canvasGroup.blocksRaycasts)
+                FollowTarget(_lastAppliedState);
+        }
+
         private void Hide()
         {
+            _followTarget = null;
             _canvasGroup.alpha = 0;
             _canvasGroup.blocksRaycasts = false;
         }
@@ -120,7 +134,22 @@ namespace _GAME.Scripts.UI.Screens.Lobby
         {
             if (state == null) return;
 
+            _lastAppliedState = state;
             var (sx, sy, su) = GetScale();
+
+            if (_fingerTransform != null)
+            {
+                _fingerTransform.localScale = state.FingerScale * su;
+                _fingerTransform.rotation = Quaternion.Euler(0, 0, state.FingerRotation);
+            }
+
+            _followTarget = null;
+            if (state.FollowNavigationButton && LobbyNavigationButton.TryGet(state.TargetPlace, out var button))
+            {
+                _followTarget = button.Rect;
+                FollowTarget(state);
+                return;
+            }
 
             if (_holeTransform != null)
             {
@@ -132,14 +161,46 @@ namespace _GAME.Scripts.UI.Screens.Lobby
             {
                 _pointerTransform.anchoredPosition = new Vector2(state.PointerPosition.x * sx, state.PointerPosition.y * sy);
             }
+        }
 
-            if (_fingerTransform != null)
+        // hole / pointer anchors are bottom-left of the root, positions are in the root space
+        private void FollowTarget(PointerPositionState state)
+        {
+            if (state == null || _followTarget == null || _rootRect == null)
+                return;
+
+            var targetCanvas = _followTarget.GetComponentInParent<Canvas>()?.rootCanvas;
+            var targetCamera = targetCanvas != null && targetCanvas.renderMode != RenderMode.ScreenSpaceOverlay ? targetCanvas.worldCamera : null;
+            var rootCanvas = _canvas != null ? _canvas.rootCanvas : null;
+            var rootCamera = rootCanvas != null && rootCanvas.renderMode != RenderMode.ScreenSpaceOverlay ? rootCanvas.worldCamera : null;
+
+            var corners = new Vector3[4];
+            _followTarget.GetWorldCorners(corners);
+            var min = new Vector2(float.MaxValue, float.MaxValue);
+            var max = new Vector2(float.MinValue, float.MinValue);
+            foreach (var corner in corners)
             {
-                _fingerTransform.localScale = state.FingerScale * su;
-                _fingerTransform.rotation = Quaternion.Euler(0, 0, state.FingerRotation);
+                var screen = RectTransformUtility.WorldToScreenPoint(targetCamera, corner);
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(_rootRect, screen, rootCamera, out var local);
+                min = Vector2.Min(min, local);
+                max = Vector2.Max(max, local);
             }
 
-            _lastAppliedState = state;
+            var (sx, sy, _) = GetScale();
+            var origin = _rootRect.rect.min;
+            var center = (min + max) * 0.5f - origin;
+
+            if (_holeTransform != null)
+            {
+                _holeTransform.anchoredPosition = center;
+                _holeTransform.sizeDelta = max - min + new Vector2(state.Padding.x * sx, state.Padding.y * sy) * 2f;
+            }
+
+            if (_pointerTransform != null)
+            {
+                var offset = state.PointerPosition - state.Position;
+                _pointerTransform.anchoredPosition = center + new Vector2(offset.x * sx, offset.y * sy);
+            }
         }
 
 #if UNITY_EDITOR

@@ -25,3 +25,6 @@ MonoBehaviour:
   - Location: 9
     Color: {r: 0.85882354, g: 0.7764706, b: 0.6509804, a: 1}
     Intensity: 0.7
+  _enemyProgression: {fileID: 11400000, guid: 6f8d4dc940f9431b9de48cdf02e81fe5, type: 2}
+  _playerProgression: {fileID: 11400000, guid: 87a6acb771b346289d0f5697ff29b63d, type: 2}
+  _lootProgression: {fileID: 11400000, guid: b9d993e682b74dd78319c1220a04ef3c, type: 2}

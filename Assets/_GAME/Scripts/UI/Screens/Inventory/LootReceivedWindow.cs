@@ -49,7 +49,7 @@ namespace _GAME.Scripts.UI.Screens.Inventory
             foreach (var itemAmount in items)
             {
                 var viewer = _pool.Pop();
-                viewer.Setup(itemAmount, () => OnItemClicked(itemAmount));
+                viewer.Setup(itemAmount, () => OnItemClicked(itemAmount, (RectTransform)viewer.transform));
                 viewer.transform.SetParent(_itemsHolder, false);
                 viewer.transform.localScale = Vector3.one;
                 viewer.gameObject.SetActive(true);
@@ -60,10 +60,11 @@ namespace _GAME.Scripts.UI.Screens.Inventory
                 _emptyStateLabel.SetActive(items.Count == 0);
         }
 
-        private void OnItemClicked(ItemAmount itemAmount)
+        private void OnItemClicked(ItemAmount itemAmount, RectTransform anchor = null)
         {
             var request = new ItemInfoRequest(itemAmount.Item)
             {
+                Anchor = anchor,
                 Amount = itemAmount.Amount,
                 ShowAmount = true,
                 StatsMode = EquipmentStatsMode.Current,

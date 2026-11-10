@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e49a71e7ea4f4f6e95fc8955ce1bb19c, type: 3}
+  m_Name: Item_Offer_NoAds
+  m_EditorClassIdentifier: 
+  _id: Offer_NoAds
+  _displayName: No Ads
+  _description: Removes all ads except rewarded videos.
+  _icon: {fileID: 21300000, guid: a9d4e295f10a8984ba8a5cb3ec12837a, type: 3}
+  _rank: 5
+  _type: 10
+  _subType: Iap
+  _zeroCountEnabled: 0
+  _maxStack: 1
+  _showConditions:
+  - {fileID: 11400000, guid: 5257b49f14784974ac0a38f7d17e71b5, type: 2}
+  - {fileID: 11400000, guid: 0bdbd76eefb94b689d658009312e1280, type: 2}
+  _craftConditions: []
+  _useConditions: []
+  _recipe:
+    ItemCosts: []
+    Loot:
+      Rolls: 1
+      Entries: []
+  _usePipelines:
+  - {fileID: 11400000, guid: 193e25a799d14b3697d4c4ff2128ce36, type: 2}

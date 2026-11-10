@@ -66,7 +66,7 @@ namespace _GAME.Scripts.UI.Screens.Inventory
                 return;
 
             var items = _inventoryManager.GetMyInventory(_selectedType)
-                .OrderBy(kv => kv.Key.DisplayName)
+                .OrderForInventory(kv => kv.Key, _inventoryManager)
                 .ToList();
 
             foreach (var kv in items)
@@ -76,12 +76,12 @@ namespace _GAME.Scripts.UI.Screens.Inventory
                 
                 
                 var viewer = _pool.Pop();
-                viewer.Setup(itemAmount, () => OnItemClicked(itemAmount));
+                viewer.Setup(itemAmount, () => OnItemClicked(itemAmount, (RectTransform)viewer.transform));
                 if (item is UpgradableItemInfo)
                 {
                     var level = _inventoryManager.GetLevel(item);
-                    var data = _dataBase.Weapons.GetData(item.Id);
-                    data.Setup(null, level);
+                    var data = _dataBase.GetEquipmentData(item.Id);
+                    data?.SetLevel(level);
                     viewer.SetupEquipmentInfo(data, _inventoryManager.CanEquip(item));
                 }
                 viewer.transform.SetParent(_itemsHolder, false);
@@ -94,11 +94,12 @@ namespace _GAME.Scripts.UI.Screens.Inventory
                 _emptyStateLabel.SetActive(items.Count == 0);
         }
 
-        private void OnItemClicked(ItemAmount itemAmount)
+        private void OnItemClicked(ItemAmount itemAmount, RectTransform anchor = null)
         {
             var item = itemAmount.Item;
             var request = new ItemInfoRequest(item)
             {
+                Anchor = anchor,
                 Amount = itemAmount.Amount,
                 ShowAmount = item is not UpgradableItemInfo,
                 StatsMode = EquipmentStatsMode.Current,

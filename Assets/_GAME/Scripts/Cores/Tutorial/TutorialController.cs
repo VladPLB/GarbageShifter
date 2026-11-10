@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using _GAME.Scripts.Cores.Save.SavesConfigs;
+using _GAME.Scripts.Events;
 using _GAME.Scripts.Save;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -50,14 +51,19 @@ namespace _GAME.Scripts.Tutorial
                 {
                     t.Play();
                     _currentStep++;
-                    if (t.IsComplete)
+                    if (!t.IsComplete)
                     {
-                        continue;
+                        await UniTask.WaitWhile(()=>!t.IsComplete, cancellationToken: ct);
                     }
-                    await UniTask.WaitWhile(()=>!t.IsComplete, cancellationToken: ct);
+                    AnalyticsEvent.Push("tutorial_sub_step",
+                        ("tutorial_step", _tutorialStep),
+                        ("sub_step", _currentStep),
+                        ("sub_steps", _steps.Count),
+                        ("step_name", t.GetType().Name));
                 }
 
                 _tutorialEntryData.NextStep();
+                AnalyticsEvent.Push("tutorial_step_complete", ("tutorial_step", _tutorialStep));
             }
             catch (OperationCanceledException)
             {

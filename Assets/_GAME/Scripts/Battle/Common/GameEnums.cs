@@ -33,6 +33,83 @@ namespace _GAME.Scripts.Common
         PistolLaser = 10,
         RevolverLaser = 20,
         ShotgunLaser = 30,
+
+        // Ranked variants: base value + 100 * ItemRank
+        RiffleLaser_Uncommon = 100,
+        MinigunLaser_Uncommon = 101,
+        PistolLaser_Uncommon = 110,
+        RevolverLaser_Uncommon = 120,
+        ShotgunLaser_Uncommon = 130,
+
+        RiffleLaser_Rare = 200,
+        MinigunLaser_Rare = 201,
+        PistolLaser_Rare = 210,
+        RevolverLaser_Rare = 220,
+        ShotgunLaser_Rare = 230,
+
+        RiffleLaser_Epic = 300,
+        MinigunLaser_Epic = 301,
+        PistolLaser_Epic = 310,
+        RevolverLaser_Epic = 320,
+        ShotgunLaser_Epic = 330,
+
+        RiffleLaser_Legendary = 400,
+        MinigunLaser_Legendary = 401,
+        PistolLaser_Legendary = 410,
+        RevolverLaser_Legendary = 420,
+        ShotgunLaser_Legendary = 430,
+
+        RiffleLaser_Unique = 500,
+        MinigunLaser_Unique = 501,
+        PistolLaser_Unique = 510,
+        RevolverLaser_Unique = 520,
+        ShotgunLaser_Unique = 530,
+    }
+
+    public enum ArmorType
+    {
+        // Focus: Health / Defense / EnergyShield. Ranked variants: base value + 100 * ItemRank
+        ArmorHealth = 0,
+        ArmorDefense = 1,
+        ArmorShield = 2,
+
+        ArmorHealth_Uncommon = 100,
+        ArmorDefense_Uncommon = 101,
+        ArmorShield_Uncommon = 102,
+
+        ArmorHealth_Rare = 200,
+        ArmorDefense_Rare = 201,
+        ArmorShield_Rare = 202,
+
+        ArmorHealth_Epic = 300,
+        ArmorDefense_Epic = 301,
+        ArmorShield_Epic = 302,
+
+        ArmorHealth_Legendary = 400,
+        ArmorDefense_Legendary = 401,
+        ArmorShield_Legendary = 402,
+
+        ArmorHealth_Unique = 500,
+        ArmorDefense_Unique = 501,
+        ArmorShield_Unique = 502,
+    }
+
+    public enum ProjectileDamageMode
+    {
+        Payload,        // damage goes to the bullet payload (explosion)
+        Hit,            // damage on direct hit only
+        HitAndPayload,
+    }
+
+    public enum SecondaryWeaponType
+    {
+        // Ranked variants: base value + 100 * ItemRank
+        RocketLauncher = 0,
+        RocketLauncher_Uncommon = 100,
+        RocketLauncher_Rare = 200,
+        RocketLauncher_Epic = 300,
+        RocketLauncher_Legendary = 400,
+        RocketLauncher_Unique = 500,
     }
 
     public enum BulletType

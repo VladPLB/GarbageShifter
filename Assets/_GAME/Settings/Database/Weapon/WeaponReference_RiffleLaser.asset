@@ -89,4 +89,74 @@ MonoBehaviour:
       _damage: 12
       _damageOffset: 5
       _aimOffset: 0.06
+    - _reloadTime: 0.17
+      _reloadTimeRandomize: 0.02
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 13
+      _damageOffset: 5
+      _aimOffset: 0.06
+    - _reloadTime: 0.16
+      _reloadTimeRandomize: 0.02
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 14
+      _damageOffset: 6
+      _aimOffset: 0.06
+    - _reloadTime: 0.16
+      _reloadTimeRandomize: 0.02
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 15
+      _damageOffset: 6
+      _aimOffset: 0.05
+    - _reloadTime: 0.15
+      _reloadTimeRandomize: 0.02
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 16
+      _damageOffset: 6
+      _aimOffset: 0.05
+    - _reloadTime: 0.15
+      _reloadTimeRandomize: 0.01
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 17
+      _damageOffset: 6
+      _aimOffset: 0.05
+    - _reloadTime: 0.15
+      _reloadTimeRandomize: 0.01
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 18
+      _damageOffset: 7
+      _aimOffset: 0.05
+    - _reloadTime: 0.14
+      _reloadTimeRandomize: 0.01
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 19
+      _damageOffset: 7
+      _aimOffset: 0.05
+    - _reloadTime: 0.14
+      _reloadTimeRandomize: 0.01
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 20
+      _damageOffset: 7
+      _aimOffset: 0.04
+    - _reloadTime: 0.13
+      _reloadTimeRandomize: 0.01
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 21
+      _damageOffset: 8
+      _aimOffset: 0.04
+    - _reloadTime: 0.13
+      _reloadTimeRandomize: 0.01
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 22
+      _damageOffset: 8
+      _aimOffset: 0.04
   _prefab: {fileID: 6359684540194013533, guid: caff162d09f4a4c2cb24211144c6f1d1, type: 3}

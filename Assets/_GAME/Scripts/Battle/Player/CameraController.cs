@@ -25,6 +25,13 @@ namespace _GAME.Scripts.Battle.Player
 
         public void SetCamera(GameCameraType type, Transform follow= null,  Transform target=null)
         {
+            // keep the current camera if this type isn't configured (otherwise every camera would be disabled)
+            if (!_cameras.Exists(c => c.Type == type && c.VCamera != null))
+            {
+                Debug.LogWarning($"[CameraController] Camera '{type}' is not configured");
+                return;
+            }
+
             foreach (VCameraByType camera in _cameras)
             {
                 if (camera.Type == type)

@@ -25,9 +25,14 @@ public class Explosion : MonoBehaviour, IPoolableItem<ExplosionType>
    
    public void Setup()
    {
+      Setup(Core.Get<LevelController>().Player);
+   }
+
+   // damage < 0 = default explosion damage
+   public void Setup(IDamageDealer damageDealer, int damage = -1)
+   {
       _data = _defaultData;
-      var player = Core.Get<LevelController>().Player;
-      _data.Setup(player, -1, new ExplosionEffectAttribute());
+      _data.Setup(damageDealer, damage, new ExplosionEffectAttribute());
       Explode();
    }
 
@@ -43,13 +48,15 @@ public class Explosion : MonoBehaviour, IPoolableItem<ExplosionType>
       if(!IsActive)
          return;
 
+      // Explosions hit everyone, but keep the player's team so the player is not hurt by own explosions
+      var team = _data.DamageDealer != null && _data.DamageDealer.Team == Team.Player ? Team.Player : Team.None;
       var colliders = Physics.OverlapSphere(transform.position, _data.Radius, _coliderMask);
       for (int i = 0; i < colliders.Length; i++)
       {
          var damageReceiver = colliders[i].GetComponent<IDamageReceiver>();
          if(damageReceiver!=null)
          {
-            damageReceiver.OnDamage(Team.None, _data.Damage, transform.position, _data.Attributes);
+            damageReceiver.OnDamage(team, _data.Damage, transform.position, _data.Attributes);
          }
       }
 

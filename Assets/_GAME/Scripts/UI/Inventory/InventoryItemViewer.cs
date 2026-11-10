@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using _GAME.Scripts.Battle.Weapons;
+using _GAME.Scripts.Battle.Equipment;
 using _GAME.Scripts.Inventory;
 using _GAME.Scripts.Pools;
 using TMPro;
@@ -64,13 +64,16 @@ namespace _GAME.Scripts.UI.Inventory
             }
         }
 
-        public virtual void SetupEquipmentInfo(WeaponData data, bool isEquiped)
+        public virtual void SetupEquipmentInfo(IEquipmentData data, bool isEquiped)
         {
             if(_equipedMark!=null)
             {
                 _equipedMark.SetActive(isEquiped);
             }
-            _nameLabel.text += $" {data.Level}lv.";
+            if (data != null)
+            {
+                _nameLabel.text += $" {data.Level}lv.";
+            }
         }
     }
 }

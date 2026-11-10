@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b001afebea18411d92f52da006e3981a, type: 3}
+  m_Name: ArmorReference_ArmorShield_Epic
+  m_EditorClassIdentifier: 
+  _data:
+    _inventoryId: ArmorShield_Epic
+    _inventoryCase: 2
+    _type: 302
+    _levels:
+    - _health: 67
+      _defense: 0
+      _energyShield: 80
+    - _health: 71
+      _defense: 0
+      _energyShield: 91
+    - _health: 77
+      _defense: 0
+      _energyShield: 104
+    - _health: 82
+      _defense: 0
+      _energyShield: 118
+    - _health: 89
+      _defense: 0
+      _energyShield: 133
+    - _health: 95
+      _defense: 0
+      _energyShield: 149
+    - _health: 102
+      _defense: 0
+      _energyShield: 165
+    - _health: 109
+      _defense: 0
+      _energyShield: 181
+    - _health: 116
+      _defense: 0
+      _energyShield: 198
+    - _health: 123
+      _defense: 0
+      _energyShield: 215
+    - _health: 130
+      _defense: 0
+      _energyShield: 233
+    - _health: 138
+      _defense: 0
+      _energyShield: 250
+    - _health: 145
+      _defense: 0
+      _energyShield: 268
+    - _health: 153
+      _defense: 0
+      _energyShield: 286
+    - _health: 160
+      _defense: 0
+      _energyShield: 305
+    - _health: 168
+      _defense: 0
+      _energyShield: 323
+    - _health: 176
+      _defense: 0
+      _energyShield: 342
+    - _health: 184
+      _defense: 0
+      _energyShield: 361
+    - _health: 192
+      _defense: 0
+      _energyShield: 380
+    - _health: 200
+      _defense: 0
+      _energyShield: 399
+  _prefab: {fileID: 0}

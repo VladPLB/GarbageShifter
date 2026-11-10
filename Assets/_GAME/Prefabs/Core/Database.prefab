@@ -47,6 +47,8 @@ MonoBehaviour:
   _itemDatabase: {fileID: 11400000, guid: de2048685204c434eb2db173bb944e5a, type: 2}
   _enemyDatabase: {fileID: 11400000, guid: fb7f9b890f1de45108f06a2e2029ff33, type: 2}
   _weaponDatabase: {fileID: 11400000, guid: 7ffca6c91b0304fc09b6ff6e7fa0c9f4, type: 2}
+  _armorDatabase: {fileID: 11400000, guid: e08e6e3573ca4c3890ad5f89875c87d3, type: 2}
+  _secondaryWeaponDatabase: {fileID: 11400000, guid: a2a63eb072e44b77b2d4cdf52d58e47e, type: 2}
   _bulletDatabase: {fileID: 11400000, guid: 43588a4a0d9c7486db8fc0443adedb8d, type: 2}
   _explosionDatabase: {fileID: 11400000, guid: b0ee49072991440cea0a8ddfd99d0174, type: 2}
   _textEffectsDatabase: {fileID: 11400000, guid: c76f88af7088c4bd3aec198d49a43da9,

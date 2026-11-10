@@ -67,20 +67,22 @@ namespace _GAME.Scripts.UI.Screens.Inventory
             if (_inventoryManager == null)
                 return;
 
-            var items = _inventoryManager.GetMyInventory(_selectedType).ToList();
+            var items = _inventoryManager.GetMyInventory(_selectedType)
+                .OrderForUpgrade(kv => kv.Key, _inventoryManager)
+                .ToList();
             
             foreach (var pair in items)
             {
                 var viewer = _pool.Pop();
                 var item = pair.Key;
                 
-                viewer.Setup(item, () => OnItemClicked(item));
+                viewer.Setup(item, () => OnItemClicked(item, (RectTransform)viewer.transform));
                 
                 if (item is UpgradableItemInfo)
                 {
                     int level = _inventoryManager.GetLevel(item);
-                    var data = _dataBase.Weapons.GetData(item.Id);
-                    data.Setup(null, level);
+                    var data = _dataBase.GetEquipmentData(item.Id);
+                    data?.SetLevel(level);
                     viewer.SetupEquipmentInfo(data, _inventoryManager.CanEquip(item));
                     
                     _inventoryManager.TryCanUpgrade(item, out var result, out _);
@@ -96,10 +98,11 @@ namespace _GAME.Scripts.UI.Screens.Inventory
                 _emptyStateLabel.SetActive(items.Count == 0);
         }
 
-        private void OnItemClicked(ItemInfo itemInfo)
+        private void OnItemClicked(ItemInfo itemInfo, RectTransform anchor = null)
         {
             var request = new ItemInfoRequest(itemInfo)
             {
+                Anchor = anchor,
                 StatsMode = EquipmentStatsMode.UpgradePreview,
             };
 

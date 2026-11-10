@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _GAME.Scripts.Audio;
+using _GAME.Scripts.Battle.Equipment;
 using _GAME.Scripts.Common;
 using _GAME.Scripts.Inventory;
 using UnityEngine;
@@ -35,7 +36,7 @@ namespace _GAME.Scripts.Battle.Weapons
         public float AimOffset => _aimOffset;
     }
     [Serializable]
-    public class WeaponData: DamageDealerData
+    public class WeaponData: DamageDealerData, IEquipmentData
     {
         [SerializeField] private string _inventoryId;
         [SerializeField] private InventoryCase _inventoryCase;
@@ -55,6 +56,8 @@ namespace _GAME.Scripts.Battle.Weapons
         public WeaponEquipmentInfo NextLevelInfo => _levels[Mathf.Min(Level+1, MaxLevel)];
         
         public float LastFireTime { get; protected set; } = 0;
+        // Runtime damage scale (enemy progression), not saved in configs
+        public float DamageMultiplier { get; protected set; } = 1f;
         
         public string InventoryId => _inventoryId;
         public InventoryCase InventoryCase => _inventoryCase;
@@ -68,16 +71,26 @@ namespace _GAME.Scripts.Battle.Weapons
         public float ReloadTimeRandomize => Info.ReloadTimeRandomize;
         public float BulletAmount => Info.BulletAmount;
         public float BulletSpawnDelay => Info.BulletSpawnDelay;
-        public int Damage => Info.Damage;
+        public int Damage => Mathf.RoundToInt(Info.Damage * DamageMultiplier);
         
         public int DamageOffset =>  Info.DamageOffset;
-        public int DamageRandomize => Info.DamageRandomize;
+        public int DamageRandomize => Mathf.RoundToInt(Info.DamageRandomize * DamageMultiplier);
         public float AimOffset => Info.AimOffset;
 
         public void Setup(IDamageDealer damageDealer, int level)
         {
             base.Setup(damageDealer);
             Level = level;
+        }
+
+        public void SetLevel(int level)
+        {
+            Level = level;
+        }
+
+        public void SetDamageMultiplier(float multiplier)
+        {
+            DamageMultiplier = Mathf.Max(0f, multiplier);
         }
 
         public bool TryFireRegister()

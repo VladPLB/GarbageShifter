@@ -79,7 +79,14 @@ public class Bullet : MonoBehaviour, IPoolableItem<BulletType>
       {
          foreach (var deadHandler in _deadHandlers)
          {
-            deadHandler.OnDead();
+            if (deadHandler is IBulletPayloadHandler payloadHandler)
+            {
+               payloadHandler.OnDead(_data);
+            }
+            else
+            {
+               deadHandler.OnDead();
+            }
          }
       }
       

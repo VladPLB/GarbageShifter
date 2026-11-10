@@ -58,6 +58,25 @@ namespace _GAME.Scripts.Map
             return (newZoneInfo.zoneIndex, newZone.Locations[newZoneInfo.locationIndex].type, newZone.Locations[newZoneInfo.locationIndex].levels[newZoneInfo.levelIndex]);
         }
 
+        // Absolute location number (0-based) of the given progress level, counted across all zones
+        public int GetLocationNumber(int level)
+        {
+            var (zoneIndex, locationIndex, _) = GetInfo(level);
+            var number = 0;
+            for (int z = 0; z < zoneIndex; z++)
+            {
+                number += z < _prepareZones.Count ? _prepareZones[z].Data.Locations.Count : _generationProfile.LocationsPerZone;
+            }
+            return number + locationIndex;
+        }
+
+        public bool IsLastLevelInLocation(int level)
+        {
+            var (zoneIndex, locationIndex, levelIndex) = GetInfo(level);
+            var location = GetZone(zoneIndex).Locations[locationIndex];
+            return levelIndex >= location.levels.Count - 1;
+        }
+
         private void Start()
         {
             Core.Registry(this);
@@ -89,7 +108,7 @@ namespace _GAME.Scripts.Map
             {
                 for (int l = 0; l < _generationProfile.LocationsPerZone; l++)
                 {
-                    int levelCount = _generationProfile.GetLevelsCount(zoneIndex * l);
+                    int levelCount = _generationProfile.GetLevelsCount(z * l);
                     for (int i = 0; i < levelCount; i++)
                     {
                         if (count == level)

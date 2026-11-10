@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72b12bfb35044df1b1fe072fbf7adffb, type: 3}
+  m_Name: SecondaryWeaponReference_RocketLauncher
+  m_EditorClassIdentifier: 
+  _data:
+    _inventoryId: RocketLauncher
+    _inventoryCase: 1
+    _type: 0
+    _levels:
+    - _damage: 50
+      _capacity: 35
+    - _damage: 53
+      _capacity: 34
+    - _damage: 58
+      _capacity: 34
+    - _damage: 62
+      _capacity: 33
+    - _damage: 67
+      _capacity: 33
+    - _damage: 72
+      _capacity: 32
+    - _damage: 77
+      _capacity: 31
+    - _damage: 82
+      _capacity: 30
+    - _damage: 87
+      _capacity: 29
+    - _damage: 92
+      _capacity: 29
+    - _damage: 98
+      _capacity: 28
+    - _damage: 103
+      _capacity: 27
+    - _damage: 109
+      _capacity: 26
+    - _damage: 115
+      _capacity: 25
+    - _damage: 120
+      _capacity: 24
+    - _damage: 126
+      _capacity: 24
+    - _damage: 132
+      _capacity: 23
+    - _damage: 138
+      _capacity: 22
+    - _damage: 144
+      _capacity: 21
+    - _damage: 150
+      _capacity: 20
+  _prefab: {fileID: 0}

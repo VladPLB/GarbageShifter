@@ -14,5 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _progressData:
     Level: 0
+  _inventoryData:
+    Items:
+    - ItemId: RiffleLaser
+      Amount: 1
+    - ItemId: ArmorHealth
+      Amount: 1
+    - ItemId: RocketLauncher
+      Amount: 1
+    Upgrades: []
+    Cases:
+    - ItemId: RiffleLaser
+      Case: 0
+    - ItemId: RocketLauncher
+      Case: 1
+    - ItemId: ArmorHealth
+      Case: 2
+    GameplayStorageCapacity: 3
   _tutorialEntryData:
     TutorialStep: 0

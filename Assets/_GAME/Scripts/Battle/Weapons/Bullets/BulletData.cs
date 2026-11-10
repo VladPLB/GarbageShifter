@@ -14,6 +14,8 @@ namespace _GAME.Scripts.Weapons.Bullets
         [SerializeField] private float _speed;
         
         public int Damage{ get; private set; }
+        // Damage passed to payload handlers (explosion etc.), -1 = payload uses its own default
+        public int PayloadDamage{ get; private set; } = -1;
         public Vector3 MoveDirection{ get; private set; }
         public List<IEffectAttribute> Attributes { get; private set; }
         
@@ -25,8 +27,14 @@ namespace _GAME.Scripts.Weapons.Bullets
         {
             base.Setup(damageDealer);
             Damage = damage;
+            PayloadDamage = -1;
             MoveDirection = moveDirection;
             Attributes = attributes.IsNullOrEmpty()? new(): attributes.ToList();
+        }
+
+        public void SetPayloadDamage(int damage)
+        {
+            PayloadDamage = damage;
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using _GAME.Scripts.Battle.Context;
 using _GAME.Scripts.Battle.Enemy;
 using _GAME.Scripts.Common;
@@ -19,6 +20,7 @@ namespace _GAME.Scripts.Battle.Level
         private EnemyStagePreset _enemyStagePreset;
         private EnemyDatabase _enemyDatabase;
         private Coroutine _spawnCoroutine;
+        private CancellationTokenSource _spawnCts;
 
         private List<EnemySpawnData> _enemySpawnDatas;
         private EnemySpawnPointsGroup _group;
@@ -56,6 +58,7 @@ namespace _GAME.Scripts.Battle.Level
             _onSpawnGroupWarning = spawnGroupWarningHandler;
             TryClearSpawnCoroutine();
             _enemyController.PlayStage(_enemySpawnCounts.Sum());
+            _spawnCts = CancellationTokenSource.CreateLinkedTokenSource(this.GetCancellationTokenOnDestroy());
             _spawnCoroutine = StartCoroutine(Spawn());
         }
 
@@ -66,6 +69,12 @@ namespace _GAME.Scripts.Battle.Level
             TryClearSpawnCoroutine();
         }
 
+        // Stops spawning new enemies, already spawned stay
+        public void Pause()
+        {
+            TryClearSpawnCoroutine();
+        }
+
         private void TryClearSpawnCoroutine()
         {
             if (_spawnCoroutine != null)
@@ -73,6 +82,9 @@ namespace _GAME.Scripts.Battle.Level
                 StopCoroutine(_spawnCoroutine);
                 _spawnCoroutine = null;
             }
+            _spawnCts?.Cancel();
+            _spawnCts?.Dispose();
+            _spawnCts = null;
         }
 
         private IEnumerator Spawn()
@@ -98,17 +110,18 @@ namespace _GAME.Scripts.Battle.Level
                     yield return new WaitForSeconds(delay + .5f);
                 }
 
-                SpawnEnemies(enemyType, _enemySpawnCounts[i], _enemySpawnDelays[i], spawnPoint);
+                SpawnEnemies(enemyType, _enemySpawnCounts[i], _enemySpawnDelays[i], spawnPoint, _spawnCts.Token);
             }
         }
 
-        private async void SpawnEnemies(EnemyType type, int count, float delay, EnemySpawnPoint spawnPoint)
+        private async void SpawnEnemies(EnemyType type, int count, float delay, EnemySpawnPoint spawnPoint, CancellationToken ct)
         {
-            var ct = this.GetCancellationTokenOnDestroy();
             try
             {
                 for (int i = 0; i < count; i++)
                 {
+                    if (ct.IsCancellationRequested)
+                        return;
                     var path = spawnPoint.GetPath();
                     _enemyController.Spawn(type, path);
                     await UniTask.Delay(TimeSpan.FromSeconds(delay), cancellationToken: ct);

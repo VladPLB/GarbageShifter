@@ -1,4 +1,4 @@
-using _GAME.Scripts.Battle.Weapons;
+using _GAME.Scripts.Battle.Equipment;
 using _GAME.Scripts.Inventory;
 using TMPro;
 using UnityEngine;
@@ -19,7 +19,7 @@ namespace _GAME.Scripts.UI.Screens.Inventory.InfoSections
             _inventoryManager ??= Core.Get<InventoryManager>();
             _dataBase ??= Core.Get<DataBase>();
 
-            var data = GetWeaponData(request.Item);
+            var data = GetEquipmentData(request.Item);
 
             if (_equippedMark != null)
                 _equippedMark.SetActive(data != null && _inventoryManager.CanEquip(request.Item));
@@ -37,13 +37,13 @@ namespace _GAME.Scripts.UI.Screens.Inventory.InfoSections
             _statsLabel.text = label;
         }
 
-        private WeaponData GetWeaponData(ItemInfo item)
+        private IEquipmentData GetEquipmentData(ItemInfo item)
         {
             if (item is not UpgradableItemInfo)
                 return null;
 
-            var data = _dataBase.Weapons.GetData(item.Id);
-            data?.Setup(null, _inventoryManager.GetLevel(item));
+            var data = _dataBase.GetEquipmentData(item.Id);
+            data?.SetLevel(_inventoryManager.GetLevel(item));
             return data;
         }
     }

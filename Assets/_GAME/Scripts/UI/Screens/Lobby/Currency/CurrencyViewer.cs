@@ -40,7 +40,7 @@ namespace _GAME.Scripts.UI.Screens.Lobby.Currency
             _iconImage.sprite = item.Icon;
 
             if (_button != null)
-                _button.SetListener(() => ItemPreviewWindow.Open(Item));
+                _button.SetListener(() => ItemPreviewWindow.Open(Item, (RectTransform)_button.transform));
 
             KillTweens();
             _displayedAmount = amount;

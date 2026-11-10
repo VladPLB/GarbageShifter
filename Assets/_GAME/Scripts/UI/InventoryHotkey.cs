@@ -11,6 +11,7 @@ namespace _GAME.Scripts.UI
         [SerializeField] private KeyCode _inventoryKey = KeyCode.I;
         [SerializeField] private KeyCode _shopKey = KeyCode.O;
         [SerializeField] private KeyCode _upgradeKey = KeyCode.U;
+        [SerializeField] private KeyCode _storeKey = KeyCode.Y;
 
         private UIManager _uiManager;
 
@@ -34,6 +35,7 @@ namespace _GAME.Scripts.UI
             Toggle<InventoryWindow>(_inventoryKey);
             Toggle<StoreWindow>(_shopKey);
             Toggle<UpgradeWindow>(_upgradeKey);
+            Toggle<ChestStoreWindow>(_storeKey);
         }
         
         

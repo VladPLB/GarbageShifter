@@ -1,0 +1,147 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebda255d324d4d9881a2bb664e83444f, type: 3}
+  m_Name: UpgradableItem_ArmorShield_Epic
+  m_EditorClassIdentifier: 
+  _id: ArmorShield_Epic
+  _displayName: Shield armor (Epic)
+  _description: Shield armor (Epic)
+  _icon: {fileID: 21300000, guid: b0ce4eb969ee30e4ab9ed5e1c70dfa74, type: 3}
+  _rank: 3
+  _type: 1
+  _subType: 
+  _zeroCountEnabled: 0
+  _maxStack: 1
+  _showConditions:
+  - {fileID: 11400000, guid: c1d917506d47437d88d095b42aea6f1e, type: 2}
+  _craftConditions: []
+  _useConditions: []
+  _recipe:
+    ItemCosts:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 4100
+    Loot:
+      Rolls: 1
+      Entries:
+      - Item: {fileID: 11400000}
+        MinAmount: 1
+        MaxAmount: 1
+        Group: 0
+        ChancePercent: 100
+  _usePipelines:
+  - {fileID: 11400000, guid: 92178cc93bf6f44f593e385814f70104, type: 2}
+  - {fileID: 11400000, guid: e8629612fde92474c8bb09fcbcd83aaf, type: 2}
+  _maxLevel: 20
+  _upgradePrices:
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 1000
+    - Item: {fileID: 11400000, guid: 6e4e24d3575aa4af181e02b0865ced1a, type: 2}
+      Amount: 3
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 1200
+    - Item: {fileID: 11400000, guid: 6e4e24d3575aa4af181e02b0865ced1a, type: 2}
+      Amount: 4
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 1400
+    - Item: {fileID: 11400000, guid: 6e4e24d3575aa4af181e02b0865ced1a, type: 2}
+      Amount: 5
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 1650
+    - Item: {fileID: 11400000, guid: 6e4e24d3575aa4af181e02b0865ced1a, type: 2}
+      Amount: 6
+    - Item: {fileID: 11400000, guid: cc5a5a8cf3214e7e80685a2534a2aeac, type: 2}
+      Amount: 1
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 1900
+    - Item: {fileID: 11400000, guid: 6e4e24d3575aa4af181e02b0865ced1a, type: 2}
+      Amount: 3
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 2250
+    - Item: {fileID: 11400000, guid: 6e4e24d3575aa4af181e02b0865ced1a, type: 2}
+      Amount: 4
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 2650
+    - Item: {fileID: 11400000, guid: 6e4e24d3575aa4af181e02b0865ced1a, type: 2}
+      Amount: 5
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 3050
+    - Item: {fileID: 11400000, guid: 6e4e24d3575aa4af181e02b0865ced1a, type: 2}
+      Amount: 6
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 3600
+    - Item: {fileID: 11400000, guid: 6e4e24d3575aa4af181e02b0865ced1a, type: 2}
+      Amount: 3
+    - Item: {fileID: 11400000, guid: cc5a5a8cf3214e7e80685a2534a2aeac, type: 2}
+      Amount: 1
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 4200
+    - Item: {fileID: 11400000, guid: 6e4e24d3575aa4af181e02b0865ced1a, type: 2}
+      Amount: 4
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 4900
+    - Item: {fileID: 11400000, guid: 6e4e24d3575aa4af181e02b0865ced1a, type: 2}
+      Amount: 5
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 5750
+    - Item: {fileID: 11400000, guid: 6e4e24d3575aa4af181e02b0865ced1a, type: 2}
+      Amount: 6
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 6750
+    - Item: {fileID: 11400000, guid: 6e4e24d3575aa4af181e02b0865ced1a, type: 2}
+      Amount: 3
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 7900
+    - Item: {fileID: 11400000, guid: 6e4e24d3575aa4af181e02b0865ced1a, type: 2}
+      Amount: 4
+    - Item: {fileID: 11400000, guid: cc5a5a8cf3214e7e80685a2534a2aeac, type: 2}
+      Amount: 1
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 9200
+    - Item: {fileID: 11400000, guid: 6e4e24d3575aa4af181e02b0865ced1a, type: 2}
+      Amount: 5
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 10800
+    - Item: {fileID: 11400000, guid: 6e4e24d3575aa4af181e02b0865ced1a, type: 2}
+      Amount: 6
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 12650
+    - Item: {fileID: 11400000, guid: 6b73b51af21fb4841838d9f6febb0f8b, type: 2}
+      Amount: 1
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 14750
+    - Item: {fileID: 11400000, guid: 6b73b51af21fb4841838d9f6febb0f8b, type: 2}
+      Amount: 2
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 17300
+    - Item: {fileID: 11400000, guid: d5b5b70a412a24bc9966383bf812fc40, type: 2}
+      Amount: 1
+    - Item: {fileID: 11400000, guid: cc5a5a8cf3214e7e80685a2534a2aeac, type: 2}
+      Amount: 1

@@ -17,6 +17,9 @@ namespace _GAME.Scripts.Common
         [SerializeField] private Color _normalColor;
         [SerializeField] private Color _lowColor;
         [SerializeField] private Color _criticalColor;
+        [Header("Energy shield")]
+        [SerializeField] private GameObject _shieldRoot;
+        [SerializeField] private Slider _shieldSlider;
 
         private Player _player;
 
@@ -25,6 +28,21 @@ namespace _GAME.Scripts.Common
             _player = player;
             SetValue(_player.Health.Value);
             _player.Health.OnChangeValue01 += SetValue;
+
+            if (_shieldRoot != null)
+            {
+                _shieldRoot.SetActive(_player.EnergyShield.Max > 0);
+            }
+            SetShieldValue(_player.EnergyShield.Value);
+            _player.EnergyShield.OnChangeValue01 += SetShieldValue;
+        }
+
+        public void SetShieldValue(float val)
+        {
+            if (_shieldSlider != null)
+            {
+                _shieldSlider.value = val;
+            }
         }
 
         public void SetValue(float val)
@@ -42,7 +60,8 @@ namespace _GAME.Scripts.Common
         {
             if(_player!=null)
             {
-                _player.Health.OnChangeValue01 += SetValue;
+                _player.Health.OnChangeValue01 -= SetValue;
+                _player.EnergyShield.OnChangeValue01 -= SetShieldValue;
             }
         }
     }

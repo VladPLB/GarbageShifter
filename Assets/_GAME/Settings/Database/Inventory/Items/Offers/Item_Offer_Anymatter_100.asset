@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e49a71e7ea4f4f6e95fc8955ce1bb19c, type: 3}
+  m_Name: Item_Offer_Anymatter_100
+  m_EditorClassIdentifier: 
+  _id: Offer_Anymatter_100
+  _displayName: 100 Anymatter
+  _description: 100 Anymatter.
+  _icon: {fileID: 21300000, guid: 2710fc3bcabf4be4f919e333515a4a8b, type: 3}
+  _rank: 2
+  _type: 10
+  _subType: Iap
+  _zeroCountEnabled: 0
+  _maxStack: 1
+  _showConditions:
+  - {fileID: 11400000, guid: 5257b49f14784974ac0a38f7d17e71b5, type: 2}
+  _craftConditions: []
+  _useConditions: []
+  _recipe:
+    ItemCosts: []
+    Loot:
+      Rolls: 1
+      Entries: []
+  _usePipelines:
+  - {fileID: 11400000, guid: 4d061d3bf47e4902adc1f6e1fa483adf, type: 2}

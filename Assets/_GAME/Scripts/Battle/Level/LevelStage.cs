@@ -105,6 +105,19 @@ namespace _GAME.Scripts.Battle.Level
             EventBus.Push(new KeyEvent("StagePlay"), EventBus.EventRegion.GAMEPLAY);
         }
         
+        // Player is dead: no new enemies until the stage is restarted
+        public void Pause()
+        {
+            _enemySpawner?.Pause();
+        }
+
+        // Despawns current enemies; the stage is played again with Play()
+        public void ResetForRestart()
+        {
+            _onSpawnWarning = null;
+            _enemySpawner?.Stop();
+        }
+
         public void End()
         {
             _onSpawnWarning = null;

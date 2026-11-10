@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 953a62c49c94494f967e0bf01878b1f3, type: 3}
+  m_Name: ItemUsePipelineOpenRewardChest_Licenses_Medium
+  m_EditorClassIdentifier: 
+  _buttonView:
+    _label: Buy
+    _overrideColors: 0
+    _backgroundColor: {r: 1, g: 1, b: 1, a: 1}
+    _textColor: {r: 0, g: 0, b: 0, a: 1}
+  _useDescription: 
+  _spendAmount: 1
+  _rewardsCount: 7
+  _pool: {fileID: 11400000, guid: 33233d6ffb374cd3a067e7d9a65db59b, type: 2}
+  _places: 14000000

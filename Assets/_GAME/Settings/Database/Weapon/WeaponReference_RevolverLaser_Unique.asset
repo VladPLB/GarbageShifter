@@ -1,0 +1,162 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8af7b0e9e60c4a7b907029c420b97ceb, type: 3}
+  m_Name: WeaponReference_RevolverLaser_Unique
+  m_EditorClassIdentifier: 
+  _data:
+    _inventoryId: RevolverLaser_Unique
+    _type: 520
+    _bulletType: 2
+    _explosionType: 0
+    _soundType: 18
+    _levels:
+    - _reloadTime: 1
+      _reloadTimeRandomize: 0.2
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 32
+      _damageOffset: 8
+      _aimOffset: 0.5
+    - _reloadTime: 1
+      _reloadTimeRandomize: 0.2
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 35
+      _damageOffset: 8
+      _aimOffset: 0.5
+    - _reloadTime: 1
+      _reloadTimeRandomize: 0.2
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 37
+      _damageOffset: 10
+      _aimOffset: 0.5
+    - _reloadTime: 1
+      _reloadTimeRandomize: 0.19
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 37
+      _damageOffset: 10
+      _aimOffset: 0.5
+    - _reloadTime: 1
+      _reloadTimeRandomize: 0.19
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 37
+      _damageOffset: 10
+      _aimOffset: 0.45
+    - _reloadTime: 1
+      _reloadTimeRandomize: 0.17
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 40
+      _damageOffset: 10
+      _aimOffset: 0.45
+    - _reloadTime: 1
+      _reloadTimeRandomize: 0.16
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 42
+      _damageOffset: 10
+      _aimOffset: 0.45
+    - _reloadTime: 1
+      _reloadTimeRandomize: 0.15
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 42
+      _damageOffset: 10
+      _aimOffset: 0.44
+    - _reloadTime: 1
+      _reloadTimeRandomize: 0.14
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 43
+      _damageOffset: 11
+      _aimOffset: 0.4
+    - _reloadTime: 0.95
+      _reloadTimeRandomize: 0.13
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 48
+      _damageOffset: 16
+      _aimOffset: 0.35
+    - _reloadTime: 0.93
+      _reloadTimeRandomize: 0.12
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 52
+      _damageOffset: 16
+      _aimOffset: 0.33
+    - _reloadTime: 0.92
+      _reloadTimeRandomize: 0.12
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 55
+      _damageOffset: 18
+      _aimOffset: 0.32
+    - _reloadTime: 0.91
+      _reloadTimeRandomize: 0.12
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 56
+      _damageOffset: 19
+      _aimOffset: 0.3
+    - _reloadTime: 0.89
+      _reloadTimeRandomize: 0.11
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 60
+      _damageOffset: 19
+      _aimOffset: 0.29
+    - _reloadTime: 0.88
+      _reloadTimeRandomize: 0.11
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 63
+      _damageOffset: 19
+      _aimOffset: 0.28
+    - _reloadTime: 0.86
+      _reloadTimeRandomize: 0.1
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 66
+      _damageOffset: 21
+      _aimOffset: 0.26
+    - _reloadTime: 0.84
+      _reloadTimeRandomize: 0.1
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 69
+      _damageOffset: 23
+      _aimOffset: 0.24
+    - _reloadTime: 0.83
+      _reloadTimeRandomize: 0.09
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 71
+      _damageOffset: 23
+      _aimOffset: 0.23
+    - _reloadTime: 0.82
+      _reloadTimeRandomize: 0.08
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 74
+      _damageOffset: 23
+      _aimOffset: 0.21
+    - _reloadTime: 0.8
+      _reloadTimeRandomize: 0.08
+      _bulletAmount: 1
+      _bulletSpawnDelay: 0
+      _damage: 77
+      _damageOffset: 24
+      _aimOffset: 0.2
+  _prefab: {fileID: 117406340391291731, guid: dd12b80bd5844fd192bdda8c9b7642a7, type: 3}

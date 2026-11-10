@@ -15,6 +15,7 @@ namespace _GAME.Scripts.Cores.Save.SavesConfigs
         public List<ItemStackSave> Items = new();
         public List<ItemUpgradeSave> Upgrades = new();
         public List<ItemCaseSave> Cases = new();
+        public List<DailyClaimSave> DailyClaims = new();
 
         public int GameplayStorageCapacity = 3;
 
@@ -38,6 +39,14 @@ namespace _GAME.Scripts.Cores.Save.SavesConfigs
         public int Level;
     }
     
+    [Serializable]
+    public struct DailyClaimSave
+    {
+        public string Id;
+        // Local calendar day number of the last claim
+        public int Day;
+    }
+
     [Serializable]
     public struct ItemCaseSave
     {

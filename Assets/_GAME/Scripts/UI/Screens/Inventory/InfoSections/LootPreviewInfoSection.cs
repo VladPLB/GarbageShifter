@@ -30,7 +30,7 @@ namespace _GAME.Scripts.UI.Screens.Inventory.InfoSections
             {
                 var item = reward.Item;
                 var viewer = _pool.Pop();
-                viewer.Setup(item, reward.Min, reward.Max, () => ItemPreviewWindow.Open(item));
+                viewer.Setup(item, reward.Min, reward.Max, () => ItemPreviewWindow.Open(item, (RectTransform)viewer.transform));
                 viewer.SetInteractable(request.AllowPreview);
                 viewer.transform.SetParent(_itemsHolder, false);
                 viewer.transform.localScale = Vector3.one;

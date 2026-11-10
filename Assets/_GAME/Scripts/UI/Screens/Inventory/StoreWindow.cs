@@ -65,13 +65,13 @@ namespace _GAME.Scripts.UI.Screens.Inventory
                 return;
 
             var items = _inventoryManager.GetAll(_selectedType)
-                .OrderBy(kv => kv.DisplayName)
+                .OrderForStore(item => item, _inventoryManager)
                 .ToList();
 
             foreach (var item in items)
             {
                 var viewer = _pool.Pop();
-                viewer.Setup(item, () => OnItemClicked(item));
+                viewer.Setup(item, () => OnItemClicked(item, (RectTransform)viewer.transform));
                 viewer.transform.SetParent(_itemsHolder, false);
                 viewer.transform.localScale = Vector3.one;
                 viewer.gameObject.SetActive(true);
@@ -82,10 +82,11 @@ namespace _GAME.Scripts.UI.Screens.Inventory
                 _emptyStateLabel.SetActive(items.Count == 0);
         }
 
-        private void OnItemClicked(ItemInfo itemInfo)
+        private void OnItemClicked(ItemInfo itemInfo, RectTransform anchor = null)
         {
             var request = new ItemInfoRequest(itemInfo)
             {
+                Anchor = anchor,
                 StatsMode = EquipmentStatsMode.Current,
                 Price = itemInfo.Recipe?.ItemCosts,
             };
@@ -98,6 +99,8 @@ namespace _GAME.Scripts.UI.Screens.Inventory
         {
             if (!result.Success)
                 Debug.LogError($"[StoreWindow] Failed to use item {result.Item.DisplayName}");
+            else
+                RefreshItems(); // owned marks and sorting (bought equipment goes down)
 
             //Feel reaction
             if (!TryShowReceivedLoot(result))

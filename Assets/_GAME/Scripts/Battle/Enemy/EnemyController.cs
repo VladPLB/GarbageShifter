@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _GAME.Scripts.Audio;
+using _GAME.Scripts.Battle.Level.Progression;
 using _GAME.Scripts.Battle.Player;
 using _GAME.Scripts.Battle.Weapons;
 using _GAME.Scripts.Common;
@@ -39,6 +40,7 @@ namespace _GAME.Scripts.Battle.Enemy
         private Transform _playerTransform;
 
         private bool _isFire = false;
+        private bool _isFrozen = false;
         public override Team Team => Team.Enemy;
         public EnemyType Type => _data.Type;
         public EnemyData Data => _data;
@@ -50,16 +52,18 @@ namespace _GAME.Scripts.Battle.Enemy
 
         public event Action<EnemyController> OnDead;
 
-        public void Init()
+        public void Init(EnemyScaling scaling)
         {
             if(!_data.IsBomber)
             {
                 _data.WeaponData.Setup(this, 0);
+                _data.WeaponData.SetDamageMultiplier(scaling.Damage);
                 _weapon.Setup(_data.WeaponData, IsFire, fireCallback:_enemyViewer.Fire);
             }
             else
             {
-                _data.ExplosionData.Setup(this, -1, new ExplosionEffectAttribute());
+                var explosionDamage = Mathf.RoundToInt(_data.ExplosionData.BaseDamage * scaling.Damage);
+                _data.ExplosionData.Setup(this, explosionDamage, new ExplosionEffectAttribute());
                 _weaponBomb.Setup(_data.ExplosionData, IsFire);
             }
             _health.OnChangeValue -= OnHealthChange;
@@ -71,9 +75,10 @@ namespace _GAME.Scripts.Battle.Enemy
             }
         }
 
-        public void Setup(List<Vector3> movePath, Transform player, EnemyBounds enemyBounds)
+        public void Setup(List<Vector3> movePath, Transform player, EnemyBounds enemyBounds, EnemyScaling scaling)
         {
-            Init();
+            _isFrozen = false;
+            Init(scaling);
             _playerTransform = player;
             _lastHitPoint = null;
             _explosionForce = null;
@@ -92,8 +97,8 @@ namespace _GAME.Scripts.Battle.Enemy
             {
                 _weaponBomb.SetActive(true, false);
             }
-            _health.Set(_data.Health);
-            _armor.Set(_data.Armor);
+            _health.Set(Mathf.RoundToInt(_data.Health * scaling.Health));
+            _armor.Set(Mathf.RoundToInt(_data.Armor * scaling.Health));
             DamageRepeatersSetActive(true);
             if (_spawnEffectType != GameEffectType.None)
             {
@@ -107,9 +112,16 @@ namespace _GAME.Scripts.Battle.Enemy
             _enemyMover.OnMoveSpeed += _enemyViewer.Run;
         }
 
+        // Stops moving and shooting (e.g. while the player is dead)
+        public void Freeze()
+        {
+            _isFrozen = true;
+            _enemyMover.Stop();
+        }
+
         private bool IsFire()
         {
-            return _fireCondition.IsFire(this);
+            return !_isFrozen && _fireCondition.IsFire(this);
         }
         
         public override void OnDamage(Team damageDealersTeam, int damageAmount, Vector3 hitPoint, List<IEffectAttribute> additiveAttributes = null)

@@ -12,7 +12,7 @@ namespace _GAME.Scripts.Inventory
     public enum ItemRank { Common, Uncommon, Rare, Epic, Legendary, Unique }
     // New values must be appended at the end - Unity serializes enum fields on ItemInfo assets by index,
     // so inserting/reordering here would silently reassign the type of already-authored items.
-    public enum ItemType { Currency, Equipment, Consumable, Material, Quest, Other, Weapon }
+    public enum ItemType { Currency, Equipment, Consumable, Material, Quest, Other, Weapon, SecondaryWeapon, License, Chest, Offer }
 
     public enum PlaceTarget
     {
@@ -210,6 +210,12 @@ namespace _GAME.Scripts.Inventory
 
         public bool Add(ItemInfo item, int amount)
         {
+            return Add(item, amount, null);
+        }
+
+        // received: what actually ended up in the inventory (an already owned equipment item is converted to currency)
+        public bool Add(ItemInfo item, int amount, List<ItemAmount> received)
+        {
             if (item == null) return false;
             if (amount == 0) return false;
             if (string.IsNullOrWhiteSpace(item.Id)) return false;
@@ -219,7 +225,7 @@ namespace _GAME.Scripts.Inventory
 
             if (isUpgradable && current > 0)
             {
-                return false;
+                return amount > 0 && AddDuplicateCompensation(item, amount, received);
             }
             
             var target = current + amount;
@@ -242,7 +248,29 @@ namespace _GAME.Scripts.Inventory
             
             WriteCacheToSave();
             EventBus.Push(new InventoryItemChangedEvent(item, current, target), EventBus.EventRegion.GLOBAL);
+            if (amount > 0)
+            {
+                received?.Add(new ItemAmount { Item = item, Amount = amount });
+            }
             return true;
+        }
+
+        // Duplicate equipment is paid out with the currency part of its recipe price
+        private bool AddDuplicateCompensation(ItemInfo item, int amount, List<ItemAmount> received)
+        {
+            var costs = item.Recipe?.ItemCosts;
+            if (costs == null) return false;
+
+            var result = false;
+            foreach (var cost in costs)
+            {
+                if (cost.Item == null || cost.Item.Type != ItemType.Currency || cost.Amount <= 0)
+                    continue;
+
+                if (Add(cost.Item, cost.Amount * amount, received))
+                    result = true;
+            }
+            return result;
         }
 
         public bool Add(string id, int amount)
@@ -350,6 +378,12 @@ namespace _GAME.Scripts.Inventory
             _upgrades[info.Id] = upgrade + 1;
             
             WriteCacheToSave();
+            AnalyticsEvent.Push("equipment_upgrade",
+                ("item_id", info.Id),
+                ("item_type", info.Type.ToString()),
+                ("rank", info.Rank.ToString()),
+                ("item_level", upgrade + 2),
+                ("is_equipped", CanEquip(info)));
             
             return true;
         }
@@ -464,12 +498,7 @@ namespace _GAME.Scripts.Inventory
                 var amount = e.RollAmount(rng);
                 if (amount > 0)
                 {
-                    Add(e.Item, amount);
-                    results.Add(new ItemAmount()
-                    {
-                        Item = e.Item,
-                        Amount = amount
-                    });
+                    Add(e.Item, amount, results);
                 }
 
                 return results;
@@ -501,12 +530,7 @@ namespace _GAME.Scripts.Inventory
                         var amount = e.RollAmount(rng);
                         if (amount > 0)
                         {
-                            Add(e.Item, amount);
-                            results.Add(new ItemAmount()
-                            {
-                                Item = e.Item,
-                                Amount = amount
-                            });
+                            Add(e.Item, amount, results);
                             break;
                         }
                     }
@@ -525,13 +549,62 @@ namespace _GAME.Scripts.Inventory
             return false;
         }
 
+        // Daily rewards are bound to the local calendar day, not to the time of the last claim
+        public static int CurrentDay => (int)(DateTime.Now.Date - new DateTime(2000, 1, 1)).TotalDays;
+        public static TimeSpan TimeToNextDay => DateTime.Now.Date.AddDays(1) - DateTime.Now;
+
+        public bool IsDailyClaimAvailable(string id)
+        {
+            if (_inventoryData?.DailyClaims == null)
+                return true;
+
+            foreach (var claim in _inventoryData.DailyClaims)
+            {
+                if (claim.Id == id)
+                    return claim.Day != CurrentDay;
+            }
+            return true;
+        }
+
+        public void MarkDailyClaimed(string id)
+        {
+            if (_inventoryData == null)
+                return;
+
+            _inventoryData.DailyClaims ??= new List<DailyClaimSave>();
+            _inventoryData.DailyClaims.RemoveAll(c => c.Id == id);
+            _inventoryData.DailyClaims.Add(new DailyClaimSave { Id = id, Day = CurrentDay });
+            _inventoryData.MarkDirty(forced: true);
+        }
+
+        public bool TryGetEquipped(InventoryCase inventoryCase, out ItemInfo item, out int level)
+        {
+            item = null;
+            level = 0;
+            if (!_cases.TryGetValue(inventoryCase, out var id) || string.IsNullOrEmpty(id))
+                return false;
+
+            if (!ItemDatabase.TryGet(id, out item) || GetCount(item) <= 0)
+                return false;
+
+            level = GetLevel(item);
+            return true;
+        }
+
         public bool TryEquip(ItemInfo itemInfo)
         {
-            var data = _dataBase.Weapons.GetData(itemInfo.Id);
+            var data = _dataBase.GetEquipmentData(itemInfo.Id);
             if(data == null) return false;
             
+            _cases.TryGetValue(data.InventoryCase, out var previousId);
             _cases[data.InventoryCase] = itemInfo.Id;
             WriteCacheToSave();
+            AnalyticsEvent.Push("equip_change",
+                ("slot", data.InventoryCase.ToString()),
+                ("item_id", itemInfo.Id),
+                ("prev_item_id", previousId ?? string.Empty),
+                ("rank", itemInfo.Rank.ToString()),
+                ("item_level", GetLevel(itemInfo) + 1));
             
             return true;
         }
@@ -540,6 +613,7 @@ namespace _GAME.Scripts.Inventory
         {
             _counts.Clear();
             _upgrades.Clear();
+            _cases.Clear();
 
             if (_inventoryData?.Items == null)
                 return;
@@ -556,6 +630,31 @@ namespace _GAME.Scripts.Inventory
                     continue;
                 
                 _counts[stack.ItemId] = stack.Amount;
+            }
+
+            // owned upgradable items start at level 0 even without a saved upgrade entry (e.g. default save)
+            foreach (var id in _counts.Keys)
+            {
+                if (ItemDatabase.TryGet(id, out var info) && info is UpgradableItemInfo)
+                    _upgrades[id] = 0;
+            }
+
+            if (_inventoryData.Upgrades != null)
+            {
+                foreach (var upgrade in _inventoryData.Upgrades)
+                {
+                    if (_counts.ContainsKey(upgrade.ItemId))
+                        _upgrades[upgrade.ItemId] = upgrade.Level;
+                }
+            }
+
+            if (_inventoryData.Cases != null)
+            {
+                foreach (var equipped in _inventoryData.Cases)
+                {
+                    if (_counts.ContainsKey(equipped.ItemId))
+                        _cases[equipped.Case] = equipped.ItemId;
+                }
             }
         }
 

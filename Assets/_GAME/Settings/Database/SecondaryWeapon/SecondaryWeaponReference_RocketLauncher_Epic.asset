@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72b12bfb35044df1b1fe072fbf7adffb, type: 3}
+  m_Name: SecondaryWeaponReference_RocketLauncher_Epic
+  m_EditorClassIdentifier: 
+  _data:
+    _inventoryId: RocketLauncher_Epic
+    _inventoryCase: 1
+    _type: 300
+    _levels:
+    - _damage: 67
+      _capacity: 30
+    - _damage: 71
+      _capacity: 30
+    - _damage: 77
+      _capacity: 29
+    - _damage: 82
+      _capacity: 28
+    - _damage: 89
+      _capacity: 28
+    - _damage: 95
+      _capacity: 27
+    - _damage: 102
+      _capacity: 27
+    - _damage: 109
+      _capacity: 26
+    - _damage: 116
+      _capacity: 25
+    - _damage: 123
+      _capacity: 25
+    - _damage: 130
+      _capacity: 24
+    - _damage: 138
+      _capacity: 23
+    - _damage: 145
+      _capacity: 22
+    - _damage: 153
+      _capacity: 22
+    - _damage: 160
+      _capacity: 21
+    - _damage: 168
+      _capacity: 20
+    - _damage: 176
+      _capacity: 19
+    - _damage: 184
+      _capacity: 19
+    - _damage: 192
+      _capacity: 18
+    - _damage: 200
+      _capacity: 17
+  _prefab: {fileID: 0}

@@ -13,14 +13,15 @@ namespace _GAME.Scripts.Battle.Player.SecondaryWeapon
         private static readonly TimeSpan _shotDelayToHide = TimeSpan.FromSeconds(.3f);
         
         [SerializeField] private BulletType _bulletType;
+        [SerializeField] private ProjectileDamageMode _damageMode = ProjectileDamageMode.Payload;
         [SerializeField] private List<GameObject> _rockets;
         [SerializeField] private List<ParticleSystem> _muzzleFlashes;
         
         private BulletData _defaultBulletData;
 
-        public override void Setup(Player player)
+        public override void Setup(Player player, SecondaryWeaponData data)
         {
-            base.Setup(player);
+            base.Setup(player, data);
             _defaultBulletData = Core.Get<DataBase>().Bullets.GetDefaultData(_bulletType);
         }
 
@@ -66,7 +67,12 @@ namespace _GAME.Scripts.Battle.Player.SecondaryWeapon
             bullet.transform.position = point.position;
             bullet.transform.forward = point.forward;
             var data = _defaultBulletData.Clone();
-            data.Setup(_player, 0, bullet.transform.forward);
+            var hitDamage = _damageMode == ProjectileDamageMode.Payload ? 0 : _data.Damage;
+            data.Setup(_player, hitDamage, bullet.transform.forward);
+            if (_damageMode != ProjectileDamageMode.Hit)
+            {
+                data.SetPayloadDamage(_data.Damage);
+            }
             bullet.Setup(data, null);
             bullet.gameObject.SetActive(true);
         }

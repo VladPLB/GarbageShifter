@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using _GAME;
 using _GAME.Scripts;
+using _GAME.Scripts.Ads;
 using _GAME.Scripts.Battle.Items;
 using _GAME.Scripts.Inventory;
 using _GAME.Scripts.UI;
@@ -45,19 +46,34 @@ public class GameplayCompetedScreen : UIWindow
     private void ExitGame()
     {
         _inventory.TakeOut();
-        ToLobby();
+        ToLobby("level_complete");
     }
     
+    // rewarded ad: all collected loot is taken, not only the stored part
     private void ExitWithRv()
     {
-        _inventory.TakeAll();
-        ToLobby();
+        var adsManager = Core.Get<AdsManager>();
+        if (adsManager == null)
+        {
+            OnLootAllRewarded(true);
+            return;
+        }
+        adsManager.ShowRewarded("loot_all", OnLootAllRewarded);
     }
 
-    private void ToLobby()
+    private void OnLootAllRewarded(bool isRewarded)
+    {
+        if (!isRewarded)
+            return;
+
+        _inventory.TakeAll();
+        ToLobby(null);
+    }
+
+    private void ToLobby(string interstitialPlacement)
     {
         Close();
-        _levelController.EndLevel();
+        _levelController.EndLevel(interstitialPlacement);
     }
 
     private void InitBehaviours()

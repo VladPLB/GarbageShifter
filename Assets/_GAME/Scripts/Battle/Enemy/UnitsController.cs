@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _GAME.Scripts.Battle.Items;
+using _GAME.Scripts.Battle.Level.Progression;
 using _GAME.Scripts.Common;
 using _GAME.Scripts.Events;
 using Cysharp.Threading.Tasks;
@@ -23,6 +24,7 @@ namespace _GAME.Scripts.Battle.Enemy
         private int _enemyCount = 0;
 
         private EnemyBounds _enemyBounds;
+        private EnemyScaling _scaling = EnemyScaling.Default;
         public int EnemyCountFull
         {
             get => _enemyCountFull;
@@ -40,8 +42,9 @@ namespace _GAME.Scripts.Battle.Enemy
         public event Action<EnemyController> OnSpawned;
         public event Action<EnemyController> OnRemoved;
 
-        public void Setup(Transform player)
+        public void Setup(Transform player, EnemyScaling scaling)
         {
+            _scaling = scaling;
             _pool = Core.Get<PoolProvider>().Enemies;
             _dropManager ??= Core.Get<DropManager>();
             _activeUnits = new();
@@ -59,7 +62,7 @@ namespace _GAME.Scripts.Battle.Enemy
         {
             var unit = _pool.Pop(type);
             unit.transform.position = path[0];
-            unit.Setup(path, _playerTransform, _enemyBounds);
+            unit.Setup(path, _playerTransform, _enemyBounds, _scaling);
             unit.OnDead += RemoveUnit;
             _activeUnits.Add(unit);
             OnSpawned?.Invoke(unit);
@@ -95,6 +98,11 @@ namespace _GAME.Scripts.Battle.Enemy
             {
                 // component destroyed mid-await, expected
             }
+        }
+
+        public void FreezeAll()
+        {
+            _activeUnits.ForEach(u => u.Freeze());
         }
 
         public void ClearCurrentEnemies()

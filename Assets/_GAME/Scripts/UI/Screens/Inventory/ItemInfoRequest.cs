@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _GAME.Scripts.Inventory;
+using UnityEngine;
 
 namespace _GAME.Scripts.UI.Screens.Inventory
 {
@@ -31,6 +32,8 @@ namespace _GAME.Scripts.UI.Screens.Inventory
         public string PriceTitle { get; set; } = "Price:";
         public List<ItemAmount> Price { get; set; }
         public string PriceOverrideText { get; set; }
+        // UI element the window was opened from (window / arrow are aligned to it)
+        public RectTransform Anchor { get; set; }
 
         public IReadOnlyList<ItemInfoButtonOption> Buttons => _buttons;
 

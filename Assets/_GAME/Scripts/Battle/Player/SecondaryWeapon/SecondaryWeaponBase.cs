@@ -11,15 +11,17 @@ namespace _GAME.Scripts.Battle.Player.SecondaryWeapon
         [SerializeField] protected SecondaryWeaponDisolver _disolver;
 
         protected Player _player;
+        protected SecondaryWeaponData _data;
         protected bool _isReady = false;
         protected bool _isFire = false;
 
         public virtual bool IsReady => _isReady;
         public virtual bool IsFire => _isFire;
 
-        public virtual void Setup(Player player)
+        public virtual void Setup(Player player, SecondaryWeaponData data)
         {
             _player = player;
+            _data = data;
             SetReady(false);
             _disolver.Setup();
         }

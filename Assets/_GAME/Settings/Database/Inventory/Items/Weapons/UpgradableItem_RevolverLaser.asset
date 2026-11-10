@@ -1,0 +1,148 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebda255d324d4d9881a2bb664e83444f, type: 3}
+  m_Name: UpgradableItem_RevolverLaser
+  m_EditorClassIdentifier: 
+  _id: RevolverLaser
+  _displayName: Laser revolver
+  _description: Laser revolver
+  _icon: {fileID: 21300000, guid: 58424b003e8d0d040932d263c2c73c98, type: 3}
+  _rank: 0
+  _type: 6
+  _subType: 
+  _zeroCountEnabled: 0
+  _maxStack: 1
+  _showConditions:
+  - {fileID: 11400000, guid: f07eeeb8f1dd343ed954253650302ae6, type: 2}
+  _craftConditions: []
+  _useConditions: []
+  _recipe:
+    ItemCosts:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 750
+    Loot:
+      Rolls: 1
+      Entries:
+      - Item: {fileID: 11400000}
+        MinAmount: 1
+        MaxAmount: 1
+        Group: 0
+        ChancePercent: 100
+  _usePipelines:
+  - {fileID: 11400000, guid: 4134afeb444fe463cb6dab3cddf27198, type: 2}
+  - {fileID: 11400000, guid: 92178cc93bf6f44f593e385814f70104, type: 2}
+  - {fileID: 11400000, guid: e8629612fde92474c8bb09fcbcd83aaf, type: 2}
+  _maxLevel: 20
+  _upgradePrices:
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 200
+    - Item: {fileID: 11400000, guid: 428f299197133440884ed70e713a878b, type: 2}
+      Amount: 2
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 250
+    - Item: {fileID: 11400000, guid: 428f299197133440884ed70e713a878b, type: 2}
+      Amount: 3
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 250
+    - Item: {fileID: 11400000, guid: 428f299197133440884ed70e713a878b, type: 2}
+      Amount: 4
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 300
+    - Item: {fileID: 11400000, guid: 428f299197133440884ed70e713a878b, type: 2}
+      Amount: 5
+    - Item: {fileID: 11400000, guid: a566fddbdc8447c5a9a939e8e4d11403, type: 2}
+      Amount: 1
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 350
+    - Item: {fileID: 11400000, guid: 60651a646fad445669e9fde35df29e6a, type: 2}
+      Amount: 2
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 450
+    - Item: {fileID: 11400000, guid: 60651a646fad445669e9fde35df29e6a, type: 2}
+      Amount: 3
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 500
+    - Item: {fileID: 11400000, guid: 60651a646fad445669e9fde35df29e6a, type: 2}
+      Amount: 4
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 600
+    - Item: {fileID: 11400000, guid: 60651a646fad445669e9fde35df29e6a, type: 2}
+      Amount: 5
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 700
+    - Item: {fileID: 11400000, guid: 1b52748a1623447629c85621017319ef, type: 2}
+      Amount: 2
+    - Item: {fileID: 11400000, guid: a566fddbdc8447c5a9a939e8e4d11403, type: 2}
+      Amount: 1
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 800
+    - Item: {fileID: 11400000, guid: 1b52748a1623447629c85621017319ef, type: 2}
+      Amount: 3
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 950
+    - Item: {fileID: 11400000, guid: 1b52748a1623447629c85621017319ef, type: 2}
+      Amount: 4
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 1100
+    - Item: {fileID: 11400000, guid: 1b52748a1623447629c85621017319ef, type: 2}
+      Amount: 5
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 1300
+    - Item: {fileID: 11400000, guid: 6e4e24d3575aa4af181e02b0865ced1a, type: 2}
+      Amount: 2
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 1550
+    - Item: {fileID: 11400000, guid: 6e4e24d3575aa4af181e02b0865ced1a, type: 2}
+      Amount: 3
+    - Item: {fileID: 11400000, guid: a566fddbdc8447c5a9a939e8e4d11403, type: 2}
+      Amount: 1
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 1800
+    - Item: {fileID: 11400000, guid: 6e4e24d3575aa4af181e02b0865ced1a, type: 2}
+      Amount: 4
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 2100
+    - Item: {fileID: 11400000, guid: 6e4e24d3575aa4af181e02b0865ced1a, type: 2}
+      Amount: 5
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 2450
+    - Item: {fileID: 11400000, guid: 6b73b51af21fb4841838d9f6febb0f8b, type: 2}
+      Amount: 1
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 2900
+    - Item: {fileID: 11400000, guid: 6b73b51af21fb4841838d9f6febb0f8b, type: 2}
+      Amount: 1
+  - Items:
+    - Item: {fileID: 11400000, guid: 63e11d103c6ed4c05827e60081bef516, type: 2}
+      Amount: 3400
+    - Item: {fileID: 11400000, guid: d5b5b70a412a24bc9966383bf812fc40, type: 2}
+      Amount: 1
+    - Item: {fileID: 11400000, guid: a566fddbdc8447c5a9a939e8e4d11403, type: 2}
+      Amount: 1

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using _GAME.Scripts.Audio;
+using _GAME.Scripts.Battle.Level.Progression;
 using _GAME.Scripts.Common;
 using _GAME.Scripts.Cores.Save.SavesConfigs;
 using _GAME.Scripts.Inventory;
@@ -32,7 +33,11 @@ namespace _GAME.Scripts.Battle.Items
         private LocalInventory _localInventory;
         
         private Pool<Coin, CoinType> _pool;
-        private Dictionary<ItemInfo, Vector2Int> _dropItemTypes = new();
+        private readonly Dictionary<(string subType, ItemRank rank), ItemInfo> _materials = new();
+        private readonly Dictionary<ItemRank, ItemInfo> _licenses = new();
+        private LootProgressionSettings _lootSettings;
+        private int? _grade;
+        private int? _ownedEquipmentRank;
         
         public LocalInventory LocalInventory => _localInventory;
 
@@ -49,22 +54,18 @@ namespace _GAME.Scripts.Battle.Items
             _progressData = _saveManager.GetData<ProgressData>();
             _inventoryData = _saveManager.GetData<InventoryData>();
             _localInventory = new LocalInventory(_inventoryData.GameplayStorageCapacity);
-            _dropItemTypes.Clear();
-            var datas = _inventoryManager.GetAll(ItemType.Material, true);
-            foreach (var data in datas)
+            _materials.Clear();
+            foreach (var data in _inventoryManager.GetAll(ItemType.Material, true))
             {
-                var mul = (1f / ((int)data.Rank * 5f));
-                if (data.SubType == "Scrap")
-                {
-                    var scrapCountRange = new Vector2Int((int)(40f*mul), (int)(80f*mul));
-                    _dropItemTypes.Add(data, scrapCountRange);
-                }
-                else if (data.SubType == "Tools")
-                {
-                    var toolsCountRange = new Vector2Int((int)(20f*mul), (int)(30f*mul));
-                    _dropItemTypes.Add(data, toolsCountRange);
-                }
+                _materials[(data.SubType, data.Rank)] = data;
             }
+            _licenses.Clear();
+            foreach (var data in _inventoryManager.GetAll(ItemType.License, true))
+            {
+                _licenses[data.Rank] = data;
+            }
+            _grade = null;
+            _ownedEquipmentRank = null;
             _pool = _poolProvider.Coins;
             Setup(FindObjectOfType<Player.Player>().transform);
         }
@@ -108,9 +109,106 @@ namespace _GAME.Scripts.Battle.Items
                 }
             }
             
-            var info = _dropItemTypes.Keys.ElementAt(Random.Range(0, _dropItemTypes.Count));
-            var count = Random.Range(_dropItemTypes[info].x, _dropItemTypes[info].y);
-            _localInventory.Add(info, count);
+            DropLoot();
+        }
+
+        // Settings and location are resolved lazily: both are registered after this module
+        private LootProgressionSettings LootSettings
+        {
+            get
+            {
+                if (_lootSettings == null)
+                {
+                    var battle = Core.Get<Settings>()?.Battle;
+                    _lootSettings = battle != null ? battle.LootProgression : null;
+                }
+                return _lootSettings;
+            }
+        }
+
+        private int Grade
+        {
+            get
+            {
+                if (_grade == null && LootSettings != null)
+                {
+                    var progression = Core.Get<LevelController>()?.EnemyProgression;
+                    _grade = LootSettings.GetGrade(progression?.Location ?? 0);
+                }
+                return _grade ?? 0;
+            }
+        }
+
+        // Per enemy kill: one material stack + a small chance of licenses of every rank up to the grade
+        private void DropLoot()
+        {
+            var settings = LootSettings;
+            if (settings == null)
+                return;
+
+            var grade = Grade;
+            if (Random.value < settings.MaterialDropChance)
+            {
+                var isTool = Random.value < settings.ToolShare;
+                var rank = settings.GetRandomMaterialRank(grade);
+                if (_materials.TryGetValue((isTool ? "Tool" : "Scrap", rank), out var material))
+                {
+                    _localInventory.Add(material, settings.GetMaterialAmount(isTool, rank, grade));
+                }
+            }
+
+            for (int r = 0; r <= grade; r++)
+            {
+                var rank = (ItemRank)r;
+                if (_licenses.TryGetValue(rank, out var license) && Random.value < settings.GetLicenseChance(rank, grade))
+                {
+                    _localInventory.Add(license, 1);
+                }
+            }
+
+            // extra Tools and Licenses above the grade so better equipment owned early can still be upgraded
+            for (int r = grade + 1; r <= OwnedEquipmentRank; r++)
+            {
+                var rank = (ItemRank)r;
+                if (_materials.TryGetValue(("Tool", rank), out var tool) && Random.value < settings.GetOwnedRankToolChance(rank, grade))
+                {
+                    _localInventory.Add(tool, settings.GetMaterialAmount(true, rank, r));
+                }
+                if (_licenses.TryGetValue(rank, out var license) && Random.value < settings.GetOwnedRankLicenseChance(rank, grade))
+                {
+                    _localInventory.Add(license, 1);
+                }
+            }
+        }
+
+        // Highest rank of the owned equipment (-1 if none), resolved once per level
+        private int OwnedEquipmentRank
+        {
+            get
+            {
+                if (_ownedEquipmentRank == null)
+                {
+                    var owned = _inventoryManager.GetAll(true)
+                        .Where(item => item is UpgradableItemInfo && _inventoryManager.GetCount(item) > 0)
+                        .Select(item => (int)item.Rank)
+                        .DefaultIfEmpty(-1);
+                    _ownedEquipmentRank = owned.Max();
+                }
+                return _ownedEquipmentRank.Value;
+            }
+        }
+
+        // Guaranteed license of the grade rank on the last level of every N-th location
+        public void OnLevelCompleted(int location, bool isLastLevelInLocation)
+        {
+            var settings = LootSettings;
+            if (settings == null || !isLastLevelInLocation || !settings.IsGuaranteedLicenseLocation(location))
+                return;
+
+            if (_licenses.TryGetValue((ItemRank)settings.GetGrade(location), out var license))
+            {
+                _localInventory.Add(license, 1);
+            }
         }
 
         public void StartAttraction()

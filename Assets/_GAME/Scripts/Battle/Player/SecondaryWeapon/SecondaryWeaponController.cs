@@ -23,18 +23,20 @@ namespace _GAME.Scripts.Battle.Player.SecondaryWeapon
         private bool _isReady = false;
         private Vector3 _previousWeaponHolderOffset;
         private float _maxValue = 1f;
+        private float _progressPerHit = .03f;
 
         public bool IsReady => _weapon.IsReady && !_weapon.IsFire;
         public float Progress => _fill.Progress;
 
-        public void Setup(Player player,PlayerAim aim)
+        public void Setup(Player player,PlayerAim aim, SecondaryWeaponData data)
         {
+            _progressPerHit = 1f / data.Capacity;
             _aim = aim;
             _fill.Progress = 0f;
             _maxValue = 1f;
             _isReady = false;
             _weaponHolder.transform.position = _inactiveWeaponOffset;
-            _weapon.Setup(player);
+            _weapon.Setup(player, data);
             SetWeaponTransform();
             _fillAnimator.Rebind();
             EventBus.Subscribe<SeccondaryMaxValueEvent>(OnMaxValueChange, EventBus.EventRegion.GAMEPLAY);
@@ -58,7 +60,7 @@ namespace _GAME.Scripts.Battle.Player.SecondaryWeapon
         {
             if(_fill.Progress<1f)
             {
-                _fill.Progress = Mathf.Clamp(_fill.Progress + .03f, 0, _maxValue);
+                _fill.Progress = Mathf.Clamp(_fill.Progress + _progressPerHit, 0, _maxValue);
                 if (_fill.Progress < 1f)
                 {
                     _fillAnimator.SetTrigger("Added");

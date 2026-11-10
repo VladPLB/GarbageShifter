@@ -1,18 +1,34 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using _GAME.Scripts.Audio;
+using _GAME.Scripts.Battle.Armors;
 using _GAME.Scripts.Battle.Enemy;
 using _GAME.Scripts.Battle.Level;
+using _GAME.Scripts.Battle.Level.Progression;
+using _GAME.Scripts.Cores.Save.SavesConfigs;
+using _GAME.Scripts.Save;
 using _GAME.Scripts.Battle.Player.SecondaryWeapon;
 using _GAME.Scripts.Battle.Weapons;
 using _GAME.Scripts.Common;
 using _GAME.Scripts.Events;
+using _GAME.Scripts.Inventory;
+using _GAME.Scripts.Map;
+using Cysharp.Threading.Tasks;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
 namespace _GAME.Scripts.Battle.Player
 {
+    [Serializable]
+    public class ArmorRendererLink
+    {
+        // Inventory id of the armor item (e.g. ArmorDefense_Rare)
+        public string InventoryId;
+        public List<SkinnedMeshRenderer> Renderers = new();
+    }
+
     public class Player: DamageReceiver, IDamageDealer
     {
         [SerializeField] private PlayerData _data;
@@ -20,17 +36,27 @@ namespace _GAME.Scripts.Battle.Player
         [SerializeField] private PlayerMover _mover;
         [SerializeField] private Transform _weaponRoot;
         [SerializeField] private WeaponType _weaponType;
+        [SerializeField] private ArmorType _armorType;
+        [Tooltip("Armor as equipment is temporarily disabled: no armor stats, visuals untouched")]
+        [SerializeField] private bool _useArmor = false;
+        [Tooltip("Energy shield is temporarily disabled")]
+        [SerializeField] private bool _useEnergyShield = false;
+        [SerializeField] private SecondaryWeaponType _secondaryWeaponType;
         [SerializeField] private SecondaryWeaponController _secondaryWeaponController;
         [SerializeField] private PlayerAim _aim;
         [SerializeField] private Transform _freeWeaponHolder;
         [SerializeField] private RigBuilder _rig;
         [SerializeField] private StateIntAttribute _health;
+        [SerializeField] private StateIntAttribute _energyShield;
         
         [SerializeField, ReadOnly]
         private DamageRepeater[] _damageRepeaters;
         [SerializeField] private DamageReactionViewer _damageReactionViewer;
+        [Header("Armor visuals")]
+        [SerializeField] private List<ArmorRendererLink> _armorRenderers = new();
         [SerializeField]
         private Weapon _weapon;
+        private ArmorData _armorData;
         private CameraController _cameraController;
         private GameInput _gameInput;
         private bool _battleReady = false;
@@ -39,7 +65,12 @@ namespace _GAME.Scripts.Battle.Player
         private bool _isAimLock = false;
         
         public override Team Team => Team.Player;
+        public bool IsDead { get; private set; }
         public StateIntAttribute Health => _health;
+        public StateIntAttribute EnergyShield => _energyShield;
+        public ArmorData ArmorData => _armorData;
+        // Defense is a real percent of incoming health damage blocked (90 defense = -90% damage)
+        private float DefenseFactor => _armorData != null ? Mathf.Clamp01(_armorData.Defense / 100f) : 0f;
 
         public bool IsReadySecondaryWeapon => _secondaryWeaponController != null && _secondaryWeaponController.IsReady;
         public float SecondaryWeaponProgress => _secondaryWeaponController != null? _secondaryWeaponController.Progress: 0f;
@@ -57,6 +88,7 @@ namespace _GAME.Scripts.Battle.Player
         private void Awake()
         {
             _health.OnChangeValue += OnHealthChange;
+            _energyShield.OnChangeValue += OnEnergyShieldChange;
         }
 
         public void Setup(CameraController cameraController)
@@ -65,9 +97,11 @@ namespace _GAME.Scripts.Battle.Player
             _gameInput = new GameInput();
             
             SetupWeapon();
+            SetupArmor();
             _aim.Setup(_gameInput, _weapon);
-            _secondaryWeaponController.Setup(this, _aim);
-            _health.Set(_data.Health);
+            _secondaryWeaponController.Setup(this, _aim, GetSecondaryWeaponData());
+            _health.Set(_data.Health + GetProgressHealthBonus() + (_armorData?.Health ?? 0));
+            _energyShield.Set(_useEnergyShield ? _armorData?.EnergyShield ?? 0 : 0);
             
             foreach (var damageRepeater in _damageRepeaters)
             {
@@ -80,8 +114,18 @@ namespace _GAME.Scripts.Battle.Player
         private void SetupWeapon()
         {
             _rig.enabled = false;
-            var weaponData = Core.Get<DataBase>().Weapons.GetData(_weaponType);
-            weaponData.Setup(this, _data.WeaponLevel);
+            var weapons = Core.Get<DataBase>().Weapons;
+            WeaponData weaponData = null;
+            if (TryGetEquipped(InventoryCase.Weapon, out var weaponId, out var weaponLevel))
+            {
+                weaponData = weapons.GetData(weaponId);
+            }
+            if (weaponData == null)
+            {
+                weaponData = weapons.GetData(_weaponType);
+                weaponLevel = _data.WeaponLevel;
+            }
+            weaponData.Setup(this, weaponLevel);
             if (_weapon != null)
             {
                 Weapon.Release(_weapon);
@@ -95,6 +139,94 @@ namespace _GAME.Scripts.Battle.Player
             OnHit += _secondaryWeaponController.OnHit;
             OnShot += _viewer.Fire;
             _rig.enabled = true;
+        }
+
+        private int GetProgressHealthBonus()
+        {
+            var battleSettings = Core.Get<Settings>()?.Battle;
+            var settings = battleSettings != null ? battleSettings.PlayerProgression : null;
+            var saveManager = Core.Get<SaveManager>();
+            var mapManager = Core.Get<MapManager>();
+            if (settings == null || saveManager == null || mapManager == null)
+                return 0;
+
+            var location = mapManager.GetLocationNumber(saveManager.GetData<ProgressData>().Level);
+            return settings.GetHealthBonus(location);
+        }
+
+        private void SetupArmor()
+        {
+            _armorData = null;
+            if (!_useArmor)
+                return;
+
+            var armors = Core.Get<DataBase>().Armors;
+            if (TryGetEquipped(InventoryCase.Armor, out var armorId, out var armorLevel))
+            {
+                _armorData = armors.GetData(armorId);
+            }
+            if (_armorData == null)
+            {
+                _armorData = armors.GetData(_armorType);
+                armorLevel = _data.ArmorLevel;
+            }
+            _armorData.SetLevel(armorLevel);
+            ApplyArmorVisuals(_armorData.InventoryId);
+        }
+
+        // Renderers linked to the equipped armor are shown, the rest of the linked renderers are hidden
+        private void ApplyArmorVisuals(string armorId)
+        {
+            var visible = new HashSet<SkinnedMeshRenderer>(_armorRenderers
+                .Where(link => link.InventoryId == armorId)
+                .SelectMany(link => link.Renderers)
+                .Where(r => r != null));
+
+            foreach (var link in _armorRenderers)
+            {
+                foreach (var meshRenderer in link.Renderers)
+                {
+                    if (meshRenderer != null)
+                        meshRenderer.enabled = visible.Contains(meshRenderer);
+                }
+            }
+        }
+
+        private SecondaryWeaponData GetSecondaryWeaponData()
+        {
+            var secondaryWeapons = Core.Get<DataBase>().SecondaryWeapons;
+            SecondaryWeaponData data = null;
+            if (TryGetEquipped(InventoryCase.SubWeapon, out var id, out var level))
+            {
+                data = secondaryWeapons.GetData(id);
+            }
+            if (data == null)
+            {
+                data = secondaryWeapons.GetData(_secondaryWeaponType);
+                level = _data.SecondaryWeaponLevel;
+            }
+            data.SetLevel(level);
+            return data;
+        }
+
+        // Equipment from the inventory overrides the serialized fallback (_weaponType/_armorType)
+        private bool TryGetEquipped(InventoryCase inventoryCase, out string id, out int level)
+        {
+            id = null;
+            level = 0;
+            var inventory = Core.Get<InventoryManager>();
+            if (inventory == null || !inventory.TryGetEquipped(inventoryCase, out var item, out level))
+            {
+                return false;
+            }
+
+            id = item.Id;
+            return true;
+        }
+
+        public void RestoreEnergyShield()
+        {
+            _energyShield.Add(_energyShield.Max);
         }
 
         private void OnHitHandler()
@@ -225,17 +357,85 @@ namespace _GAME.Scripts.Battle.Player
         
         public override void OnDamage(Team damageDealersTeam, int damageAmount, Vector3 hitPoint, List<IEffectAttribute> additiveAttributes = null)
         {
+            // Own damage (e.g. explosion of the player's rocket) is ignored
+            if (damageDealersTeam == Team || IsDead)
+                return;
+
             OnDamaged?.Invoke();
-            _health.Remove(damageAmount);
+            damageAmount = Mathf.Abs(damageAmount);
+
+            // Energy shield takes damage first and ignores defense
+            var absorbed = Mathf.Min(_energyShield.Current, damageAmount);
+            _energyShield.Remove(absorbed);
+
+            var healthDamage = damageAmount - absorbed;
+            if (healthDamage > 0)
+            {
+                _health.Remove(Mathf.RoundToInt(healthDamage * (1f - DefenseFactor)));
+            }
+        }
+
+        private void OnEnergyShieldChange(int delta)
+        {
+            if (delta < 0)
+            {
+                _damageReactionViewer?.Show(delta, transform.position, DamageTextType.Armor);
+            }
         }
         
         public void OnHealthChange(int delta)
         {
-            _damageReactionViewer?.Show(delta, transform.position);
+            if (delta < 0)
+            {
+                _damageReactionViewer?.Show(delta, transform.position);
+            }
 
             if (_health.Current <= 0)
             {
-               // Dead(); TODO
+                Dead();
+            }
+        }
+
+        private void Dead()
+        {
+            if (IsDead)
+                return;
+
+            IsDead = true;
+            BattleStop();
+            _rig.enabled = false;
+            _viewer.Dead();
+            _cameraController.SetCamera(GameCameraType.Dead);
+            EventBus.Push(new PlayerDeadEvent(), EventBus.EventRegion.GAMEPLAY);
+        }
+
+        public void Revive()
+        {
+            if (!IsDead)
+                return;
+
+            IsDead = false;
+            _health.Add(_health.Max);
+            RestoreEnergyShield();
+            _viewer.Revive();
+            _cameraController.SetCamera(GameCameraType.Battle);
+            EnableRigAfterRevive();
+        }
+
+        private async void EnableRigAfterRevive()
+        {
+            try
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.PLAYER_REVIVE_IK_DELAY), cancellationToken: this.GetCancellationTokenOnDestroy());
+                if (IsDead)
+                    return;
+
+                _rig.enabled = true;
+                _rig.Build();
+            }
+            catch (OperationCanceledException)
+            {
+                // component destroyed mid-await, expected
             }
         }
 

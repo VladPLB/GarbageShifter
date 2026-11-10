@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a10c1013728e47b08d06a40e65c54d48, type: 3}
+  m_Name: ItemUsePipelineIapPurchase_Anymatter_10
+  m_EditorClassIdentifier: 
+  _buttonView:
+    _label: Buy
+    _overrideColors: 0
+    _backgroundColor: {r: 1, g: 1, b: 1, a: 1}
+    _textColor: {r: 0, g: 0, b: 0, a: 1}
+  _useDescription: 
+  _productId: anymatter_10
+  _rewards:
+  - Item: {fileID: 11400000, guid: b26c4354b85fe4b768859d12a4b1050b, type: 2}
+    Amount: 10

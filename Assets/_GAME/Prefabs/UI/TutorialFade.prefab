@@ -125,6 +125,9 @@ MonoBehaviour:
     PointerPosition: {x: 122, y: 207}
     FingerScale: {x: 1, y: 1}
     FingerRotation: 16.647102
+    FollowNavigationButton: 1
+    TargetPlace: 10
+    Padding: {x: 10, y: 10}
   - Id: 1
     Region: 3
     Position: {x: 540.3441, y: 146.67432}
@@ -132,6 +135,9 @@ MonoBehaviour:
     PointerPosition: {x: 598.07697, y: 199.15164}
     FingerScale: {x: 0.96208525, y: 0.96208525}
     FingerRotation: 16.647102
+    FollowNavigationButton: 1
+    TargetPlace: -1
+    Padding: {x: 10, y: 10}
   - Id: 2
     Region: 3
     Position: {x: 540.3441, y: 146.67432}
@@ -139,6 +145,9 @@ MonoBehaviour:
     PointerPosition: {x: 598.07697, y: 199.15164}
     FingerScale: {x: 0.96208525, y: 0.96208525}
     FingerRotation: 16.647102
+    FollowNavigationButton: 1
+    TargetPlace: -1
+    Padding: {x: 10, y: 10}
   _canvas: {fileID: 0}
   _rootRect: {fileID: 5142556045888314879}
   _referenceResolution: {x: 1125, y: 2436}

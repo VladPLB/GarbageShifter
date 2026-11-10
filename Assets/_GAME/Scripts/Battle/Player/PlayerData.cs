@@ -12,10 +12,12 @@ namespace _GAME.Scripts.Battle.Enemy
         [SerializeField] private int _weaponLevel;
 
         [SerializeField] private int _health;
-        [SerializeField] private int _armor;
+        [SerializeField] private int _armorLevel;
+        [SerializeField] private int _secondaryWeaponLevel;
 
         public int WeaponLevel => _weaponLevel;
         public int Health => _health;
-        public int Armor => _armor;
+        public int ArmorLevel => _armorLevel;
+        public int SecondaryWeaponLevel => _secondaryWeaponLevel;
     }
 }

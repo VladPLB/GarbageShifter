@@ -1,5 +1,6 @@
 using System;
 using _GAME.Scripts.Battle.Context;
+using _GAME.Scripts.Battle.Equipment;
 using _GAME.Scripts.Inventory;
 using UnityEngine;
 
@@ -13,6 +14,8 @@ namespace _GAME.Scripts
         [SerializeField] private EnemyDatabase _enemyDatabase;
         
         [SerializeField] private WeaponDatabase _weaponDatabase;
+        [SerializeField] private ArmorDatabase _armorDatabase;
+        [SerializeField] private SecondaryWeaponDatabase _secondaryWeaponDatabase;
         [SerializeField] private BulletDatabase _bulletDatabase;
         [SerializeField] private ExplosionDatabase _explosionDatabase;
         
@@ -27,6 +30,8 @@ namespace _GAME.Scripts
         public ItemDatabase ItemDatabase => _itemDatabase;
         public EnemyDatabase Enemies => _enemyDatabase;
         public WeaponDatabase Weapons => _weaponDatabase;
+        public ArmorDatabase Armors => _armorDatabase;
+        public SecondaryWeaponDatabase SecondaryWeapons => _secondaryWeaponDatabase;
         public BulletDatabase Bullets => _bulletDatabase;
         public ExplosionDatabase Explosion => _explosionDatabase;
         
@@ -38,6 +43,13 @@ namespace _GAME.Scripts
         
         public MapLocationItemsDatabase MapLocationItemsDatabase => _mapLocationItemsDatabase;
 
+        public IEquipmentData GetEquipmentData(string inventoryId)
+        {
+            return (IEquipmentData)Weapons.GetData(inventoryId)
+                   ?? (IEquipmentData)Armors.GetData(inventoryId)
+                   ?? SecondaryWeapons.GetData(inventoryId);
+        }
+
         private void Awake()
         {
             Core.Registry(this);
@@ -48,6 +60,8 @@ namespace _GAME.Scripts
             ItemDatabase.RuntimeSetup();
             Enemies.RuntimeSetup();
             Weapons.RuntimeSetup();
+            Armors.RuntimeSetup();
+            SecondaryWeapons.RuntimeSetup();
             Bullets.RuntimeSetup();
             Explosion.RuntimeSetup();
             TextsEffects.RuntimeSetup();

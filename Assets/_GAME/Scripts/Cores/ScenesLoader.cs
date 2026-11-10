@@ -72,6 +72,11 @@ namespace _GAME.Scripts
                 case "ToGameplay":
                     LoadGameplayAsync().Forget();
                     break;
+                case "ToGameplayBuffed":
+                    // e.g. after a rewarded video: next level with minimal enemy pressure
+                    _saveManager.GetData<ProgressData>().SetEnemyPressureBuff(true);
+                    LoadGameplayAsync().Forget();
+                    break;
             }
         }
 

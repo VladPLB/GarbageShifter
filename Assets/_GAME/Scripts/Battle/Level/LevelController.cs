@@ -2,13 +2,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using _GAME;
 using _GAME.Scripts;
+using _GAME.Scripts.Ads;
 using _GAME.Scripts.Audio;
 using _GAME.Scripts.Battle.Context;
 using _GAME.Scripts.Battle.Enemy;
 using _GAME.Scripts.Battle.Items;
 using _GAME.Scripts.Battle.Level;
+using _GAME.Scripts.Battle.Level.Progression;
 using _GAME.Scripts.Battle.Player;
 using _GAME.Scripts.Common;
 using _GAME.Scripts.Cores.Save.SavesConfigs;
@@ -17,6 +20,7 @@ using _GAME.Scripts.Inventory;
 using _GAME.Scripts.Map;
 using _GAME.Scripts.Save;
 using _GAME.Scripts.Tutorial;
+using _GAME.Scripts.UI.Screens.Battle;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -42,6 +46,12 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
     private SaveManager _saveManager;
     private Settings _settings;
     private ProgressData _progressData;
+    private EnemyProgression _enemyProgression;
+    // Stage flow (stage play / switching); cancelled while the player is dead
+    private CancellationTokenSource _flowCts;
+    private int _deathCount = 0;
+    private MapManager.LevelType _levelType;
+    private float _levelStartTime;
     
     
     private Player _player;
@@ -54,6 +64,9 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
 
     public Player Player => _player;
     public UnitsController UnitsController => _unitsController;
+    public EnemyProgression EnemyProgression => _enemyProgression;
+    // Revive is offered only for the first death in the level
+    public bool CanRevive => _deathCount <= 1;
 
     public event Action<Vector3> OnSpawnWarning;
 
@@ -71,7 +84,9 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
         _settings = Core.Get<Settings>();
         
         _progressData = _saveManager.GetData<ProgressData>();
-        
+        _enemyProgression = new EnemyProgression(_settings.Battle.EnemyProgression, _progressData,
+            _mapManager.GetLocationNumber(_progressData.Level), _mapManager.IsLastLevelInLocation(_progressData.Level));
+        EventBus.Subscribe<PlayerDeadEvent>(OnPlayerDead, EventBus.EventRegion.GAMEPLAY);
         
         BuildLevel();
         Setup(FindObjectOfType<Player>());
@@ -84,7 +99,7 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
         {
             _player = player;
             _player.Setup(_cameraController);
-            _unitsController.Setup(_player.transform);
+            _unitsController.Setup(_player.transform, _enemyProgression.Scaling);
 
             _realStages = _stages.Where(stage => stage.PlayerPosition != null).ToList();
             _stagesCount = _realStages.Count;
@@ -99,7 +114,10 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
                 tutorialController.Initialize();
             }
             _uiManager.OpenWindow<GameplayScreen>();
+            ResetFlow();
             PlayCurrentStage();
+            _levelStartTime = Time.time;
+            ReportLevel("level_start");
             EventBus.Push(new KeyEvent("SceneLoaded"), EventBus.EventRegion.GLOBAL);
             EventBus.Push(new MusicPlayEvent(MusicTrack.Battle), EventBus.EventRegion.GLOBAL);
         }
@@ -138,6 +156,7 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
         zoneData.Setup();
         var locationType = zoneData.GetLocationType(locationIndex);
         var levelType = zoneData.GetLevelType(locationIndex, levelIndex);
+        _levelType = levelType;
 
         var levels = _levelDatasController.GetLevelDataList(_progressData.Level, locationType, levelType);
         var levelData = _useOverrideLevelData? _overrideLevelData: levels.GetRandomItem();
@@ -169,12 +188,13 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
 
     public async void ToNextStage()
     {
-        var ct = this.GetCancellationTokenOnDestroy();
+        var ct = _flowCts.Token;
         try
         {
             var previewPosition = _playerPositions[_currentStageIndex];
             _realStages[_currentStageIndex].End();
             _player.BattleStop();
+            _player.RestoreEnergyShield();
             await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.STAGE_COMPLETE_PLAYER_DELAY), cancellationToken: ct);
             _dropManager.StartAttraction();
             _currentStageIndex++;
@@ -196,17 +216,25 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
         }
     }
 
-    private async void PlayCurrentStage()
+    private void PlayCurrentStage()
+    {
+        PlayCurrentStage(false);
+    }
+
+    private async void PlayCurrentStage(bool isRestart)
     {
         if(_currentStageIndex == 0)
         {
             PlayFirstStage();
             return;
         }
-        var ct = this.GetCancellationTokenOnDestroy();
+        var ct = _flowCts.Token;
         try
         {
-            EventBus.Push(new KeyEvent("StageStart"), EventBus.EventRegion.GAMEPLAY);
+            if (!isRestart)
+            {
+                EventBus.Push(new KeyEvent("StageStart"), EventBus.EventRegion.GAMEPLAY);
+            }
             await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.STAGE_PLAY_PLAYER_DELAY), cancellationToken: ct);
             var stage = _realStages[_currentStageIndex];
             if (stage.BigWeapon != null)
@@ -233,7 +261,7 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
 
     private async void PlayFirstStage()
     {
-        var ct = this.GetCancellationTokenOnDestroy();
+        var ct = _flowCts.Token;
         try
         {
             _currentStageIndex = 0;
@@ -261,6 +289,13 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
         try
         {
             _player.Victory();
+            _enemyProgression.OnLevelCompleted();
+            _dropManager.OnLevelCompleted(_enemyProgression.Location, _enemyProgression.IsLastLevelInLocation);
+            ReportLevel("level_complete", ("is_location_complete", _enemyProgression.IsLastLevelInLocation));
+            if (_enemyProgression.IsLastLevelInLocation)
+            {
+                ReportLevel("location_complete");
+            }
 
             OnSpawnWarning = null;
             await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.LEVEL_COMPLETE_PLAYER_DELAY), cancellationToken: ct);
@@ -272,13 +307,103 @@ public class LevelController : MonoBehaviour, IRuntimeSetup, IReparentIgnored
         }
     }
 
-    public void EndLevel()
+    private void ResetFlow()
     {
+        _flowCts?.Cancel();
+        _flowCts?.Dispose();
+        _flowCts = CancellationTokenSource.CreateLinkedTokenSource(this.GetCancellationTokenOnDestroy());
+    }
+
+    // Player died: stage flow and enemies stop, revive window on the first death, defeat otherwise
+    private void OnPlayerDead(PlayerDeadEvent deadEvent)
+    {
+        // level is already completed
+        if (_currentStageIndex >= _stagesCount)
+            return;
+
+        _deathCount++;
+        _flowCts?.Cancel();
+        _player.OnDestinationTargetPosition -= PlayCurrentStage;
+        _realStages[_currentStageIndex].Pause();
+        _unitsController.FreezeAll();
+        ReportLevel("player_death", ("can_revive", CanRevive));
+
+        ShowDeathScreenDelayed();
+    }
+
+    // let the death animation and camera play before the revive / defeat window
+    private async void ShowDeathScreenDelayed()
+    {
+        try
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(GameConstants.PLAYER_DEATH_SCREEN_DELAY), cancellationToken: this.GetCancellationTokenOnDestroy());
+            // without the revive window prefab registered in UIManager go straight to defeat
+            if (!CanRevive || _uiManager.OpenWindow<GameplayReviveScreen>() == null)
+            {
+                Defeat();
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // component destroyed mid-await, expected
+        }
+    }
+
+    // Restarts the current stage: spawned enemies are removed and the stage is played again
+    public void Revive()
+    {
+        if (!_player.IsDead)
+            return;
+
+        ResetFlow();
+        _realStages[_currentStageIndex].ResetForRestart();
+        _player.Revive();
+        ReportLevel("level_revive");
+        PlayCurrentStage(true);
+    }
+
+    public void Defeat()
+    {
+        _enemyProgression?.OnDefeat();
+        ReportLevel("level_fail");
+        if (_uiManager.OpenWindow<GameplayDefeatScreen>() == null)
+        {
+            // no defeat window yet: loot is lost, leave the level
+            _dropManager.LocalInventory.Clear();
+            EndLevel("level_defeat");
+        }
+    }
+
+    // interstitialPlacement: interstitial is queued and shown in the lobby; null - none (e.g. right after a rewarded ad)
+    public void EndLevel(string interstitialPlacement = null)
+    {
+        _progressData.AddLevelPlayed();
+        if (!string.IsNullOrEmpty(interstitialPlacement))
+        {
+            Core.Get<AdsManager>()?.QueueInterstitial(interstitialPlacement);
+        }
         EventBus.Push(new KeyEvent("ToLobby"), EventBus.EventRegion.GLOBAL);
+    }
+
+    private void ReportLevel(string eventName, params (string Key, object Value)[] parameters)
+    {
+        var all = new List<(string, object)>
+        {
+            ("level_type", _levelType.ToString()),
+            ("stage", _currentStageIndex),
+            ("stages", _stagesCount),
+            ("deaths", _deathCount),
+            ("is_buffed", _enemyProgression?.IsBuffed ?? false),
+            ("duration_sec", Mathf.RoundToInt(Time.time - _levelStartTime)),
+        };
+        all.AddRange(parameters);
+        AnalyticsEvent.Push(eventName, all.ToArray());
     }
 
     private void OnDestroy()
     {
+        EventBus.Unsubscribe<PlayerDeadEvent>(OnPlayerDead, EventBus.EventRegion.GAMEPLAY);
+        _flowCts?.Dispose();
         EventBus.Push(new AmbientStopEvent(AmbientType.All), EventBus.EventRegion.GLOBAL);
         _uiManager.CloseAllWindows();
         Core.Unregistry(this);
